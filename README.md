@@ -9,3 +9,5 @@ Nosso nicho é voltado para profissionais de saúde que buscam entender melhor o
 Com a proposta de valor de sempre estar disponível 24 horas por dia e com zero custo!
 
 Este é o MindFlow
+
+Idealizador do Projeto: Matues Wolf

@@ -11,3 +11,8 @@ Com a proposta de valor de sempre estar disponível 24 horas por dia e com zero 
 Este é o MindFlow
 
 Idealizador do Projeto: Mateus Wolf
+
+
+--------------------------------------------------
+
+Como um projeto em React, para inicia-lo, você deve navegar até a pasta onde se encontram os arquivos JSON e iniciar com "npm start"

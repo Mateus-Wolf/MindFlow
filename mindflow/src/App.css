@@ -1,3 +1,116 @@
+/* Importando as Fontes */
+@font-face {
+  font-family: 'tituloAnurati';
+  src: url(./fontes/anurati/Anurati-Regular.otf);
+}
+
+@font-face {
+  font-family: 'textosGerais';
+  src: url(./fontes/quicksand/Quicksand-VariableFont_wght.ttf);
+}
+/* Fim da Importação das Fontes */
+
+
+/*Inicio da Customização do Body*/
+#conteudoBody {
+  display: flex;
+  height: 100vh;
+}
+
+#tituloPrincipal {
+  font-family: 'tituloAnurati';
+  font-size: 75px;
+  margin-top: 85px;
+  color: whitesmoke;
+}
+
+#textoInicial {
+  font-weight: normal;
+  font-family: 'textosGerais';
+  font-size: 22px;
+}
+
+#conteudoEsquerda {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  flex: 1;
+  overflow: hidden;
+}
+
+#conteudoEsquerda::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('./imagens/background.jpg');
+  background-size: 150%;
+  /* Ajusta a imagem para ser 150% do tamanho do elemento, efetivamente fazendo um zoom out */
+  background-repeat: no-repeat;
+  /* Evita a repetição da imagem */
+  filter: blur(8px);
+  /* Aplica um desfoque de 8 pixels */
+  z-index: -1;
+  /* Coloca o pseudo-elemento atrás do conteúdo */
+}
+
+#conteudoEsquerda::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Preto com 50% de opacidade */
+  z-index: -1; /* Coloca o pseudo-elemento acima da imagem borrada, mas abaixo do conteúdo */
+}
+
+#conteudoDireita {
+  background-color: #150031;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+/*Fim da Customização Body*/
+
+
+/*Customização dos Botões*/
+#botões {
+  display: flex; /* Para garantir que os botões fiquem lado a lado */
+  gap: 30px; /* Espaço entre os botões */
+}
+
+.saibaMais {
+  background-color: rgb(71, 6, 135);
+  border-radius: 15px;
+  color: whitesmoke;
+  padding: 15px 30px;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.saibaMais:hover {
+  background-color: rgb(103, 24, 229);
+  transform: scale(1.05);
+}
+/*Fim da Customização dos Botões*/
+
+
 .App {
   text-align: center;
 }
@@ -32,6 +145,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

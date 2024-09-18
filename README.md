@@ -10,7 +10,7 @@ Com a proposta de valor de sempre estar disponível 24 horas por dia e com zero 
 
 Este é o MindFlow
 
-Idealizador do Projeto: Mateus Wolf
+Idealizador do Projeto: Mateus Pedrini Wolf
 
 
 --------------------------------------------------

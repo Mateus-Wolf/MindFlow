@@ -47,7 +47,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('./imagens/background.jpg');
+  background-image: url('./imagens/backgroundHome.jpg');
   background-size: 150%;
   /* Ajusta a imagem para ser 150% do tamanho do elemento, efetivamente fazendo um zoom out */
   background-repeat: no-repeat;
@@ -85,11 +85,6 @@
 
 
 /*Customização dos Botões*/
-#botões {
-  display: flex; /* Para garantir que os botões fiquem lado a lado */
-  gap: 30px; /* Espaço entre os botões */
-}
-
 .saibaMais {
   background-color: rgb(71, 6, 135);
   border-radius: 15px;

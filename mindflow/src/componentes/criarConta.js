@@ -19,6 +19,7 @@ const CriarConta = ({ voltar }) => {
         <div id='campos'>
           <input className='form' type="text" placeholder="Nome" />
           <input className='form' type="email" placeholder="Email" />
+          <input className='form' type='date' placeholder="Data de Nascimento"/>
           
           {/* Campo de senha com botão de exibir/ocultar */}
           <div className='password-container'>

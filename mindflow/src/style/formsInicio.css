@@ -50,7 +50,6 @@
 
 .password-container {
     position: relative;
-    margin-bottom: 15px; /* Espaçamento entre os campos */
 }
 
 .password-input {
@@ -59,8 +58,8 @@
 
 .password-toggle {
     position: absolute;
-    right: 10px; /* Ajusta a posição do botão dentro do campo */
-    top: 50%; /* Alinha verticalmente ao centro do campo */
+    right: 8px; /* Ajusta a posição do botão dentro do campo */
+    top: 43%; /* Alinha verticalmente ao centro do campo */
     transform: translateY(-50%); /* Corrige o alinhamento vertical do botão */
     background: none;
     border: none;

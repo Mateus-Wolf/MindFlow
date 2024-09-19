@@ -86,6 +86,8 @@
 
 /*Customização dos Botões*/
 .saibaMais {
+  width: 290px;
+  margin: 5px;
   background-color: rgb(71, 6, 135);
   border-radius: 15px;
   color: whitesmoke;

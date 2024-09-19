@@ -1,5 +1,5 @@
 import './App.css';
-import './style/login.css'
+import './style/formsInicio.css'
 import React, { Component } from 'react';
 import Home from './componentes/home';
 

@@ -30,8 +30,8 @@ const Login = ({ voltar }) => {
         <div className='form-group'>
           <a href="#" className='forgot-password'>Esqueci minha senha</a>
         </div>
-        <button className='btns' type="submit">Enviar</button>
         <button className='btns' onClick={voltar}>Voltar</button>
+        <button className='btns' type="submit">Entrar</button>
       </form>
     </div>
   );

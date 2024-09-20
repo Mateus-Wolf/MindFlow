@@ -81,6 +81,39 @@
   display: flex;
   justify-content: center;
 }
+
+/* Container do e-mail com botão de envio */
+.email-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo do botão "Enviar Código" */
+.email-send-btn {
+  margin-left: 10px;
+  background-color: rgb(71, 6, 135);
+  color: white;
+  padding: 5px;
+  border: none;
+  border-radius: 10px;
+  margin-top: -15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.email-send-btn:hover {
+  background-color: rgb(103, 24, 229);
+}
+
+/* Mensagem de código enviado */
+.codigo-enviado-msg {
+  margin-bottom: 20px;
+  margin-top: -7px;
+  text-align: left;
+  font-size: 16px;
+}
+
 /*Fim da Customização Body*/
 
 

@@ -14,5 +14,6 @@ Idealizador do Projeto: Mateus Pedrini Wolf
 
 
 --------------------------------------------------
+Para que o projeto rode com êxito, primeiramente se deve navegar até a pasta do mesmo e executar o comando "npm Install", para que todas as dependências sejam baixadas
 
 Como um projeto em React, para inicia-lo, você deve navegar até a pasta onde se encontram os arquivos JSON e iniciar com "npm start"

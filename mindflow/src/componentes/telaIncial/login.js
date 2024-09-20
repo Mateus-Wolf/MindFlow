@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa o useNavigate para navegação
 
 const Login = ({ voltar }) => {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [telaEsqueciSenha, setTelaEsqueciSenha] = useState(false);
   const [telaAtualizarSenha, setTelaAtualizarSenha] = useState(false);
   const [codigoEnviado, setCodigoEnviado] = useState(false);
+  
+  const navigate = useNavigate(); // Hook para navegação
 
   const alternarVisibilidadeSenha = () => {
     setMostrarSenha(!mostrarSenha);
@@ -28,12 +31,20 @@ const Login = ({ voltar }) => {
     setCodigoEnviado(true);
   };
 
+  // Função para redirecionar para a tela Home
+  const redirecionarParaHome = () => {
+    navigate('/home'); // Redireciona para a rota /home
+  };
+
   return (
     <div id='conteudo'>
       {!telaEsqueciSenha && !telaAtualizarSenha ? (
         <>
           <h2>Entrar na sua conta do MindFlow</h2>
-          <form>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            redirecionarParaHome(); // Redireciona ao enviar o formulário de login
+          }}>
             <input className='form' type="text" placeholder="Email" required />
             <div className='password-container'>
               <input
@@ -93,7 +104,10 @@ const Login = ({ voltar }) => {
       {telaAtualizarSenha ? (
         <>
           <h2>Atualizar Senha</h2>
-          <form>
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            redirecionarParaHome(); // Redireciona ao atualizar a senha
+          }}>
             <div className='password-container'>
               <input
                 className='form password-input'

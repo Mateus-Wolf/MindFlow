@@ -1,16 +1,26 @@
 import './App.css';
 import './style/formsInicio.css'
-import React, { Component } from 'react';
-import Home from './componentes/home';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './componentes/telaIncial/home';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <Home />
-      </div>
-    );
-  }
-}
+const Home = () => {
+  return (
+    <div>
+      <h1>Bem-vindo à Home!</h1>
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/home" element={<Home />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;

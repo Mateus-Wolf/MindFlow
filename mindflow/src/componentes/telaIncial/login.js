@@ -31,7 +31,6 @@ const Login = ({ voltar }) => {
     setCodigoEnviado(true);
   };
 
-  // Função para redirecionar para a tela Home
   const redirecionarParaHome = () => {
     navigate('/home'); // Redireciona para a rota /home
   };

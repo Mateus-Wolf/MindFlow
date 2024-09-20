@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa o useNavigate para navegação
 
 const CriarConta = ({ voltar }) => {
   const [mostrarSenha, setMostrarSenha] = useState(false);

@@ -1,0 +1,90 @@
+#conteudoPerfil {
+    background-color: var(--roxo-fundo); /* Adicione o ponto e vírgula aqui */
+    color: #fff; /* Cor do texto branca */
+    padding-bottom: 30px;
+    
+}
+
+.perfil-container {
+    margin-top: 45px;
+}
+
+.avatar-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: #555; /* Cor de fundo do avatar */
+    border-radius: 50%;
+    margin: 20px auto;
+}
+
+.perfil-opcoes  {
+    padding: 15px;
+}
+
+.perfil-opcoes label {
+    display: block;
+    margin: 10px 0;
+}
+
+.perfil-opcoes input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+a {
+    display: block;
+    margin: 20px 0;
+    color: #1e90ff; /* Cor do link */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.delete-account {
+    background-color: #ff4c4c; /* Cor do botão de excluir conta */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-account:hover {
+    background-color: #ff1c1c; /* Cor do botão ao passar o mouse */
+}
+
+.save-account {
+    background-color: #1bbd10; /* Cor do botão de excluir conta */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.save-account:hover {
+    background-color: rgb(28, 145, 17); /* Cor do botão ao passar o mouse */
+}
+
+#botoes {
+    display: flex;
+    justify-content: space-between; /* Espaça os dois contêineres */
+    align-items: center; /* Alinha verticalmente */
+    gap: 10px; /* Espaçamento entre os grupos de botões */
+}
+
+.btn-esquerda {
+    display: flex;
+}
+
+.btn-direita {
+    display: flex;
+    gap: 10px; /* Espaçamento entre os botões da direita */
+    margin-right: 35px;
+}

@@ -10,6 +10,13 @@
 }
 /* Fim da Importação das Fontes */
 
+/* Criando as Cores */
+:root {
+  --roxo-fundo: #150031;
+  --roxo-destaque: #6F00FF;
+  --roxo-escuro: #0C001C;
+}
+
 
 /*Inicio da Customização do Body*/
 #conteudoBody {

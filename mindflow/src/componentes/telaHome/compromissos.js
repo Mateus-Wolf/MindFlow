@@ -1,22 +1,30 @@
-import React from "react";
+import React from 'react';
 
 const Compromissos = () => {
+    const hoje = new Date();
+    const opcoes = { day: '2-digit', month: '2-digit', year: 'numeric' };
+    const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
+
     return (
         <div id="compromissos">
-            <h3>Bem Vindo, DR. Gabo</h3>
-            <p>Compromissos - Dia 20/09</p>
-            <div className="card" style={{ width: '18rem' }}> {/* Corrigido o style */}
-                    <ul className="list-group list-group-flush"> {/* Use className ao invés de class */}
-                        <li className="list-group-item">An item</li> {/* Corrigido class para className */}
-                        <li className="list-group-item">A second item</li>
-                        <li className="list-group-item">A third item</li>
-                    </ul>
-                    <div className="card-footer"> {/* Corrigido class para className */}
-                        Card footer
-                    </div>
+            <h3>Bem vinda, <span className="destaque">Dra. Amanda</span></h3>
+            <p id='dataComp'>Compromissos de hoje - Dia {dataFormatada} <span className="ver-todos">Ver todos &gt;</span></p>
+
+            <div className="compromisso-item">
+                <span className="hora">
+                    <span className="indicador red"></span> 10:20
+                </span>
+                <span className="consulta"> - Consulta Gabo Gabriel</span>
+            </div>
+
+            <div className="compromisso-item">
+                <span className="hora">
+                    <span className="indicador yellow"></span> 13:40
+                </span>
+                <span className="consulta"> - Consulta Luana Santos</span>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Compromissos
+export default Compromissos;

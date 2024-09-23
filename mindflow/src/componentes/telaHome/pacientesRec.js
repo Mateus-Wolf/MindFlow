@@ -1,23 +1,47 @@
-import React from "react";
+import React from 'react';
 
 const PacientesRec = () => {
     return (
-        <div id="pacientes">
-            <h3>Pacientes Recentes</h3>
-            <div id="pacientes">
-                <div className="card" style={{ width: '18rem' }}> {/* Corrigido o style */}
-                    <ul className="list-group list-group-flush"> {/* Use className ao invés de class */}
-                        <li className="list-group-item">Gabo Gabriel 10:20 <hr></hr>Gabo 24</li> {/* Corrigido class para className */}
-                        <li className="list-group-item">Zasryd Griddy 13:40 <hr></hr>Feminino 23</li>
-                        <li className="list-group-item">Marcelo Silva 13:23 <hr></hr>Masculino 35</li>
-                    </ul>
-                    <div className="card-footer"> {/* Corrigido class para className */}
-                        Card footer
-                    </div>
+        <div id="pacientes-recentes">
+            <h3>Pacientes recentes <span className="ver-todos">Ver todos &gt;</span></h3>
+            
+            <div className="paciente-item">
+                <img src="/path/to/image1.jpg" alt="Gabo Gabriel" className="paciente-img" />
+                <div className="paciente-info">
+                    <h4>Gabo Gabriel</h4>
+                    <p>Gabo <span className="idade">??</span></p>
+                </div>
+                <div className="paciente-consulta">
+                    <button className="btn-horario">10:20</button>
+                    <button className="btn-horario secundario">13/01 10:20</button>
+                </div>
+            </div>
+
+            <div className="paciente-item">
+                <img src="/path/to/image2.jpg" alt="Zasryd Griddy" className="paciente-img" />
+                <div className="paciente-info">
+                    <h4>Zasryd Griddy</h4>
+                    <p>Feminino <span className="idade">23</span></p>
+                </div>
+                <div className="paciente-consulta">
+                    <button className="btn-horario">13:40</button>
+                    <button className="btn-horario secundario">10/01 11:20</button>
+                </div>
+            </div>
+
+            <div className="paciente-item">
+                <img src="/path/to/image3.jpg" alt="Marcelo Silva" className="paciente-img" />
+                <div className="paciente-info">
+                    <h4>Marcelo Silva</h4>
+                    <p>Masculino <span className="idade">35</span></p>
+                </div>
+                <div className="paciente-consulta">
+                    <button className="btn-horario">13:23</button>
+                    <button className="btn-horario secundario">11/02 11:20</button>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default PacientesRec;

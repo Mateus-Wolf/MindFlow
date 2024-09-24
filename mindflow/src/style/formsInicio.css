@@ -34,6 +34,20 @@
     box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
 }
 
+/* styles.css ou o arquivo CSS que você estiver usando */
+.error-message {
+    color: rgb(255, 0, 0);
+    font-weight: bold; 
+    font-size: 15px;
+    margin-left: 3px;
+}
+
+/* styles.css */
+.input-error {
+    border: 2px solid red; /* Borda vermelha */
+}
+
+
 /* Animação ao focar */
 .form:focus {
     border-color: #ff5722; /* Cor da borda ao focar */

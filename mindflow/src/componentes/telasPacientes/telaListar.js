@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import Header from '../telaHome/header';
 
 const PacientesLista = () => {
     const [searchTerm, setSearchTerm] = useState(''); // Estado para o termo de pesquisa
-
-    // Lista de pacientes simulada
-    const pacientes = [
-        { id: 1, nome: 'Gabo Gabriel', img: '/path/to/image.jpg' },
-        { id: 2, nome: 'Ana Silva', img: '/path/to/image.jpg' },
-        { id: 3, nome: 'Lucas Lima', img: '/path/to/image.jpg' },
-    ];
+    const [pacientes, setPacientes] = useState([]); // Estado para armazenar a lista de pacientes
+    const [loading, setLoading] = useState(true); // Estado para controle de loading
 
     // Função para atualizar o estado conforme o usuário digita
     const handleSearchChange = (e) => {
@@ -20,6 +16,26 @@ const PacientesLista = () => {
     const filteredPacientes = pacientes.filter((paciente) =>
         paciente.nome.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // useEffect para buscar pacientes da API
+    useEffect(() => {
+        const fetchPacientes = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/api/pacientes');
+                setPacientes(response.data);
+            } catch (error) {
+                console.error('Erro ao obter pacientes:', error);
+            } finally {
+                setLoading(false); // Finaliza o loading
+            }
+        };
+
+        fetchPacientes();
+    }, []);
+
+    if (loading) {
+        return <div>Carregando...</div>; // Exibe loading enquanto os dados estão sendo carregados
+    }
 
     return (
         <div id="tudo">
@@ -37,7 +53,7 @@ const PacientesLista = () => {
 
                 {filteredPacientes.map((paciente) => (
                     <div key={paciente.id} className="paciente-item">
-                        <img src={paciente.img} alt={paciente.nome} className="paciente-img" />
+                        <img src={paciente.img || '/path/to/image.jpg'} alt={paciente.nome} className="paciente-img" />
                         <div className="paciente-info">
                             <h4>{paciente.nome}</h4>
                         </div>

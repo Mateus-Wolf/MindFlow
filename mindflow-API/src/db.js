@@ -13,7 +13,6 @@ const pool = new Pool({
 pool.connect()
     .then(client => {
         console.log('Conectado ao banco de dados com sucesso')
-        console.log('http://localhost:3000/api/usuarios')
         client.release();
     })
     .catch(err => {

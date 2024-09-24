@@ -16,9 +16,14 @@ app.get('/', (req, res) => {
     res.send('API do MindFlow');
 });
 
+const pacientesRouter = require('./routes/pacientes');
+app.use('/api/pacientes', pacientesRouter);
+
 // Iniciar o servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
+    console.log('ROTA DE PACIENTES = http://localhost:3000/api/pacientes')
+    console.log('ROTA DE USUARIOS = http://localhost:3000/api/usuarios')
 });
 
 app.use('/api/usuarios', usuariosRoute);

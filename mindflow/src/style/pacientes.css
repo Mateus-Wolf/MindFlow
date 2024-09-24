@@ -1,0 +1,122 @@
+#pacientes-lista {
+    color: white;
+    padding: 20px;
+    background-color: var(--roxo-fundo); /* Fundo mais escuro */
+    height: 100vh;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: -10px;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: none;
+    margin: 0 10px;
+}
+
+.btn-back, .btn-search {
+    background-color: #333;
+    border: none;
+    color: white;
+    font-size: 18px;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.paciente-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--roxo-escuro); /* Fundo de cada item do paciente */
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.paciente-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.paciente-info {
+    flex-grow: 1;
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.paciente-botoes {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-opcao {
+    background: linear-gradient(90deg, rgba(119,0,255,1) 0%, rgba(166,58,255,1) 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+#tudo {
+    background-color: var(--roxo-escuro);
+}
+
+.form-container {
+    background-color: var(--roxo-fundo);
+    padding: 10px;
+    height: 505px;
+    padding: 15px;
+}
+  
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+  
+.form-group {
+    flex: 1;
+    margin-right: 10px;
+}
+  
+.form-group:last-child {
+    margin-right: 0;
+}
+  
+label {
+    display: block;
+    color: #fff;
+    margin-bottom: 5px;
+}
+  
+input, select {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+}
+  
+.submit-button {
+    background-color: var(--roxo-destaque);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 25px;
+}
+
+  

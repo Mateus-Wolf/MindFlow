@@ -2,6 +2,7 @@ import './App.css';
 import './style/formsInicio.css';
 import './style/home.css';
 import './style/perfil.css';
+import './style/pacientes.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './componentes/telaIncial/home';

@@ -17,3 +17,7 @@ Idealizador do Projeto: Mateus Pedrini Wolf
 Para que o projeto rode com êxito, primeiramente se deve navegar até a pasta do mesmo e executar o comando "npm Install", para que todas as dependências sejam baixadas
 
 Como um projeto em React, para inicia-lo, você deve navegar até a pasta onde se encontram os arquivos JSON e iniciar com "npm start"
+
+Agora com a adição da API, para iniciar o servidor, deve-se navegar até a pasta onde se encontra o arquivo "index.js" e iniciar com um "node src/index.js" (Lembre-se de configurar as as variáveis de ambiente no arquivo `.env`
+
+Para executar o banco de dados, os comandos estão todos dentro do "createDataBase.sql"

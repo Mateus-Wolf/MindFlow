@@ -110,6 +110,7 @@ const PacienteCadastro = ({ usuarioId }) => {
                                 <option value="casado">Casado</option>
                                 <option value="solteiro">Solteiro</option>
                                 <option value="divorciado">Divorciado</option>
+                                <option value="viuvo">Separado</option>
                                 <option value="viuvo">Viúvo</option>
                             </select>
                         </div>

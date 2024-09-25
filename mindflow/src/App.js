@@ -5,7 +5,7 @@ import './style/perfil.css';
 import './style/pacientes.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './componentes/telaIncial/home';
+import Login from './componentes/telaIncial/bemVindo';
 import Home from './componentes/telaHome/home';
 import Perfil from './componentes/telaPerfil/perfil';
 import Agendamentos from './componentes/telaAgendamentos/agendamentos';

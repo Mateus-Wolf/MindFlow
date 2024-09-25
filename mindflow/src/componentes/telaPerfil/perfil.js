@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importa useNavigate
 import Header from '../telaHome/header';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
@@ -11,8 +12,15 @@ const Perfil = () => {
         senha: false,
     });
 
+    const navigate = useNavigate(); // Inicializa o useNavigate
+
     const toggleEdit = (field) => {
         setEditable((prev) => ({ ...prev, [field]: !prev[field] }));
+    };
+
+    const handleLogout = () => {
+        // Aqui você pode adicionar a lógica para limpar o estado do usuário ou o token, se necessário
+        navigate('/'); // Redireciona para a tela de login
     };
 
     return (
@@ -58,7 +66,7 @@ const Perfil = () => {
                         <button className="save-account">Salvar</button>
                     </div>
                     <div className="btn-direita">
-                        <button className="delete-account">Sair</button>
+                        <button className="delete-account" onClick={handleLogout}>Sair</button> {/* Adiciona a função handleLogout */}
                         <button className="delete-account">Excluir conta</button>
                     </div>
                 </div>

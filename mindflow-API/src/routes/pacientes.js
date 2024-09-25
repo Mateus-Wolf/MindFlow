@@ -15,16 +15,22 @@ router.get('/', async (req, res) => {
 
 // Rota para criar um novo paciente
 router.post('/', async (req, res) => {
-    const { medico_id, nome, idade, cpf, cep, genero, email, telefone, estado_civil } = req.body;
+    const { usuario_ID, nome, idade, cpf, cep, genero, email, telefone, estado_civil } = req.body;
+
+    // Validação básica para garantir que os campos não estejam vazios
+    if (!usuario_ID || !nome || !idade || !cpf || !cep || !genero || !email || !telefone || !estado_civil) {
+        return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
+    }
+
     try {
         const result = await pool.query(
-            'INSERT INTO pacientes (medico_id, nome, idade, cpf, cep, genero, email, telefone, estado_civil) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-            [medico_id, nome, idade, cpf, cep, genero, email, telefone, estado_civil]
+            'INSERT INTO pacientes (usuario_ID, nome, idade, cpf, cep, genero, email, telefone, estado_civil) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
+            [usuario_ID, nome, idade, cpf, cep, genero, email, telefone, estado_civil]
         );
         res.status(201).json(result.rows[0]);
     } catch (error) {
         console.error('Erro ao criar paciente:', error);
-        res.status(500).json({ error: 'Erro ao criar paciente' });
+        res.status(500).json({ error: 'Erro ao criar paciente', details: error.message });
     }
 });
 

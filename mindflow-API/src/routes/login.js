@@ -28,8 +28,8 @@ router.post('/', async (req, res) => {
             expiresIn: '1h',
         });
 
-        // Retorna o token e o nome do usuário
-        res.json({ token, nome: usuario.nome });
+        // Retorna o token, o nome do usuário e o ID
+        res.json({ token, nome: usuario.nome, id: usuario.id }); // Adicione o id aqui
     } catch (error) {
         console.error('Erro ao realizar login:', error);
         res.status(500).json({ error: 'Erro ao realizar login' });

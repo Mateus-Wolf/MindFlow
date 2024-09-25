@@ -37,22 +37,26 @@ const Login = ({ voltar }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMensagemErro(''); // Resetar mensagem de erro
-
+        setMensagemErro('');
+    
         try {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
-
-            // Supondo que o nome do usuário seja retornado na resposta do login
-            const { token, nome } = response.data;
-
-            localStorage.setItem('token', token); // Armazena o token no localStorage
-            localStorage.setItem('nomeUsuario', nome); // Armazena o nome do usuário no localStorage
-
-            navigate('/home'); // Redireciona para a rota /home após login
+    
+            // Adicione um console.log aqui para verificar a resposta
+            console.log(response.data); // Verifique se o ID está aqui
+    
+            const { token, nome, id } = response.data; // Verifique se o ID está sendo atribuído corretamente
+    
+            localStorage.setItem('token', token);
+            localStorage.setItem('nomeUsuario', nome);
+            localStorage.setItem('usuarioId', id); // Armazena o ID no localStorage
+    
+            navigate('/home');
         } catch (error) {
-            setMensagemErro('Usuário ou senha incorretos.'); // Mensagem de erro
+            setMensagemErro('Usuário ou senha incorretos.');
         }
     };
+    
 
     return (
         <div id='conteudo'>

@@ -41,7 +41,13 @@ const Login = ({ voltar }) => {
 
         try {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
-            localStorage.setItem('token', response.data.token); // Armazena o token no localStorage
+
+            // Supondo que o nome do usuário seja retornado na resposta do login
+            const { token, nome } = response.data;
+
+            localStorage.setItem('token', token); // Armazena o token no localStorage
+            localStorage.setItem('nomeUsuario', nome); // Armazena o nome do usuário no localStorage
+
             navigate('/home'); // Redireciona para a rota /home após login
         } catch (error) {
             setMensagemErro('Usuário ou senha incorretos.'); // Mensagem de erro
@@ -120,48 +126,48 @@ const Login = ({ voltar }) => {
                 </>
             ) : null}
 
-{telaAtualizarSenha ? (
-    <>
-        <h2>Atualizar Senha</h2>
-        <form onSubmit={(e) => {
-            e.preventDefault();
-            navigate('/home'); // Redireciona ao atualizar a senha
-        }}>
-            <div className='password-container'>
-                <input
-                    className='form password-input'
-                    type={mostrarSenha ? "text" : "password"}
-                    placeholder="Nova Senha"
-                    required
-                />
-                <button
-                    type="button"
-                    className='password-toggle'
-                    onClick={alternarVisibilidadeSenha}
-                >
-                    <i className={`fa ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                </button>
-            </div>
-            <div className='password-container'>
-                <input
-                    className='form password-input'
-                    type={mostrarSenha ? "text" : "password"}
-                    placeholder="Confirme a Nova Senha"
-                    required
-                />
-                <button
-                    type="button"
-                    className='password-toggle'
-                    onClick={alternarVisibilidadeSenha}
-                >
-                    <i className={`fa ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                </button>
-            </div>
-            <button className='btns' onClick={voltarParaLogin}>Voltar</button>
-            <button className='btns' type="submit">Atualizar Senha e Realizar Login</button>
-        </form>
-    </>
-) : null}
+            {telaAtualizarSenha ? (
+                <>
+                    <h2>Atualizar Senha</h2>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        navigate('/home'); // Redireciona ao atualizar a senha
+                    }}>
+                        <div className='password-container'>
+                            <input
+                                className='form password-input'
+                                type={mostrarSenha ? "text" : "password"}
+                                placeholder="Nova Senha"
+                                required
+                            />
+                            <button
+                                type="button"
+                                className='password-toggle'
+                                onClick={alternarVisibilidadeSenha}
+                            >
+                                <i className={`fa ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                            </button>
+                        </div>
+                        <div className='password-container'>
+                            <input
+                                className='form password-input'
+                                type={mostrarSenha ? "text" : "password"}
+                                placeholder="Confirme a Nova Senha"
+                                required
+                            />
+                            <button
+                                type="button"
+                                className='password-toggle'
+                                onClick={alternarVisibilidadeSenha}
+                            >
+                                <i className={`fa ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                            </button>
+                        </div>
+                        <button className='btns' onClick={voltarParaLogin}>Voltar</button>
+                        <button className='btns' type="submit">Atualizar Senha e Realizar Login</button>
+                    </form>
+                </>
+            ) : null}
         </div>
     );
 };

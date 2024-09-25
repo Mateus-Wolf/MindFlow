@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Compromissos = () => {
+    const [nomeUsuario, setNomeUsuario] = useState('');
+
+    useEffect(() => {
+        // Recupera o nome do usuário do localStorage
+        const nome = localStorage.getItem('nomeUsuario');
+        if (nome) {
+            setNomeUsuario(nome); // Atualiza o estado com o nome do usuário
+        }
+    }, []);
+
     const hoje = new Date();
     const opcoes = { day: '2-digit', month: '2-digit', year: 'numeric' };
     const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
 
     return (
         <div id="compromissos">
-            <h3>Bem vinda, <span className="destaque">Dra. Amanda</span></h3>
+            <h3>Olá, Dr(a) <span className="destaque">{nomeUsuario ? nomeUsuario : 'Dra. Amanda'}</span></h3>
             <p id='dataComp'>Compromissos de hoje - Dia {dataFormatada} <span className="ver-todos">Ver todos &gt;</span></p>
 
             <div className="compromisso-item">

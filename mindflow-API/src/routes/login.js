@@ -28,11 +28,13 @@ router.post('/', async (req, res) => {
             expiresIn: '1h',
         });
 
-        res.json({ token });
+        // Retorna o token e o nome do usuário
+        res.json({ token, nome: usuario.nome });
     } catch (error) {
         console.error('Erro ao realizar login:', error);
         res.status(500).json({ error: 'Erro ao realizar login' });
     }
 });
 
+// Certifique-se de exportar o router corretamente
 module.exports = router;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importa o useNavigate para navegação
 import axios from 'axios'; // Importa axios
+import Swal from 'sweetalert2'; // Importa SweetAlert
 
 const Login = ({ voltar }) => {
     const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -37,26 +38,26 @@ const Login = ({ voltar }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMensagemErro('');
-    
+        setMensagemErro(''); // Resetar mensagem de erro
+
         try {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
-    
-            // Adicione um console.log aqui para verificar a resposta
-            console.log(response.data); // Verifique se o ID está aqui
-    
-            const { token, nome, id } = response.data; // Verifique se o ID está sendo atribuído corretamente
-    
-            localStorage.setItem('token', token);
-            localStorage.setItem('nomeUsuario', nome);
-            localStorage.setItem('usuarioId', id); // Armazena o ID no localStorage
-    
-            navigate('/home');
+            localStorage.setItem('token', response.data.token); // Armazena o token no localStorage
+
+            // Adicionando mensagem de sucesso usando SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Login bem-sucedido!',
+                text: 'Bem-vindo ao MindFlow.',
+                confirmButtonText: 'Continuar'
+            }).then(() => {
+                navigate('/home'); // Redireciona para a rota /home após login
+            });
+
         } catch (error) {
-            setMensagemErro('Usuário ou senha incorretos.');
+            setMensagemErro('Usuário ou senha incorretos.'); // Mensagem de erro
         }
     };
-    
 
     return (
         <div id='conteudo'>

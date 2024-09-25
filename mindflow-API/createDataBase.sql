@@ -1,3 +1,8 @@
+-- Cria o banco de dados
+CREATE DATABASE MindFlow;
+
+-- **Conecte-se ao banco de dados MindFlow antes de executar as próximas instruções**
+
 -- Tabela de usuários
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
@@ -14,7 +19,7 @@ CREATE TABLE pacientes (
     medico_id INT REFERENCES usuarios(id),
     nome VARCHAR(100) NOT NULL,
     idade INT NOT NULL,
-    cpf VARCHAR(14) UNIQUE NOT NULL,
+    cpf VARCHAR(11) UNIQUE NOT NULL,  -- Alterado para VARCHAR(11)
     cep VARCHAR(10) NOT NULL,
     genero VARCHAR(10) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -48,3 +53,10 @@ CREATE TABLE relatorios (
     relacao_5_estrelas_tarefas TEXT,
     relacao_1_estrela_tarefas TEXT
 );
+
+-- Alterações na tabela pacientes
+ALTER TABLE pacientes DROP COLUMN IF EXISTS id_medico;
+
+ALTER TABLE pacientes ADD COLUMN usuario_id INT;
+
+ALTER TABLE pacientes ADD CONSTRAINT fk_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE;

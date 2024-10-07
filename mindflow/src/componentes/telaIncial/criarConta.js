@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2'; // Importa o SweetAlert2
+import Swal from 'sweetalert2';
 
 const CriarConta = ({ voltar }) => {
   const [nome, setNome] = useState('');
@@ -13,7 +13,7 @@ const CriarConta = ({ voltar }) => {
 
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarRepetirSenha, setMostrarRepetirSenha] = useState(false);
-  const navigate = useNavigate(); // Hook para navegação
+  const navigate = useNavigate();
 
   const alternarVisibilidadeSenha = () => {
     setMostrarSenha(!mostrarSenha);
@@ -22,6 +22,8 @@ const CriarConta = ({ voltar }) => {
   const alternarVisibilidadeRepetirSenha = () => {
     setMostrarRepetirSenha(!mostrarRepetirSenha);
   };
+
+  const isFormValid = nome && email && nascimento && senha && senhaRepetida;
 
   const handleCreateAccount = async (event) => {
     event.preventDefault();
@@ -50,7 +52,7 @@ const CriarConta = ({ voltar }) => {
         title: 'Conta criada com sucesso!',
         text: 'Você já pode começar a usar o MindFlow agora!',
       });
-      navigate('/home'); // Substitua '/home' pela rota correta
+      navigate('/home');
     }
   };
 
@@ -122,7 +124,17 @@ const CriarConta = ({ voltar }) => {
         </div>
         {erro && <p className="error-message">{erro}</p>}
         <button className='btns' type="button" onClick={voltar}>Voltar</button>
-        <button className='btns' type="submit">Criar Conta</button>
+        <button
+          className='btns'
+          type="submit"
+          disabled={!isFormValid} // Botão desabilitado se o formulário estiver incompleto
+          style={{
+            backgroundColor: isFormValid ? 'rgb(71, 6, 135)' : 'gray',
+            cursor: isFormValid ? 'pointer' : 'not-allowed',
+          }}
+        >
+          Criar Conta
+        </button>
       </form>
     </div>
   );

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa o useNavigate para navegação
-import axios from 'axios'; // Importa axios
-import Swal from 'sweetalert2'; // Importa SweetAlert
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const Login = ({ voltar }) => {
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [telaEsqueciSenha, setTelaEsqueciSenha] = useState(false);
     const [telaAtualizarSenha, setTelaAtualizarSenha] = useState(false);
     const [codigoEnviado, setCodigoEnviado] = useState(false);
-    const [email, setEmail] = useState(''); // Estado para o email
-    const [senha, setSenha] = useState(''); // Estado para a senha
-    const [mensagemErro, setMensagemErro] = useState(''); // Estado para mensagens de erro
+    const [email, setEmail] = useState(''); 
+    const [senha, setSenha] = useState('');
+    const [mensagemErro, setMensagemErro] = useState('');
 
-    const navigate = useNavigate(); // Hook para navegação
+    const navigate = useNavigate();
 
     const alternarVisibilidadeSenha = () => {
         setMostrarSenha(!mostrarSenha);
@@ -29,33 +29,35 @@ const Login = ({ voltar }) => {
     const voltarParaLogin = () => {
         setTelaEsqueciSenha(false);
         setTelaAtualizarSenha(false);
-        setCodigoEnviado(false); // Resetar o estado ao voltar
+        setCodigoEnviado(false);
     };
 
     const enviarCodigoEmail = () => {
         setCodigoEnviado(true);
     };
 
+    const isFormValid = email && senha;
+
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMensagemErro(''); // Resetar mensagem de erro
+        setMensagemErro('');
 
         try {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
-            localStorage.setItem('token', response.data.token); // Armazena o token no localStorage
+            localStorage.setItem('token', response.data.token);
 
-            // Adicionando mensagem de sucesso usando SweetAlert
+            // mensagem do SweetAlert
             Swal.fire({
                 icon: 'success',
                 title: 'Login bem-sucedido!',
                 text: 'Bem-vindo ao MindFlow.',
                 confirmButtonText: 'Continuar'
             }).then(() => {
-                navigate('/home'); // Redireciona para a rota /home após login
+                navigate('/home'); // Redirecionar para a rota /home caso os dados estejam corretos
             });
 
         } catch (error) {
-            setMensagemErro('Usuário ou senha incorretos.'); // Mensagem de erro
+            setMensagemErro('Usuário ou senha incorretos.'); 
         }
     };
 
@@ -70,7 +72,7 @@ const Login = ({ voltar }) => {
                             type="text"
                             placeholder="Email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)} // Atualiza o estado do email
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                         <div className='password-container'>
@@ -79,7 +81,7 @@ const Login = ({ voltar }) => {
                                 type={mostrarSenha ? "text" : "password"}
                                 placeholder="Senha"
                                 value={senha}
-                                onChange={(e) => setSenha(e.target.value)} // Atualiza o estado da senha
+                                onChange={(e) => setSenha(e.target.value)}
                                 required
                             />
                             <button
@@ -97,7 +99,17 @@ const Login = ({ voltar }) => {
                         </div>
                         {mensagemErro && <p className='error-message'>{mensagemErro}</p>} {/* Mensagem de erro */}
                         <button className='btns' onClick={voltar}>Voltar</button>
-                        <button className='btns' type="submit">Enviar</button>
+                        <button
+                            className='btns'
+                            type="submit"
+                            disabled={!isFormValid}
+                            style={{
+                                backgroundColor: isFormValid ? 'rgb(71, 6, 135)' : 'gray', 
+                                cursor: isFormValid ? 'pointer' : 'not-allowed', 
+                            }}
+                        >
+                            Enviar
+                        </button>
                     </form>
                 </>
             ) : null}
@@ -136,7 +148,7 @@ const Login = ({ voltar }) => {
                     <h2>Atualizar Senha</h2>
                     <form onSubmit={(e) => {
                         e.preventDefault();
-                        navigate('/home'); // Redireciona ao atualizar a senha
+                        navigate('/home'); // Redirecionar ao atualizar a senha
                     }}>
                         <div className='password-container'>
                             <input

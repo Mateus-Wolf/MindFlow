@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../telaHome/header';
 
+
 const Agendamentos = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [popupVisible, setPopupVisible] = useState(false);
@@ -111,8 +112,10 @@ const Agendamentos = () => {
             ) : (
               <p>Não há agendamentos para este dia.</p>
             )}
-            <button onClick={closePopup}>Criar Agendamento</button>
-            <button onClick={closePopup}>Fechar</button>
+            <div className="popup-buttons">
+              <button className="btn btn-primary" onClick={closePopup}>Criar Agendamento</button>
+              <button className="btn btn-secondary" onClick={closePopup}>Fechar</button>
+            </div>
           </div>
         </div>
       )}

@@ -61,7 +61,13 @@ body, html {
     font-size: 1.2rem;
     border-radius: 5px;
   }
+
+  .calendar-day:hover {
+    background-color: #2a0061; /* Cor ao passar o mouse */
+    cursor: pointer;
+  }
   
+
   .no-appointments {
     margin-top: 20px;
     font-size: 1.1rem;
@@ -83,9 +89,9 @@ body, html {
   
   .popup-content {
     background-color: white;
-    padding: 20px;
+    padding: 30px; /* Aumentado o padding para tornar o pop-up maior */
     border-radius: 8px;
-    max-width: 400px;
+    max-width: 500px; /* Aumentado o max-width para tornar o pop-up maior */
     width: 100%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   }
@@ -94,7 +100,8 @@ body, html {
     margin: 0 0 10px;
   }
   
-  .popup-content button {
-    margin-right: 10px;
+  .popup-buttons {
+    margin-top: 20px; /* Adicionado espaçamento entre os itens */
+    display: flex; /* Usar flexbox para alinhar os botões */
+    justify-content: space-between; /* Espaçamento entre os botões */
   }
-  

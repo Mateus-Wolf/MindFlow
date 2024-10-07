@@ -20,4 +20,4 @@ Como um projeto em React, para inicia-lo, você deve navegar até a pasta onde s
 
 Agora com a adição da API, para iniciar o servidor, deve-se navegar até a pasta onde se encontra o arquivo "index.js" e iniciar com um "node src/index.js" (Lembre-se de configurar as as variáveis de ambiente no arquivo `.env`
 
-Para executar o banco de dados, os comandos estão todos dentro do "createDataBase.sql"
+O Banco de Dados está em Postgre e para executa-lo, os comandos estão todos dentro do "createDataBase.sql"

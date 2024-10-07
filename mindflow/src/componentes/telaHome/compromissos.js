@@ -17,7 +17,7 @@ const Compromissos = () => {
 
     return (
         <div id="compromissos">
-            <h3>Olá, Dr(a) <span className="destaque">{nomeUsuario ? nomeUsuario : 'Dra. Amanda'}</span></h3>
+            <h3>Olá, Dr(a) <span className="destaque">{nomeUsuario ? nomeUsuario : ''}</span></h3>
             <p id='dataComp'>Compromissos de hoje - Dia {dataFormatada} <span className="ver-todos">Ver todos &gt;</span></p>
 
             <div className="compromisso-item">

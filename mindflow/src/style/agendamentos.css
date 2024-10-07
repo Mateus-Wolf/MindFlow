@@ -1,0 +1,100 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    
+  }
+  
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .calendar-container {
+    flex-grow: 1; /* Faz o calendário ocupar o espaço restante */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centraliza verticalmente */
+    align-items: center; /* Centraliza horizontalmente */
+    background-color: var(--roxo-fundo);
+    color: white;
+    padding: 20px;
+  }
+  
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 25px;
+    margin-bottom: 50px;
+  }
+  
+  .calendar-header h2 {
+    font-size: 2rem;
+    color: #D6A4FF;
+  }
+  
+  .calendar-header button {
+    background-color: #4A4A4A;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .calendar-days-of-week, .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    max-width: 800px;
+    width: 100%;
+  }
+  
+  .calendar-day {
+    background-color: #4A4A4A;
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+  }
+  
+  .no-appointments {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: #BBBBBB;
+  }
+  
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que o pop-up fique sobre outros elementos */
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .popup-content h3 {
+    margin: 0 0 10px;
+  }
+  
+  .popup-content button {
+    margin-right: 10px;
+  }
+  

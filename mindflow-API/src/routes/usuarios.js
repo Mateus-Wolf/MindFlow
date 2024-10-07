@@ -4,6 +4,18 @@ const db = require('../db'); // Certifique-se de que o caminho para o seu db est
 
 const router = express.Router();
 
+// Rota para obter todos os usuários
+router.get('/', async (req, res) => {
+    try {
+        // Consulta todos os usuários no banco de dados
+        const usuarios = await db.query('SELECT * FROM usuarios');
+        res.status(200).json(usuarios.rows);
+    } catch (error) {
+        console.error('Erro ao obter usuários:', error);
+        res.status(500).json({ error: 'Erro ao obter usuários' });
+    }
+});
+
 // Rota para registro de novos usuários
 router.post('/register', async (req, res) => {
     const { nome, email, nascimento, senha, tipo_usuario } = req.body;

@@ -37,7 +37,7 @@ body, html {
   }
   
   .calendar-header button {
-    background-color: #4A4A4A;
+    background-color: var(--roxo-destaque);
     border: none;
     color: white;
     padding: 10px 20px;
@@ -55,7 +55,7 @@ body, html {
   }
   
   .calendar-day {
-    background-color: #4A4A4A;
+    background-color: var(--roxo-destaque);
     text-align: center;
     padding: 20px;
     font-size: 1.2rem;

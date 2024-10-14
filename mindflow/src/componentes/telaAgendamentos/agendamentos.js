@@ -3,7 +3,6 @@ import Header from '../telaHome/header';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
-
 const Agendamentos = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [popupVisible, setPopupVisible] = useState(false);
@@ -52,9 +51,18 @@ const Agendamentos = () => {
     return daysArray;
   };
 
-  const handleDayClick = (day) => {
+  const handleDayClick = async (day) => {
     setSelectedDay(day);
-    // Aqui você poderia buscar agendamentos do dia selecionado, se necessário.
+    const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+    // Buscar agendamentos para o dia selecionado
+    try {
+      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}`);
+      setAppointments(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar agendamentos:', error);
+    }
+
     setPopupVisible(true);
   };
 
@@ -83,11 +91,11 @@ const Agendamentos = () => {
 
     try {
       await axios.post('http://localhost:3000/api/agendamentos', newAppointment);
-      alert('Agendamento criado com sucesso!');
+      Swal.fire('Agendamento criado com sucesso!', '', 'success'); // Usando SweetAlert2
       closePopup();
     } catch (error) {
       console.error('Erro ao criar agendamento:', error);
-      alert('Erro ao criar agendamento. Por favor, tente novamente.');
+      Swal.fire('Erro ao criar agendamento. Por favor, tente novamente.', '', 'error');
     }
   };
 

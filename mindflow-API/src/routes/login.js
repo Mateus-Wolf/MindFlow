@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
             expiresIn: '1h',
         });
 
-        res.json({ token });
+        res.json({ token, nome: usuario.nome });
     } catch (error) {
         console.error('Erro ao realizar login:', error);
         res.status(500).json({ error: 'Erro ao realizar login' });

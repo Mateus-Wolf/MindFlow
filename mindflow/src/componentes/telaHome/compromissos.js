@@ -4,10 +4,15 @@ const Compromissos = () => {
     const [nomeUsuario, setNomeUsuario] = useState('');
 
     useEffect(() => {
+        // Função para capitalizar a primeira letra
+        const capitalizeFirstLetter = (nome) => {
+            return nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
+        };
+
         // Recupera o nome do usuário do localStorage
         const nome = localStorage.getItem('nomeUsuario');
         if (nome) {
-            setNomeUsuario(nome); // Atualiza o estado com o nome do usuário
+            setNomeUsuario(capitalizeFirstLetter(nome)); // Atualiza o estado com o nome formatado
         }
     }, []);
 

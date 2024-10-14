@@ -41,11 +41,15 @@ const Login = ({ voltar }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setMensagemErro('');
-
+    
         try {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
             localStorage.setItem('token', response.data.token);
-
+    
+            // Aqui vamos salvar o nome do usuário no localStorage
+            const { nome } = response.data;
+            localStorage.setItem('nomeUsuario', nome); // Armazena o nome no localStorage
+    
             // mensagem do SweetAlert
             Swal.fire({
                 icon: 'success',
@@ -55,11 +59,12 @@ const Login = ({ voltar }) => {
             }).then(() => {
                 navigate('/home'); // Redirecionar para a rota /home caso os dados estejam corretos
             });
-
+    
         } catch (error) {
             setMensagemErro('Usuário ou senha incorretos.'); 
         }
     };
+    
 
     return (
         <div id='conteudo'>
@@ -69,7 +74,7 @@ const Login = ({ voltar }) => {
                     <form onSubmit={handleLogin}>
                         <input
                             className='form'
-                            type="text"
+                            type="email"
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}

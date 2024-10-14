@@ -27,12 +27,12 @@ const CriarConta = ({ voltar }) => {
 
   const handleCreateAccount = async (event) => {
     event.preventDefault();
-
+  
     if (senha !== senhaRepetida) {
       setErro('As SENHAS não coincidem, por favor, verifique!');
       return;
     }
-
+  
     const response = await fetch('http://localhost:3000/api/usuarios/register', {
       method: 'POST',
       headers: {
@@ -40,13 +40,17 @@ const CriarConta = ({ voltar }) => {
       },
       body: JSON.stringify({ nome, email, nascimento, senha, tipo_usuario }),
     });
-
+  
     const data = await response.json();
-
+  
     if (!response.ok) {
       setErro(`Erro ao criar conta: ${data.error || 'Erro desconhecido'}`);
     } else {
       console.log('Conta criada com sucesso:', data);
+      // Salva o nome e o ID do usuário no localStorage
+      localStorage.setItem('nomeUsuario', data.nome);
+      localStorage.setItem('token', data.token); // Caso tenha token, ajustar conforme necessário
+  
       Swal.fire({
         icon: 'success',
         title: 'Conta criada com sucesso!',
@@ -55,6 +59,7 @@ const CriarConta = ({ voltar }) => {
       navigate('/home');
     }
   };
+  
 
   return (
     <div>

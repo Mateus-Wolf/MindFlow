@@ -1,12 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../telaHome/header';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 
 const Agendamentos = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [popupVisible, setPopupVisible] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [appointments, setAppointments] = useState([]); // Para armazenar os agendamentos do dia selecionado
+  const [appointments, setAppointments] = useState([]);
+  const [patients, setPatients] = useState([]);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState('');
+  const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    // Carrega os pacientes do banco de dados
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/pacientes');
+        setPatients(response.data);
+      } catch (error) {
+        console.error('Erro ao carregar pacientes:', error);
+      }
+    };
+
+    fetchPatients();
+  }, []);
 
   const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
@@ -21,15 +41,10 @@ const Agendamentos = () => {
   const generateCalendarDays = () => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
-
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    let daysArray = [];
-    for (let i = 0; i < firstDay; i++) {
-      daysArray.push('');
-    }
-
+    let daysArray = Array(firstDay).fill('');
     for (let day = 1; day <= daysInMonth; day++) {
       daysArray.push(day);
     }
@@ -38,16 +53,8 @@ const Agendamentos = () => {
   };
 
   const handleDayClick = (day) => {
-    // Aqui você pode buscar os agendamentos do dia específico
-    // Simulando a busca de agendamentos
-    const fakeAppointments = [
-      { time: "10:00 AM", description: "Consulta com o médico" },
-      { time: "2:00 PM", description: "Reunião" }
-    ];
-    
-    // Definindo o dia selecionado e os agendamentos
     setSelectedDay(day);
-    setAppointments(fakeAppointments); // Substitua por uma chamada real para buscar agendamentos
+    // Aqui você poderia buscar agendamentos do dia selecionado, se necessário.
     setPopupVisible(true);
   };
 
@@ -55,16 +62,41 @@ const Agendamentos = () => {
     setPopupVisible(false);
     setSelectedDay(null);
     setAppointments([]);
+    setShowCreateForm(false);
+    setSelectedPatient('');
+    setDescription('');
+  };
+
+  const openCreateForm = () => {
+    setShowCreateForm(true);
+  };
+
+  const handleCreateAppointment = async () => {
+    const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+    const newAppointment = {
+      paciente_id: selectedPatient,
+      data: formattedDate,
+      descricao: description,
+      usuario_id: 1,
+      registro_humor_id: null
+    };
+
+    try {
+      await axios.post('http://localhost:3000/api/agendamentos', newAppointment);
+      alert('Agendamento criado com sucesso!');
+      closePopup();
+    } catch (error) {
+      console.error('Erro ao criar agendamento:', error);
+      alert('Erro ao criar agendamento. Por favor, tente novamente.');
+    }
   };
 
   const renderCalendarDays = () => {
-    const daysArray = generateCalendarDays();
-
-    return daysArray.map((day, index) => (
+    return generateCalendarDays().map((day, index) => (
       <div
         key={index}
         className={`calendar-day ${day ? 'filled' : 'empty'}`}
-        onClick={() => day && handleDayClick(day)} // Apenas adiciona o evento se o dia não estiver vazio
+        onClick={() => day && handleDayClick(day)}
       >
         {day}
       </div>
@@ -85,17 +117,17 @@ const Agendamentos = () => {
           <h2>{monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}</h2>
           <button onClick={handleNextMonth}>&gt;</button>
         </div>
-        
+
         <div className="calendar-days-of-week">
           {daysOfWeek.map((day, index) => (
             <div key={index} className="day-of-week">{day}</div>
           ))}
         </div>
-        
+
         <div className="calendar-days">
           {renderCalendarDays()}
         </div>
-        
+
         <p className="no-appointments">Você não tem agendamentos marcados para esse mês</p>
       </div>
 
@@ -106,15 +138,67 @@ const Agendamentos = () => {
             {appointments.length > 0 ? (
               <ul>
                 {appointments.map((appt, index) => (
-                  <li key={index}>{appt.time} - {appt.description}</li>
+                  <li key={index}>{appt.time} - {appt.descricao}</li>
                 ))}
               </ul>
             ) : (
               <p>Não há agendamentos para este dia.</p>
             )}
+
             <div className="popup-buttons">
-              <button className="btn btn-primary" onClick={closePopup}>Criar Agendamento</button>
-              <button className="btn btn-secondary" onClick={closePopup}>Fechar</button>
+              {!showCreateForm ? (
+                <>
+                  <button className="btn btnCriar" onClick={openCreateForm}>Criar Agendamento</button>
+                  <button className="btn btnCancelar" onClick={closePopup}>Fechar</button>
+                </>
+              ) : (
+                <form id='form-Agendamento-PopUp'>
+                  <div className="form-group">
+                    <label>Paciente</label>
+                    <select
+                      className="form-control"
+                      value={selectedPatient}
+                      onChange={(e) => setSelectedPatient(e.target.value)}
+                    >
+                      <option value="">Selecione o paciente</option>
+                      {patients.map((patient) => (
+                        <option key={patient.id} value={patient.id}>
+                          {patient.nome}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Data</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={`${selectedDay}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Descrição</label>
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      placeholder='Adicione uma descrição para este agendamento'
+                    ></textarea>
+                  </div>
+
+                  <div className="popup-buttons">
+                    <button
+                      type="button"
+                      className="btn btnCriar"
+                      onClick={handleCreateAppointment}
+                    >
+                      Salvar Agendamento
+                    </button>
+                    <button className="btn btnCancelar" onClick={closePopup}>Cancelar</button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         </div>

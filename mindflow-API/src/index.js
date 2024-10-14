@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const usuariosRoute = require('./routes/usuarios');
 const loginRouter = require('./routes/login');
 const pacientesRouter = require('./routes/pacientes');
+const agendamentosRoute = require('./routes/agendamentos');
 
 // Configurar o dotenv
 dotenv.config();
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use('/api/usuarios', usuariosRoute);
 app.use('/api/login', loginRouter);
 app.use('/api/pacientes', pacientesRouter);
+app.use(agendamentosRoute);
 
 // Rota padrão
 app.get('/', (req, res) => {

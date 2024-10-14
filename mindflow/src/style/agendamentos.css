@@ -88,10 +88,12 @@ body, html {
   }
   
   .popup-content {
-    background-color: white;
-    padding: 30px; /* Aumentado o padding para tornar o pop-up maior */
+    background-color: var(--roxo-fundo);
+    text-align: center;
+    color: whitesmoke;
+    padding: 40px; 
     border-radius: 8px;
-    max-width: 500px; /* Aumentado o max-width para tornar o pop-up maior */
+    max-width: 600px;
     width: 100%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   }
@@ -101,7 +103,22 @@ body, html {
   }
   
   .popup-buttons {
-    margin-top: 20px; /* Adicionado espaçamento entre os itens */
-    display: flex; /* Usar flexbox para alinhar os botões */
-    justify-content: space-between; /* Espaçamento entre os botões */
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between; 
+    gap: 55px;
+  }
+
+  .btnCriar {
+    background-color: #2a0061;
+    color: whitesmoke;
+  }
+
+  .btnCancelar {
+    background-color: var(--vermelho-cancelar);
+    color: whitesmoke;
+  }
+
+  #form-Agendamento-PopUp {
+    margin-left: 100px;
   }

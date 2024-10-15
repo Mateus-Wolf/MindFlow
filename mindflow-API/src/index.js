@@ -4,7 +4,8 @@ const dotenv = require('dotenv');
 const usuariosRoute = require('./routes/usuarios');
 const loginRouter = require('./routes/login');
 const pacientesRouter = require('./routes/pacientes');
-const agendamentosRoute = require('./routes/agendamentos');
+const PUTagendamentosRoute = require('./routes/PUTagendamentos');
+const GETagendamentosRoute = require('./routes/GETagendamentos');
 
 // Configurar o dotenv
 dotenv.config();
@@ -20,7 +21,8 @@ app.use(express.json());
 app.use('/api/usuarios', usuariosRoute);
 app.use('/api/login', loginRouter);
 app.use('/api/pacientes', pacientesRouter);
-app.use(agendamentosRoute);
+app.use('/api/agendamentos', GETagendamentosRoute); // Ajuste aqui
+app.use(PUTagendamentosRoute);
 
 // Rota padrão
 app.get('/', (req, res) => {
@@ -31,6 +33,4 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
-    //console.log('ROTA DE PACIENTES = http://localhost:3000/api/pacientes');
-    //console.log('ROTA DE USUARIOS = http://localhost:3000/api/usuarios');
 });

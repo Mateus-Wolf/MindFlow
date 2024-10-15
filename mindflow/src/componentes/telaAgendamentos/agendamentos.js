@@ -140,18 +140,23 @@ const Agendamentos = () => {
       </div>
 
       {popupVisible && (
-        <div className="popup">
-          <div className="popup-content">
-            <h3>Agendamentos para {selectedDay}/{currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h3>
-            {appointments.length > 0 ? (
-              <ul>
-                {appointments.map((appt, index) => (
-                  <li key={index}>{appt.time} - {appt.descricao}</li>
-                ))}
-              </ul>
-            ) : (
-              <p>Não há agendamentos para este dia.</p>
-            )}
+  <div className="popup">
+    <div className="popup-content">
+      <h3>Agendamentos para {selectedDay}/{currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h3>
+      {appointments.length > 0 ? (
+        <ul>
+          {appointments.map((appt, index) => {
+            const patient = patients.find(patient => patient.id === appt.paciente_id); // Encontra o paciente pelo ID
+            return (
+              <li key={index}>
+                {appt.time} {patient ? patient.nome : 'Paciente não encontrado'}
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <p>Não há agendamentos para este dia.</p>
+      )}
 
             <div className="popup-buttons">
               {!showCreateForm ? (

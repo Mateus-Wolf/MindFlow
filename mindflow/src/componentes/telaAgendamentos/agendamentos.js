@@ -12,9 +12,9 @@ const Agendamentos = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState('');
   const [description, setDescription] = useState('');
+  const [totalAppointments, setTotalAppointments] = useState(0);
 
   useEffect(() => {
-    // Carrega os pacientes do banco de dados
     const fetchPatients = async () => {
       try {
         const response = await axios.get('http://localhost:3000/api/pacientes');
@@ -24,8 +24,23 @@ const Agendamentos = () => {
       }
     };
 
+    const fetchTotalAppointments = async () => {
+      const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+      try {
+        const response = await axios.get(`http://localhost:3000/api/agendamentos/mensal?mes=${formattedDate}`);
+        setTotalAppointments(response.data.length);
+      } catch (error) {
+        console.error('Erro ao carregar agendamentos:', error);
+      }
+    };
+
     fetchPatients();
-  }, []);
+    fetchTotalAppointments();
+  }, [currentDate]);
+
+  const isBeforeToday = (day) => {
+    return day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date();
+  };
 
   const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 
@@ -55,7 +70,6 @@ const Agendamentos = () => {
     setSelectedDay(day);
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
-    // Buscar agendamentos para o dia selecionado
     try {
       const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}`);
       setAppointments(response.data);
@@ -91,7 +105,7 @@ const Agendamentos = () => {
 
     try {
       await axios.post('http://localhost:3000/api/agendamentos', newAppointment);
-      Swal.fire('Agendamento criado com sucesso!', '', 'success'); // Usando SweetAlert2
+      Swal.fire('Agendamento criado com sucesso!', '', 'success');
       closePopup();
     } catch (error) {
       console.error('Erro ao criar agendamento:', error);
@@ -100,15 +114,21 @@ const Agendamentos = () => {
   };
 
   const renderCalendarDays = () => {
-    return generateCalendarDays().map((day, index) => (
-      <div
-        key={index}
-        className={`calendar-day ${day ? 'filled' : 'empty'}`}
-        onClick={() => day && handleDayClick(day)}
-      >
-        {day}
-      </div>
-    ));
+    const today = new Date();
+
+    return generateCalendarDays().map((day, index) => {
+      const isBeforeToday = day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < today;
+
+      return (
+        <div
+          key={index}
+          className={`calendar-day ${day ? (isBeforeToday ? 'filled before-today' : 'filled') : 'empty'}`}
+          onClick={() => day && handleDayClick(day)}
+        >
+          {day}
+        </div>
+      );
+    });
   };
 
   const monthNames = [
@@ -136,32 +156,41 @@ const Agendamentos = () => {
           {renderCalendarDays()}
         </div>
 
-        <p className="no-appointments">Você não tem agendamentos marcados para esse mês</p>
+        <p className="no-appointments">
+          {totalAppointments > 0 ? `Você tem ${totalAppointments} agendamentos marcados para este mês.` : 'Você não tem agendamentos marcados para esse mês.'}
+        </p>
       </div>
 
       {popupVisible && (
-  <div className="popup">
-    <div className="popup-content">
-      <h3>Agendamentos para {selectedDay}/{currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h3>
-      {appointments.length > 0 ? (
-        <ul>
-          {appointments.map((appt, index) => {
-            const patient = patients.find(patient => patient.id === appt.paciente_id); // Encontra o paciente pelo ID
-            return (
-              <li key={index}>
-                {appt.time} {patient ? patient.nome : 'Paciente não encontrado'}
-              </li>
-            );
-          })}
-        </ul>
-      ) : (
-        <p>Não há agendamentos para este dia.</p>
-      )}
-
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Agendamentos para {selectedDay}/{currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h3>
+            <hr />
+            {appointments.length > 0 ? (
+              <ul>
+                {appointments.map((appt, index) => {
+                  const patient = patients.find(patient => patient.id === appt.paciente_id);
+                  return (
+                    <li id='agendamentosDoDia' key={index}>
+                      {appt.time} {patient ? patient.nome : 'Paciente não encontrado'}
+                      <hr />
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p>Não há agendamentos para este dia.</p>
+            )}
             <div className="popup-buttons">
               {!showCreateForm ? (
                 <>
-                  <button className="btn btnCriar" onClick={openCreateForm}>Criar Agendamento</button>
+                  <button
+                    className="btn btnCriar"
+                    onClick={openCreateForm}
+                    disabled={selectedDay && new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay) < new Date()}
+                  >
+                    Criar Agendamento
+                  </button>
                   <button className="btn btnCancelar" onClick={closePopup}>Fechar</button>
                 </>
               ) : (
@@ -191,6 +220,12 @@ const Agendamentos = () => {
                     />
                   </div>
                   <div className="form-group">
+                    <label>Hora</label>
+                    <input
+                      type='time'>
+                    </input>
+                  </div>
+                  <div className="form-group">
                     <label>Descrição</label>
                     <textarea
                       className="form-control"
@@ -213,6 +248,7 @@ const Agendamentos = () => {
                 </form>
               )}
             </div>
+
           </div>
         </div>
       )}

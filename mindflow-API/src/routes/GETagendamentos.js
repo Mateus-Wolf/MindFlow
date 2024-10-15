@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db'); // Supondo que você tenha um arquivo de conexão com o banco de dados
+const db = require('../db');
 
 // Rota para buscar agendamentos por data
 router.get('/', async (req, res) => {

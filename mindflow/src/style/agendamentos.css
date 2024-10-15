@@ -122,3 +122,19 @@ body, html {
 #form-Agendamento-PopUp {
   margin-left: 100px;
 }
+
+#agendamentosDoDia {
+  font-size: 15px;
+  text-align: left;
+}
+
+.calendar-day.empty {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.calendar-day.filled.before-today {
+  background-color: var(--roxo-escuro);
+  color: #aaa;
+}
+

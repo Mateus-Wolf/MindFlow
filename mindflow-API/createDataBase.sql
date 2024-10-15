@@ -64,4 +64,5 @@ CREATE TABLE agendamentos (
     registro_humor_id INT REFERENCES registros_humor(id) ON DELETE CASCADE,
     data DATE NOT NULL,
     descricao TEXT
+    hora TIME
 );

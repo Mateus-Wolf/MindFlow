@@ -13,6 +13,7 @@ const Agendamentos = () => {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [description, setDescription] = useState('');
   const [totalAppointments, setTotalAppointments] = useState(0);
+  const [time, setTime] = useState(''); // Novo estado para hora
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -87,6 +88,7 @@ const Agendamentos = () => {
     setShowCreateForm(false);
     setSelectedPatient('');
     setDescription('');
+    setTime(''); // Resetar a hora ao fechar o popup
   };
 
   const openCreateForm = () => {
@@ -98,6 +100,7 @@ const Agendamentos = () => {
     const newAppointment = {
       paciente_id: selectedPatient,
       data: formattedDate,
+      hora: time, // Incluir a hora aqui
       descricao: description,
       usuario_id: 1,
       registro_humor_id: null
@@ -172,7 +175,7 @@ const Agendamentos = () => {
                   const patient = patients.find(patient => patient.id === appt.paciente_id);
                   return (
                     <li id='agendamentosDoDia' key={index}>
-                      {appt.time} {patient ? patient.nome : 'Paciente não encontrado'}
+                      {appt.hora} - {patient ? patient.nome : 'Paciente não encontrado'}
                       <hr />
                     </li>
                   );
@@ -222,8 +225,11 @@ const Agendamentos = () => {
                   <div className="form-group">
                     <label>Hora</label>
                     <input
-                      type='time'>
-                    </input>
+                      type='time'
+                      className="form-control"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)} // Atualizar estado da hora
+                    />
                   </div>
                   <div className="form-group">
                     <label>Descrição</label>
@@ -231,10 +237,8 @@ const Agendamentos = () => {
                       className="form-control"
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
-                      placeholder='Adicione uma descrição para este agendamento'
                     ></textarea>
                   </div>
-
                   <div className="popup-buttons">
                     <button
                       type="button"
@@ -248,7 +252,6 @@ const Agendamentos = () => {
                 </form>
               )}
             </div>
-
           </div>
         </div>
       )}

@@ -188,3 +188,23 @@
     transform: rotate(360deg);
   }
 }
+
+/* Estilo da barra de Scroll */
+::-webkit-scrollbar {
+  width: 20px; /* Largura da barra de rolagem */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--roxo-fundo); /* Cor do trilho da barra */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--roxo-fundo); /* Cor da barra de rolagem */
+  border-radius: 10px;
+  border: 3px solid #d6b5ff; /* Adiciona um efeito de espaço ao redor da barra */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--roxo-destaque); /* Cor ao passar o mouse */
+  border: 3px solid #8000ff; /* Adiciona um efeito de espaço ao redor da barra */
+}

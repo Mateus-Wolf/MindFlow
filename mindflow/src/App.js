@@ -12,6 +12,7 @@ import Perfil from './componentes/telaPerfil/perfil';
 import Agendamentos from './componentes/telaAgendamentos/agendamentos';
 import ListarPacientes from './componentes/telasPacientes/telaListar';
 import CadastrarPacientes from './componentes/telasPacientes/telaCadastrar';
+import DadosPacientes from './componentes/telasPacientes/telaDados';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/agendamentos" element={<Agendamentos />} /> {/* Rota para Perfil */}
         <Route path="/telaCadastrar" element={<CadastrarPacientes />} /> {/* Rota para Perfil */}
         <Route path="/telaListar" element={<ListarPacientes />} /> {/* Rota para Perfil */}
+        <Route path="/telaDados" element={<DadosPacientes />} /> {/* Rota para Perfil */}
       </Routes>
     </Router>
   );

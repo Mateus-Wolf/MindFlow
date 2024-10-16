@@ -120,4 +120,67 @@ input, select {
     margin-top: 25px;
 }
 
-  
+.buttonDados {
+    background-color: var(--roxo-destaque);
+    border-radius: 15px;
+    color: whitesmoke;
+    border: none;
+    width: 100px;
+    height: 40px;
+}
+
+.delete-button {
+    background-color: var(--vermelho-cancelar);
+    border-radius: 15px;
+    color: whitesmoke;
+    border: none;
+    width: 100px;
+    height: 40px;
+}
+
+.buttonDados {
+    padding: 10px 20px;
+    background-color: var(--roxo-destaque);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Espaçamento entre os botões */
+}
+
+.buttonDados:last-child {
+    margin-right: 0; /* Remove o espaçamento no último botão */
+}
+
+.delete-button {
+    padding: 10px 20px;
+    background-color: var(--vermelho-cancelar);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px; /* Adiciona um espaçamento do botão excluir */
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.form-select {
+    appearance: none; /* Remove o estilo padrão dos navegadores no select */
+    background-color: #fff;
+}
+
+.form-input:disabled,
+.form-select:disabled {
+    background-color: #f0f0f0; /* Cor de fundo para campos desabilitados */
+    cursor: not-allowed;
+}
+

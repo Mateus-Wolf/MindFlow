@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../telaHome/header';
+import { useNavigate } from 'react-router-dom';
 
 const PacientesLista = () => {
     const [searchTerm, setSearchTerm] = useState(''); // Estado para o termo de pesquisa
     const [pacientes, setPacientes] = useState([]); // Estado para armazenar a lista de pacientes
     const [loading, setLoading] = useState(true); // Estado para controle de loading
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+      navigate('/telaListar');  // Substitua pela rota da sua tela de listar
+    };
 
     // Função para atualizar o estado conforme o usuário digita
     const handleSearchChange = (e) => {
@@ -36,6 +43,7 @@ const PacientesLista = () => {
     if (loading) {
         return <div>Carregando...</div>; // Exibe loading enquanto os dados estão sendo carregados
     }
+    
 
     return (
         <div id="tudo">
@@ -58,7 +66,7 @@ const PacientesLista = () => {
                             <h4>{paciente.nome}</h4>
                         </div>
                         <div className="paciente-botoes">
-                            <button className="btn-opcao">Dados</button>
+                            <button className="btn-opcao" onClick={handleClick}>Dados</button>
                             <button className="btn-opcao">Registros</button>
                         </div>
                     </div>

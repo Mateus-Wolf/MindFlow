@@ -13,6 +13,30 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Rota para obter um paciente específico pelo ID
+router.get('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    // Verifica se o ID é um número
+    const pacienteId = parseInt(id, 10);
+
+    if (isNaN(pacienteId)) {
+        return res.status(400).json({ error: 'ID inválido' });
+    }
+
+    try {
+        const result = await pool.query('SELECT * FROM pacientes WHERE id = $1', [pacienteId]);
+        if (result.rows.length > 0) {
+            res.json(result.rows[0]);
+        } else {
+            res.status(404).json({ error: 'Paciente não encontrado' });
+        }
+    } catch (error) {
+        console.error('Erro ao obter paciente:', error);
+        res.status(500).json({ error: 'Erro ao obter paciente' });
+    }
+});
+
 // Rota para criar um novo paciente
 router.post('/', async (req, res) => {
     const { usuario_ID, nome, idade, cpf, cep, genero, email, telefone, estado_civil } = req.body;

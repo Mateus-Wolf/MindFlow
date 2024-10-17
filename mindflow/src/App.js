@@ -24,7 +24,7 @@ function App() {
         <Route path="/agendamentos" element={<Agendamentos />} /> {/* Rota para Perfil */}
         <Route path="/telaCadastrar" element={<CadastrarPacientes />} /> {/* Rota para Perfil */}
         <Route path="/telaListar" element={<ListarPacientes />} /> {/* Rota para Perfil */}
-        <Route path="/telaDados" element={<DadosPacientes />} /> {/* Rota para Perfil */}
+        <Route path="/telaDados/:id" element={<DadosPacientes />} /> {/* Rota para Perfil */}
       </Routes>
     </Router>
   );

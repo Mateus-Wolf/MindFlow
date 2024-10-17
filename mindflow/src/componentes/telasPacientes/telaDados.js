@@ -1,237 +1,203 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../telaHome/header';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // Importa SweetAlert
+import { useParams, useNavigate } from 'react-router-dom'; // Adicione useNavigate
+import Header from '../telaHome/header';
+import Swal from 'sweetalert2';
 
-const PacienteDetalhes = ({ pacienteId }) => {
-    const [nome, setNome] = useState('');
-    const [idade, setIdade] = useState('');
-    const [cpf, setCpf] = useState('');
-    const [cep, setCep] = useState('');
-    const [genero, setGenero] = useState('masculino');
-    const [email, setEmail] = useState('');
-    const [telefone, setTelefone] = useState('');
-    const [estadoCivil, setEstadoCivil] = useState('casado');
-    const [isEditMode, setIsEditMode] = useState(false);
-    const [originalData, setOriginalData] = useState({}); // Para armazenar os dados originais
+const PacienteDados = () => {
+    const { id } = useParams();
+    const navigate = useNavigate(); // Crie uma instância do navigate
+    const [paciente, setPaciente] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState({});
 
     useEffect(() => {
-        // Carregar os dados do paciente ao montar o componente
-        const fetchPacienteData = async () => {
+        const fetchPaciente = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/pacientes/${pacienteId}`);
-                const { nome, idade, cpf, cep, genero, email, telefone, estado_civil } = response.data;
-                setNome(nome);
-                setIdade(idade);
-                setCpf(cpf);
-                setCep(cep);
-                setGenero(genero);
-                setEmail(email);
-                setTelefone(telefone);
-                setEstadoCivil(estado_civil);
-                setOriginalData(response.data); // Armazena os dados originais
+                const response = await axios.get(`http://localhost:3000/api/pacientes/${id}`);
+                setPaciente(response.data);
+                setFormData(response.data);
             } catch (error) {
-                console.error('Erro ao carregar dados do paciente:', error);
+                console.error('Erro ao obter dados do paciente:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
-        fetchPacienteData();
-    }, [pacienteId]);
+        fetchPaciente();
+    }, [id]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleEdit = () => {
+        setIsEditing(true);
+    };
 
-        const updatedPacienteData = {
-            nome,
-            idade,
-            cpf,
-            cep,
-            genero,
-            email,
-            telefone,
-            estado_civil: estadoCivil,
-        };
+    const handleCancel = () => {
+        setIsEditing(false);
+        setFormData(paciente);
+    };
 
-        try {
-            const response = await axios.put(`http://localhost:3000/api/pacientes/${pacienteId}`, updatedPacienteData);
-            console.log('Paciente atualizado com sucesso:', response.data);
-
-            Swal.fire({
-                title: 'Sucesso!',
-                text: 'Paciente atualizado com sucesso!',
-                icon: 'success',
-                confirmButtonText: 'Ok',
-            }).then(() => {
-                setIsEditMode(false); // Sair do modo de edição
-            });
-        } catch (error) {
-            console.error('Erro ao atualizar paciente:', error.response ? error.response.data : error.message);
-        }
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value,
+        }));
     };
 
     const handleDelete = async () => {
-        Swal.fire({
+        const confirmation = await Swal.fire({
             title: 'Tem certeza?',
-            text: 'Você não poderá desfazer essa ação!',
+            text: 'Você não poderá reverter isso!',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Sim, excluir!',
             cancelButtonText: 'Cancelar',
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    await axios.delete(`http://localhost:3000/api/pacientes/${pacienteId}`);
-                    Swal.fire('Excluído!', 'O paciente foi excluído.', 'success').then(() => {
-                        window.location.href = 'telaListar'; // Redireciona para a listagem após a exclusão
-                    });
-                } catch (error) {
-                    console.error('Erro ao excluir paciente:', error);
-                }
-            }
         });
+
+        if (confirmation.isConfirmed) {
+            try {
+                const response = await axios.delete(`http://localhost:3000/api/pacientes/${id}`);
+                Swal.fire('Excluído!', response.data.message, 'success');
+                navigate('/telaListar'); // Redireciona para a tela de listagem
+            } catch (error) {
+                console.error('Erro ao excluir paciente:', error);
+                const errorMessage = error.response?.data?.message || 'Não foi possível excluir o paciente.';
+                Swal.fire('Erro!', errorMessage, 'error');
+            }
+        }
     };
 
-    const handleCancelEdit = () => {
-        // Restaura os dados originais e sai do modo de edição
-        setNome(originalData.nome);
-        setIdade(originalData.idade);
-        setCpf(originalData.cpf);
-        setCep(originalData.cep);
-        setGenero(originalData.genero);
-        setEmail(originalData.email);
-        setTelefone(originalData.telefone);
-        setEstadoCivil(originalData.estado_civil);
-        setIsEditMode(false);
-    };
+    if (loading) {
+        return <div>Carregando...</div>;
+    }
 
     return (
         <div id="tudo">
             <Header />
-            <div className="form-container">
-                <form onSubmit={handleSubmit}>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="nome">Nome</label>
-                            <input
-                                type="text"
-                                id="nome"
-                                placeholder="Nome"
-                                value={nome}
-                                onChange={(e) => setNome(e.target.value)}
-                                disabled={!isEditMode}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="idade">Idade</label>
-                            <input
-                                type="number"
-                                id="idade"
-                                placeholder="Idade"
-                                value={idade}
-                                onChange={(e) => setIdade(e.target.value)}
-                                disabled={!isEditMode}
-                                required
-                            />
-                        </div>
+            <div id="paciente-dados">
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="nome">Nome</label>
+                        <input
+                            type="text"
+                            id="nome"
+                            name="nome"
+                            value={formData.nome}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
                     </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="cpf">CPF</label>
-                            <input
-                                type="text"
-                                id="cpf"
-                                placeholder="CPF"
-                                value={cpf}
-                                onChange={(e) => setCpf(e.target.value)}
-                                disabled={!isEditMode}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="cep">CEP</label>
-                            <input
-                                type="text"
-                                id="cep"
-                                placeholder="CEP"
-                                value={cep}
-                                onChange={(e) => setCep(e.target.value)}
-                                disabled={!isEditMode}
-                                required
-                            />
-                        </div>
+                    <div className="form-group">
+                        <label htmlFor="idade">Idade</label>
+                        <input
+                            type="number"
+                            id="idade"
+                            name="idade"
+                            value={formData.idade}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
                     </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="genero">Gênero</label>
-                            <select
-                                id="genero"
-                                value={genero}
-                                onChange={(e) => setGenero(e.target.value)}
-                                disabled={!isEditMode}
-                            >
-                                <option value="masculino">Masculino</option>
-                                <option value="feminino">Feminino</option>
-                                <option value="nao-binario">Não Binário</option>
-                                <option value="outro">Outro</option>
-                                <option value="nao-informar">Não Informar</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                placeholder="Email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                disabled={!isEditMode}
-                                required
-                            />
-                        </div>
+                </div>
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="cpf">CPF</label>
+                        <input
+                            type="text"
+                            id="cpf"
+                            name="cpf"
+                            value={formData.cpf}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
                     </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="telefone">Telefone/Celular</label>
-                            <input
-                                type="tel"
-                                id="telefone"
-                                placeholder="Telefone/Celular"
-                                value={telefone}
-                                onChange={(e) => setTelefone(e.target.value)}
-                                disabled={!isEditMode}
-                                required
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="estadoCivil">Estado Civil</label>
-                            <select
-                                id="estadoCivil"
-                                value={estadoCivil}
-                                onChange={(e) => setEstadoCivil(e.target.value)}
-                                disabled={!isEditMode}
-                            >
-                                <option value="casado">Casado</option>
-                                <option value="solteiro">Solteiro</option>
-                                <option value="divorciado">Divorciado</option>
-                                <option value="separado">Separado</option>
-                                <option value="viuvo">Viúvo</option>
-                            </select>
-                        </div>
+                    <div className="form-group">
+                        <label htmlFor="cep">CEP</label>
+                        <input
+                            type="text"
+                            id="cep"
+                            name="cep"
+                            value={formData.cep}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
                     </div>
-                    {isEditMode ? (
+                </div>
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="genero">Gênero</label>
+                        <select
+                            id="genero"
+                            name="genero"
+                            value={formData.genero}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        >
+                            <option value="masculino">Masculino</option>
+                            <option value="feminino">Feminino</option>
+                            <option value="nao-binario">Não Binário</option>
+                            <option value="outro">Outro</option>
+                            <option value="nao-informar">Não Informar</option>
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                </div>
+                <div className="form-row">
+                    <div className="form-group">
+                        <label htmlFor="telefone">Telefone/Celular</label>
+                        <input
+                            type="tel"
+                            id="telefone"
+                            name="telefone"
+                            value={formData.telefone}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="estadoCivil">Estado Civil</label>
+                        <select
+                            id="estadoCivil"
+                            name="estado_civil"
+                            value={formData.estado_civil}
+                            onChange={handleChange}
+                            disabled={!isEditing}
+                        >
+                            <option value="casado">Casado</option>
+                            <option value="solteiro">Solteiro</option>
+                            <option value="divorciado">Divorciado</option>
+                            <option value="separado">Separado</option>
+                            <option value="viuvo">Viúvo</option>
+                        </select>
+                    </div>
+                </div>
+                <div className="button-group">
+                    {isEditing ? (
                         <>
-                                <button type="submit" className="buttonDados">Salvar</button>
-                                <button type="button" className="buttonDados" onClick={handleCancelEdit}>Cancelar</button>
+                            <button onClick={handleCancel} className="buttonDados">Cancelar</button>
+                            <button onClick={handleEdit} className="buttonDados">Salvar</button>
                         </>
                     ) : (
-                        <button type="button" className="buttonDados" onClick={() => setIsEditMode(true)}>Editar</button>
+                        <>
+                            <button onClick={handleEdit} className="buttonDados">Editar</button>
+                            <button onClick={handleDelete} className="delete-small-button">Excluir</button>
+                        </>
                     )}
-                    <button type="button" className="delete-button" onClick={handleDelete}>Excluir</button>
-                </form>
+                </div>
             </div>
         </div>
     );
 };
 
-export default PacienteDetalhes;
+export default PacienteDados;

@@ -6,6 +6,8 @@ const loginRouter = require('./routes/login');
 const pacientesRouter = require('./routes/pacientes');
 const PUTagendamentosRoute = require('./routes/PUTagendamentos');
 const GETagendamentosRoute = require('./routes/GETagendamentos');
+const PUTpacientes = require('./routes/PUTpacientes')
+const DELETEpacientes = require('./routes/DELETEpaciente')
 
 // Configurar o dotenv
 dotenv.config();
@@ -21,8 +23,10 @@ app.use(express.json());
 app.use('/api/usuarios', usuariosRoute);
 app.use('/api/login', loginRouter);
 app.use('/api/pacientes', pacientesRouter);
-app.use('/api/agendamentos', GETagendamentosRoute); // Ajuste aqui
+app.use('/api/agendamentos', GETagendamentosRoute);
 app.use(PUTagendamentosRoute);
+app.use('/api/pacientes', PUTpacientes);
+app.use('/api/pacientes', DELETEpacientes)
 
 // Rota padrão
 app.get('/', (req, res) => {

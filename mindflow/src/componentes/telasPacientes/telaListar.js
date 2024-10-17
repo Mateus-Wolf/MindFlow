@@ -9,9 +9,9 @@ const PacientesLista = () => {
     const [loading, setLoading] = useState(true); // Estado para controle de loading
 
     const navigate = useNavigate();
-
-    const handleClick = () => {
-      navigate('/telaListar');  // Substitua pela rota da sua tela de listar
+    
+    const handleClick = (id) => {
+        navigate(`/telaDados/${id}`);  // Substitua pela rota que leva à página de dados do paciente
     };
 
     // Função para atualizar o estado conforme o usuário digita
@@ -66,7 +66,7 @@ const PacientesLista = () => {
                             <h4>{paciente.nome}</h4>
                         </div>
                         <div className="paciente-botoes">
-                            <button className="btn-opcao" onClick={handleClick}>Dados</button>
+                            <button className="btn-opcao" onClick={() => handleClick(paciente.id)}>Dados</button>
                             <button className="btn-opcao">Registros</button>
                         </div>
                     </div>

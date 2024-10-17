@@ -1,0 +1,51 @@
+.tudo {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--roxo-fundo);
+    color: whitesmoke;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    flex-grow: 1; /* Permite que essa parte cresça e ocupe o espaço restante */
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px; /* Reduzir o padding para não ultrapassar a altura */
+    background-color: var(--roxo-fundo); /* Garantir que o fundo do footer seja roxo também */
+}
+  
+.btnSalvar{
+    width: 290px;
+    background-color: var(--roxo-destaque);
+    border-radius: 15px;
+    color: whitesmoke;
+    padding: 10px;
+    width: 115px;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btnVoltar{
+    width: 290px;
+    background-color: var(--vermelho-cancelar);
+    border-radius: 15px;
+    color: whitesmoke;
+    width: 115px;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+  }

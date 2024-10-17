@@ -4,6 +4,7 @@ import './style/home.css';
 import './style/perfil.css';
 import './style/pacientes.css';
 import './style/agendamentos.css'
+import './style/registrohumor.css'
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './componentes/telaIncial/bemVindo';
@@ -13,6 +14,7 @@ import Agendamentos from './componentes/telaAgendamentos/agendamentos';
 import ListarPacientes from './componentes/telasPacientes/telaListar';
 import CadastrarPacientes from './componentes/telasPacientes/telaCadastrar';
 import DadosPacientes from './componentes/telasPacientes/telaDados';
+import RegistroHumor from './componentes/telaRegistrosHumor/registroHumor';
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
         <Route path="/telaCadastrar" element={<CadastrarPacientes />} /> {/* Rota para Perfil */}
         <Route path="/telaListar" element={<ListarPacientes />} /> {/* Rota para Perfil */}
         <Route path="/telaDados/:id" element={<DadosPacientes />} /> {/* Rota para Perfil */}
+        <Route path="/registroHumor" element={<RegistroHumor />} /> {/* Rota para Perfil */}
       </Routes>
     </Router>
   );

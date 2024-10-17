@@ -1,13 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const usuariosRoute = require('./routes/usuarios');
-const loginRouter = require('./routes/login');
-const pacientesRouter = require('./routes/pacientes');
-const PUTagendamentosRoute = require('./routes/PUTagendamentos');
-const GETagendamentosRoute = require('./routes/GETagendamentos');
-const PUTpacientes = require('./routes/PUTpacientes')
-const DELETEpacientes = require('./routes/DELETEpaciente')
+const usuariosRoute = require('./routes/usuarios/GETusuarios');
+const loginRouter = require('./routes/usuarios/POSTlogin');
+const pacientesRouter = require('./routes/pacientes/GETpacientes');
+const PUTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
+const GETagendamentosRoute = require('./routes/agendamentos/GETagendamentos');
+const PUTpacientes = require('./routes/pacientes/PUTpacientes')
+const DELETEpacientes = require('./routes/pacientes/DELETEpaciente')
 
 // Configurar o dotenv
 dotenv.config();

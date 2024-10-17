@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db'); // Ajuste o caminho para seu módulo de conexão ao banco de dados
+const db = require('../../db'); // Ajuste o caminho para seu módulo de conexão ao banco de dados
 
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;

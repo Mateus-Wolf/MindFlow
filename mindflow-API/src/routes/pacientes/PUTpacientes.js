@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../db'); // Ajuste o caminho para seu módulo de conexão ao banco de dados
+const db = require('../../db'); // Ajuste o caminho para seu módulo de conexão ao banco de dados
 
 // Rota para atualizar os dados de um paciente
 router.put('/:id', async (req, res) => {

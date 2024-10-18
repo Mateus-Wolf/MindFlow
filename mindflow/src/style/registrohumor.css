@@ -105,3 +105,34 @@ img {
   .button-hovered-times {
     background: var(--vermelho-cancelar); /* Cor para o botão de times */
 }
+
+
+
+/* Criando CSS para a tela de Avaliação do Humor */
+.avaliacao-container {
+    color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    margin-top: -8px;
+    min-height: 100vh; /* Faz com que o container ocupe pelo menos a altura total da tela */
+}
+
+/* Criando CSS para a tela de Avaliação do Humor */
+.avaliacao-container {
+    color: whitesmoke;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    background: linear-gradient(to bottom, #000, #6e00ff);
+    padding: 20px;
+    min-height: 100vh; /* Faz com que o container ocupe pelo menos a altura total da tela */
+}
+
+.avaliacao-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    flex: 0 1 calc(50% - 20px);
+    max-width: 300px;
+}

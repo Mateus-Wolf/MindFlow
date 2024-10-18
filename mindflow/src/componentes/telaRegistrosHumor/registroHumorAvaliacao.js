@@ -8,7 +8,7 @@ import trabalhoIcon from '../../icones/trabalho-icone.svg';
 import exercicioIcon from '../../icones/exercicio-icone.svg';
 import lazerIcon from '../../icones/lazer-icone.svg';
 
-function RegistroHumor() {
+function RegistroHumorAtividades() {
   const [selected, setSelected] = useState({}); // Objeto para armazenar seleções
   const [hovered, setHovered] = useState({}); // Objeto para armazenar hover
 
@@ -86,4 +86,4 @@ function RegistroHumor() {
   );
 }
 
-export default RegistroHumor;
+export default RegistroHumorAtividades;

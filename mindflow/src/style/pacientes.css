@@ -62,18 +62,21 @@
 
 .paciente-botoes {
     display: flex;
+    align-items: center; /* Centraliza os botões verticalmente */
     gap: 10px;
 }
 
-.btn-opcao {
-    background: linear-gradient(90deg, rgba(119,0,255,1) 0%, rgba(166,58,255,1) 100%);
+.btn-opcao, .btn-Registros {
+    background: var(--roxo-gradiente);
     border: none;
     border-radius: 10px;
+    height: 80px; /* Altura padronizada */
     color: white;
-    padding: 5px 10px;
-    font-size: 12px;
+    padding: 5px 10px; /* Padding padronizado */
+    font-size: 12px; /* Tamanho da fonte padronizado */
     cursor: pointer;
 }
+
 
 .form-container {
     background-color: var(--roxo-fundo);

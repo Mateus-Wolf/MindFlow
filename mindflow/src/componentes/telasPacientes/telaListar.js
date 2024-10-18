@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Header from '../telaHome/header';
+import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
 const PacientesLista = () => {
@@ -9,10 +10,11 @@ const PacientesLista = () => {
     const [loading, setLoading] = useState(true); // Estado para controle de loading
 
     const navigate = useNavigate();
-    
+
     const handleClick = (id) => {
         navigate(`/telaDados/${id}`);  // Substitua pela rota que leva à página de dados do paciente
     };
+    
 
     // Função para atualizar o estado conforme o usuário digita
     const handleSearchChange = (e) => {
@@ -43,7 +45,7 @@ const PacientesLista = () => {
     if (loading) {
         return <div>Carregando...</div>; // Exibe loading enquanto os dados estão sendo carregados
     }
-    
+
 
     return (
         <div id="tudo">
@@ -67,7 +69,9 @@ const PacientesLista = () => {
                         </div>
                         <div className="paciente-botoes">
                             <button className="btn-opcao" onClick={() => handleClick(paciente.id)}>Dados</button>
-                            <button className="btn-opcao">Registros</button>
+                            <Link to="/registroHumorAtividades">
+                                <button className="btn-Registros">Registros</button>
+                            </Link>
                         </div>
                     </div>
                 ))}

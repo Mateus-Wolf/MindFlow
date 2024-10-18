@@ -11,17 +11,20 @@
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    flex-grow: 1; /* Permite que essa parte cresça e ocupe o espaço restante */
+    flex-grow: 1;
+    /* Permite que essa parte cresça e ocupe o espaço restante */
 }
 
 .footer {
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px; /* Reduzir o padding para não ultrapassar a altura */
-    background-color: var(--roxo-fundo); /* Garantir que o fundo do footer seja roxo também */
+    padding: 10px 20px;
+    /* Reduzir o padding para não ultrapassar a altura */
+    background-color: var(--roxo-fundo);
+    /* Garantir que o fundo do footer seja roxo também */
 }
-  
-.btnSalvar{
+
+.btnSalvar {
     width: 290px;
     background-color: var(--roxo-destaque);
     border-radius: 15px;
@@ -34,9 +37,9 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-  }
+}
 
-  .btnVoltar{
+.btnVoltar {
     width: 290px;
     background-color: var(--vermelho-cancelar);
     border-radius: 15px;
@@ -48,4 +51,52 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
+}
+
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    /* Centralizar os botões */
+    align-items: center;
+    gap: 10px;
+    /* Espaçamento entre os botões */
+}
+
+.checkstyle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    background-color: #c0c0c0; /* Cor cinza padrão */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0 5px; /* Espaçamento entre os botões */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease; /* Transição suave para hover */
+}
+
+.button :hover {
+    background: var(--roxo-gradiente)
+}
+
+.button-checked {
+    background: var(--roxo-gradiente); /* Cor para o botão de check */
+    color: white;
+  }
+  
+.button-checked-times {
+    background: var(--vermelho-cancelar); /* Cor para o botão de times */
+    color: white;
+  }
+
+  .button-hovered {
+    background: var(--roxo-gradiente); /* Cor para o botão de check */
+  }
+  
+  .button-hovered-times {
+    background: var(--vermelho-cancelar); /* Cor para o botão de times */
   }

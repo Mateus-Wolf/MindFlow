@@ -2,8 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const usuariosRoute = require('./routes/usuarios/GETusuarios');
-const loginRouter = require('./routes/usuarios/POSTlogin');
+const loginRouter = require('./routes/usuarios/POSTusuario');
 const pacientesRouter = require('./routes/pacientes/GETpacientes');
+const PUTusuarios = require('./routes/usuarios/PUTusuarios')
+const PUTsenha = require('./routes/usuarios/PUTsenha');
 const PUTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
 const GETagendamentosRoute = require('./routes/agendamentos/GETagendamentos');
 const PUTpacientes = require('./routes/pacientes/PUTpacientes')
@@ -27,6 +29,8 @@ app.use('/api/agendamentos', GETagendamentosRoute);
 app.use(PUTagendamentosRoute);
 app.use('/api/pacientes', PUTpacientes);
 app.use('/api/pacientes', DELETEpacientes)
+app.use('/api/usuarios', PUTusuarios);
+app.use('/api/usuarios', PUTsenha);
 
 // Rota padrão
 app.get('/', (req, res) => {

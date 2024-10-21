@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../telaHome/header';
+import { Link } from "react-router-dom";
 import { FaStar } from 'react-icons/fa';
 
 const RegistroHumorAvaliacao = ({ label, emoji }) => {
@@ -38,24 +39,20 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
     const Avaliacao = () => {
         return (
             <div className="avaliacao-container" style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
-                <div id='avaliacaoEsquerda' style={{ flex: '1' }}>
                     <div className="avaliacao-item">
                         <span role="img" aria-label="sono">😴</span>
                         <p>Qualidade do sono</p>
                         <div className="stars">{renderStars(ratings.sleepQuality, 'sleepQuality')}</div>
-                    </div>
                     <div className="avaliacao-item">
                         <span role="img" aria-label="estresse">😡</span>
                         <p>Nível de estresse</p>
                         <div className="stars">{renderStars(ratings.stressLevel, 'stressLevel')}</div>
                     </div>
                 </div>
-                <div id='avaliacaoDireita' style={{ flex: '1', textAlign: 'right' }}>
                     <div className="avaliacao-item">
                         <span role="img" aria-label="energia">🔥</span>
                         <p>Nível de energia</p>
                         <div className="stars">{renderStars(ratings.energyLevel, 'energyLevel')}</div>
-                    </div>
                     <div className="avaliacao-item">
                         <span role="img" aria-label="geral">🤩</span>
                         <p>Avaliação geral</p>
@@ -72,6 +69,14 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
             <h2>{label}</h2>
             <div>{emoji}</div>
             <Avaliacao />
+            <div className="footer">
+                <Link to="/registroHumorAtividades">
+                    <button className="btnVoltar">Voltar</button>
+                </Link>
+                <Link to="/registroHumorAvaliacao">
+                    <button className="btnSalvar">Salvar</button>
+                </Link>
+            </div>
         </div>
     );
 };

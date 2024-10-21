@@ -46,6 +46,7 @@ const Login = ({ voltar }) => {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
             localStorage.setItem('token', response.data.token);
 
+
             // mensagem do SweetAlert
             Swal.fire({
                 icon: 'success',
@@ -57,7 +58,7 @@ const Login = ({ voltar }) => {
             });
 
         } catch (error) {
-            setMensagemErro('Usuário ou senha incorretos.'); 
+            setMensagemErro('Email ou senha incorretos.'); 
         }
     };
 

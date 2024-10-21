@@ -1,28 +1,116 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importa useNavigate
+import React, { useState, useEffect } from "react"; // Remova useRef se não estiver usando
+import { useNavigate } from "react-router-dom"; 
 import Header from '../telaHome/header';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import InputMask from 'react-input-mask';
 
 const Perfil = () => {
-    const [editable, setEditable] = useState({
-        nome: false,
-        email: false,
-        nascimento: false,
-        senha: false,
-    });
+    const [editable, setEditable] = useState(false);
+    const [usuario, setUsuario] = useState({});
+    const [novaSenha, setNovaSenha] = useState('');
+    const navigate = useNavigate();
 
-    const navigate = useNavigate(); // Inicializa o useNavigate
-
-    const toggleEdit = (field) => {
-        setEditable((prev) => ({ ...prev, [field]: !prev[field] }));
+    const toggleEdit = () => {
+        setEditable(prev => !prev);
     };
 
     const handleLogout = () => {
-        // Aqui você pode adicionar a lógica para limpar o estado do usuário ou o token, se necessário
-        navigate('/'); // Redireciona para a tela de login
+        localStorage.removeItem('token');
+        navigate('/'); 
     };
 
+    useEffect(() => {
+        const fetchUsuario = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                navigate('/');
+                return;
+            }
+
+            try {
+                const response = await axios.get('http://localhost:3000/api/usuarios/me', {
+                    headers: {
+                        Authorization: token,
+                    },
+                });
+                setUsuario(response.data);
+            } catch (error) {
+                console.error('Erro ao obter dados do usuário:', error);
+                navigate('/');
+            }
+        };
+
+        fetchUsuario();
+    }, [navigate]);
+
+    const formatDate = (dateString) => {
+        const dateParts = dateString.split('/');
+        if (dateParts.length === 3) {
+            const day = String(dateParts[0]).padStart(2, '0');
+            const month = String(dateParts[1]).padStart(2, '0');
+            const year = dateParts[2];
+            return `${year}-${month}-${day}`; // Retorna no formato YYYY-MM-DD
+        }
+        return dateString; // Retorna a string original se não for válida
+    };
+
+    const handleSave = async () => {
+        const token = localStorage.getItem('token');
+
+        const usuarioToSave = { 
+            ...usuario, 
+            nascimento: formatDate(usuario.nascimento)
+        };
+
+        try {
+            await axios.put('http://localhost:3000/api/usuarios/me', usuarioToSave, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (novaSenha) {
+                await axios.put('http://localhost:3000/api/usuarios/me/senha', { novaSenha }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                Swal.fire('Sucesso!', 'Senha atualizada com sucesso.', 'success');
+            }
+
+            Swal.fire('Sucesso!', 'Dados atualizados com sucesso.', 'success');
+        } catch (error) {
+            console.error('Erro ao atualizar dados:', error);
+            Swal.fire('Erro!', 'Não foi possível atualizar os dados.', 'error');
+        }
+        toggleEdit();
+    };
+
+    const handleDateChange = (value) => {
+        setUsuario({ ...usuario, nascimento: value });
+    };
+
+    const handleDateBlur = () => {
+        const { nascimento } = usuario;
+        const dateParts = nascimento.split('/');
+        
+        if (dateParts.length === 3) {
+          const day = dateParts[0];
+          const month = dateParts[1];
+          const year = dateParts[2];
+          
+          const isValidDate = (d, m, y) => {
+            const date = new Date(`${y}-${m}-${d}`);
+            return date && (date.getMonth() + 1) == m && date.getDate() == d && date.getFullYear() == y;
+          };
+          
+          if (isValidDate(day, month, year)) {
+            setUsuario({ ...usuario, nascimento: `${year}-${month}-${day}` });
+          }
+        }
+      };
+      
     return (
         <div id="conteudoPerfil">
             <Header />
@@ -31,48 +119,66 @@ const Perfil = () => {
                     {/* Aqui você pode adicionar a imagem do avatar */}
                 </div>
                 <div className="perfil-opcoes">
-                    <label>
-                        Nome:
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input type="text" placeholder="Alterar nome" disabled={!editable.nome} />
-                            <FontAwesomeIcon icon={faEdit} onClick={() => toggleEdit('nome')} style={{ cursor: 'pointer', marginLeft: '5px' }} />
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="nome">Nome:</label>
+                            <input
+                                type="text"
+                                id="nome"
+                                value={usuario.nome || ''}
+                                onChange={(e) => setUsuario({ ...usuario, nome: e.target.value })}
+                                disabled={!editable}
+                            />
                         </div>
-                    </label>
-                    <label>
-                        Email:
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input type="email" placeholder="Alterar email" disabled={!editable.email} />
-                            <FontAwesomeIcon icon={faEdit} onClick={() => toggleEdit('email')} style={{ cursor: 'pointer', marginLeft: '5px' }} />
+                        <div className="form-group">
+                            <label htmlFor="email">Email:</label>
+                            <input
+                                type="email"
+                                id="email"
+                                value={usuario.email || ''}
+                                onChange={(e) => setUsuario({ ...usuario, email: e.target.value })}
+                                disabled={!editable}
+                            />
                         </div>
-                    </label>
-                    <label>
-                        Nascimento:
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input type="date" disabled={!editable.nascimento} />
-                            <FontAwesomeIcon icon={faEdit} onClick={() => toggleEdit('nascimento')} style={{ cursor: 'pointer', marginLeft: '5px' }} />
+                    </div>
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="nascimento">Nascimento:</label>
+                            <InputMask
+                                mask="99/99/9999" // Formato para a data
+                                id="nascimento"
+                                value={usuario.nascimento || ''}
+                                onChange={(e) => handleDateChange(e.target.value)}
+                                onBlur={handleDateBlur}
+                                disabled={!editable}
+                            />
                         </div>
-                    </label>
-                    <label>
-                        Senha:
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <input type="password" placeholder="Alterar senha" disabled={!editable.senha} />
-                            <FontAwesomeIcon icon={faEdit} onClick={() => toggleEdit('senha')} style={{ cursor: 'pointer', marginLeft: '5px' }} />
+                        <div className="form-group">
+                            <label htmlFor="senha">Senha:</label>
+                            <input
+                                type="password"
+                                id="senha"
+                                placeholder="Alterar senha"
+                                onChange={(e) => setNovaSenha(e.target.value)}
+                                disabled={!editable}
+                            />
                         </div>
-                    </label>
+                    </div>
                 </div>
-
-                <div id="botoes">
-                    <div className="btn-esquerda">
-                        <button className="save-account">Salvar</button>
-                    </div>
-                    <div className="btn-direita">
-                        <button className="delete-account" onClick={handleLogout}>Sair</button> {/* Adiciona a função handleLogout */}
-                        <button className="delete-account">Excluir conta</button>
-                    </div>
+                <div className="button-group">
+                    {editable ? (
+                        <>
+                            <button onClick={handleSave} className="buttonDados">Salvar</button>
+                            <button onClick={toggleEdit} className="buttonDados">Cancelar</button>
+                        </>
+                    ) : (
+                        <button onClick={toggleEdit} className="buttonDados">Editar</button>
+                    )}
+                    <button className="delete-account" onClick={handleLogout}>Sair</button>
                 </div>
             </div>
         </div>
     );
-}
+};
 
 export default Perfil;

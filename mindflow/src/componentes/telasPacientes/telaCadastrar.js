@@ -16,7 +16,8 @@ const PacienteCadastro = ({ usuarioId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        const usuarioId = localStorage.getItem('usuarioId'); // Obtém o ID do usuário do localStorage
+        const usuarioId = localStorage.getItem('usuarioId'); // ID do usuário logado
+        console.log(usuarioId)
     
         const pacienteData = {
             usuario_ID: usuarioId,
@@ -38,9 +39,13 @@ const PacienteCadastro = ({ usuarioId }) => {
         }
     
         try {
-            const response = await axios.post('http://localhost:3000/api/pacientes', pacienteData);
+            const response = await axios.post('http://localhost:3000/api/pacientes', pacienteData, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Inclui o token no cabeçalho
+                },
+            });
             console.log('Paciente cadastrado com sucesso:', response.data);
-            
+    
             // Exibe uma mensagem de sucesso
             Swal.fire({
                 title: 'Sucesso!',
@@ -48,16 +53,15 @@ const PacienteCadastro = ({ usuarioId }) => {
                 icon: 'success',
                 confirmButtonText: 'Ok'
             }).then(() => {
-                // Redireciona de volta para a tela de listagem de pacientes
                 window.location.href = 'telaListar'; // Ajuste a rota conforme necessário
             });
-            
+    
         } catch (error) {
             console.error('Erro ao cadastrar paciente:', error.response ? error.response.data : error.message);
         }
     };
     
-
+    
     return (
         <div id="tudo">
             <Header />

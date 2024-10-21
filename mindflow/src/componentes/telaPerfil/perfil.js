@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"; // Remova useRef se não estiver usando
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import Header from '../telaHome/header';
 import axios from 'axios';
 import Swal from 'sweetalert2';
@@ -17,8 +17,15 @@ const Perfil = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('usuarioId'); // Remover o ID do usuário
+        localStorage.removeItem('nomeUsuario'); // Remover o nome do usuário
+        console.log('usuarioId após logout:', localStorage.getItem('usuarioId')); // Deve ser null
+        console.log('nome após logout:', localStorage.getItem('nome')); // Deve ser null
         navigate('/'); 
     };
+    
+    
+
 
     useEffect(() => {
         const fetchUsuario = async () => {
@@ -58,8 +65,8 @@ const Perfil = () => {
     const handleSave = async () => {
         const token = localStorage.getItem('token');
 
-        const usuarioToSave = { 
-            ...usuario, 
+        const usuarioToSave = {
+            ...usuario,
             nascimento: formatDate(usuario.nascimento)
         };
 
@@ -94,23 +101,23 @@ const Perfil = () => {
     const handleDateBlur = () => {
         const { nascimento } = usuario;
         const dateParts = nascimento.split('/');
-        
+
         if (dateParts.length === 3) {
-          const day = dateParts[0];
-          const month = dateParts[1];
-          const year = dateParts[2];
-          
-          const isValidDate = (d, m, y) => {
-            const date = new Date(`${y}-${m}-${d}`);
-            return date && (date.getMonth() + 1) == m && date.getDate() == d && date.getFullYear() == y;
-          };
-          
-          if (isValidDate(day, month, year)) {
-            setUsuario({ ...usuario, nascimento: `${year}-${month}-${day}` });
-          }
+            const day = dateParts[0];
+            const month = dateParts[1];
+            const year = dateParts[2];
+
+            const isValidDate = (d, m, y) => {
+                const date = new Date(`${y}-${m}-${d}`);
+                return date && (date.getMonth() + 1) == m && date.getDate() == d && date.getFullYear() == y;
+            };
+
+            if (isValidDate(day, month, year)) {
+                setUsuario({ ...usuario, nascimento: `${year}-${month}-${day}` });
+            }
         }
-      };
-      
+    };
+
     return (
         <div id="conteudoPerfil">
             <Header />

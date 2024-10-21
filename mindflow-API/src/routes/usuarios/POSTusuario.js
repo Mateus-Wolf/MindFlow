@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
         });
         console.log('Token gerado:', token); // Log do token gerado
 
-        res.json({ token, nome: usuario.nome });
+        res.json({ token, nome: usuario.nome, id: usuario.id });
     } catch (error) {
         console.error('Erro ao realizar login:', error);
         res.status(500).json({ error: 'Erro ao realizar login' });

@@ -41,22 +41,25 @@ const Login = ({ voltar }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setMensagemErro('');
-
+    
         try {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
-            localStorage.setItem('token', response.data.token);
-
-
-            // mensagem do SweetAlert
+            const { token, nome } = response.data;
+            const userId = response.data.id; // Supondo que você retorne o ID no backend
+    
+            localStorage.setItem('token', token);
+            localStorage.setItem('usuarioId', userId); // Salva o ID do usuário no localStorage
+            localStorage.setItem('nomeUsuario', nome); // Salva o nome do usuário no localStorage
+    
             Swal.fire({
                 icon: 'success',
                 title: 'Login bem-sucedido!',
                 text: 'Bem-vindo ao MindFlow.',
                 confirmButtonText: 'Continuar'
             }).then(() => {
-                navigate('/home'); // Redirecionar para a rota /home caso os dados estejam corretos
+                navigate('/home');
             });
-
+    
         } catch (error) {
             setMensagemErro('Email ou senha incorretos.'); 
         }

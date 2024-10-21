@@ -16,6 +16,7 @@ import CadastrarPacientes from './componentes/telasPacientes/telaCadastrar';
 import DadosPacientes from './componentes/telasPacientes/telaDados';
 import RegistroHumorAtividades from './componentes/telaRegistrosHumor/registroHumorAtividades';
 import RegistroHumorAvaliacao from './componentes/telaRegistrosHumor/registroHumorAvaliacao';
+const userId = localStorage.getItem('userId');
 
 
 function App() {

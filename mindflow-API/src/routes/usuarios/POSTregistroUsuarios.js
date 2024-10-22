@@ -28,13 +28,12 @@ router.post('/register', async (req, res) => {
         // Gera um token
         const token = jwt.sign({ id: novoUsuario.rows[0].id }, 'seu_segredo', { expiresIn: '1h' });
 
-        // Responde com status 201 e os dados do usuário e o token
-        res.status(201).json({ usuario: novoUsuario.rows[0], token });
+        // Responde com status 201 e os dados do usuário (incluindo o nome) e o token
+        res.status(201).json({ usuario: { id: novoUsuario.rows[0].id, nome: novoUsuario.rows[0].nome, email: novoUsuario.rows[0].email }, token });
     } catch (error) {
         console.error('Erro ao registrar usuário:', error);
         res.status(500).json({ error: 'Erro ao registrar usuário' });
     }
 });
-
 
 module.exports = router;

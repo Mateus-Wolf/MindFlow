@@ -40,7 +40,17 @@ const Agendamentos = () => {
   }, [currentDate]);
 
   const isBeforeToday = (day) => {
-    return day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Zera a hora para comparação
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate()); // Dia atual
+    return day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < yesterday;
+  };
+
+  const isPastTime = (selectedTime) => {
+    const now = new Date();
+    const selectedDateTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay, selectedTime.split(':')[0], selectedTime.split(':')[1]);
+    return selectedDateTime < now && selectedDay === now.getDate(); // Verifica se a hora é no mesmo dia e já passou
   };
 
   const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
@@ -106,6 +116,12 @@ const Agendamentos = () => {
       registro_humor_id: null
     };
 
+    // Validação para impedir agendamento em hora já passada
+    if (selectedDay === new Date().getDate() && isPastTime(time)) {
+      Swal.fire('Erro', 'Você não pode agendar uma hora que já passou!', 'error');
+      return;
+    }
+
     try {
       await axios.post('http://localhost:3000/api/agendamentos', newAppointment);
       Swal.fire('Agendamento criado com sucesso!', '', 'success');
@@ -117,16 +133,14 @@ const Agendamentos = () => {
   };
 
   const renderCalendarDays = () => {
-    const today = new Date();
-
     return generateCalendarDays().map((day, index) => {
-      const isBeforeToday = day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < today;
+      const isDisabled = day && isBeforeToday(day); // Usa a nova função
 
       return (
         <div
           key={index}
-          className={`calendar-day ${day ? (isBeforeToday ? 'filled before-today' : 'filled') : 'empty'}`}
-          onClick={() => day && handleDayClick(day)}
+          className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : 'filled') : 'empty'}`}
+          onClick={() => !isDisabled && handleDayClick(day)} // Desabilita o clique em dias desabilitados
         >
           {day}
         </div>
@@ -190,7 +204,7 @@ const Agendamentos = () => {
                   <button
                     className="btn btnCriar"
                     onClick={openCreateForm}
-                    disabled={selectedDay && new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay) < new Date()}
+                    disabled={selectedDay && isBeforeToday(selectedDay)} // Desabilita o botão se o dia estiver antes de hoje - 1
                   >
                     Criar Agendamento
                   </button>

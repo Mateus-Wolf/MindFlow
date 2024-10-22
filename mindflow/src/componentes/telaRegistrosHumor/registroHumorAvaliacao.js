@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../telaHome/header';
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FaStar } from 'react-icons/fa';
+import axios from 'axios';
 
-const RegistroHumorAvaliacao = ({ label, emoji }) => {
+const RegistroHumorAvaliacao = ({ label, emoji, pacienteId }) => {
     const [ratings, setRatings] = useState({
         sleepQuality: 0,
         stressLevel: 0,
         energyLevel: 0,
         generalEvaluation: 0,
     });
+    const navigate = useNavigate();
 
     const renderStars = (level, keyPrefix) => (
         <div className="stars-container">
@@ -65,6 +67,45 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
         );
     };
 
+    const handleSave = async () => {
+        // Verifica se todas as avaliações foram preenchidas
+        if (ratings.sleepQuality === 0 || ratings.stressLevel === 0 || ratings.energyLevel === 0 || ratings.generalEvaluation === 0) {
+            alert('Por favor, preencha todas as avaliações antes de salvar!');
+            return;
+        }
+    
+        // Recupera os dados do localStorage
+        const estudo = localStorage.getItem('Estudos') === 'true';
+        const trabalho = localStorage.getItem('Trabalho') === 'true';
+        const exercicio = localStorage.getItem('Exercício') === 'true';
+        const lazer = localStorage.getItem('Lazer') === 'true';
+    
+        const data = {
+            id_paciente: pacienteId,
+            data_registro: new Date().toISOString().split('T')[0], // Data atual no formato YYYY-MM-DD
+            humor_sono: ratings.sleepQuality,
+            humor_estresse: ratings.stressLevel,
+            nivel_energia: ratings.energyLevel,
+            humor_geral: ratings.generalEvaluation,
+            estudo,
+            trabalho,
+            exercicio,
+            lazer
+        };
+    
+        console.log('Dados enviados para a API:', data); // Adicione esta linha
+    
+        try {
+            // Envia os dados para a API
+            await axios.post('http://localhost:3000/api/avalicaoHumor/registro-avaliacao', data); // Certifique-se de que a URL está correta
+            alert('Avaliação salva com sucesso!');
+            navigate('/telaListar'); // Redireciona após salvar
+        } catch (error) {
+            console.error('Erro ao salvar avaliação:', error);
+            alert('Ocorreu um erro ao salvar a avaliação. Tente novamente.');
+        }
+    };
+
     return (
         <div className="tudo">
             <Header />
@@ -75,9 +116,9 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
                 <Link to="/registroHumorAtividades">
                     <button className="btnVoltar">Voltar</button>
                 </Link>
-                <Link to="/registroHumorAvaliacao">
-                    <button className="btnSalvar">Salvar</button>
-                </Link>
+                <button className="btnSalvar" onClick={handleSave}>
+                    Salvar
+                </button>
             </div>
         </div>
     );

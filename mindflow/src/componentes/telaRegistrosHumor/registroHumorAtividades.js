@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../telaHome/header';
-import { Link } from "react-router-dom";
-import axios from 'axios';
-
-// Mantém as importações de outros ícones
+import { Link, useNavigate } from "react-router-dom";
 import estudoIcon from '../../icones/estudo-icone.svg';
 import trabalhoIcon from '../../icones/trabalho-icone.svg';
 import exercicioIcon from '../../icones/exercicio-icone.svg';
@@ -11,43 +8,53 @@ import lazerIcon from '../../icones/lazer-icone.svg';
 
 function RegistroHumorAtividades() {
   const [selected, setSelected] = useState({}); // Objeto para armazenar seleções
-  const [hovered, setHovered] = useState({}); // Objeto para armazenar hover
+  const navigate = useNavigate(); // Hook para navegação
 
   const handleCheck = (category) => {
     setSelected((prev) => ({
       ...prev,
-      [category]: 'check',
+      [category]: true, // Armazena como true
     }));
   };
 
   const handleTimes = (category) => {
     setSelected((prev) => ({
       ...prev,
-      [category]: 'times',
+      [category]: false, // Armazena como false
     }));
   };
 
-  const handleMouseEnter = (category, type) => {
-    setHovered((prev) => ({
-      ...prev,
-      [`${category}-${type}`]: true,
-    }));
+  const handleSave = () => {
+    // Armazena os valores no localStorage
+    Object.keys(selected).forEach((category) => {
+      localStorage.setItem(category, selected[category]);
+    });
+    // Redireciona para a tela de avaliação
+    navigate('/registroHumorAvaliacao');
   };
 
-  const handleMouseLeave = (category, type) => {
-    setHovered((prev) => ({
-      ...prev,
-      [`${category}-${type}`]: false,
-    }));
+  const handleBack = () => {
+    // Remove os dados do localStorage
+    Object.keys(selected).forEach((category) => {
+      localStorage.removeItem(category);
+    });
+    // Redireciona para a tela de listar
+    navigate('/telaListar');
   };
 
   const getButtonClass = (category, type) => {
-    if (selected[category] === type) {
-      return type === 'check' ? 'button-checked' : 'button-checked-times';
-    } else if (hovered[`${category}-${type}`]) {
-      return type === 'check' ? 'button-hovered' : 'button-hovered-times';
+    if (selected[category] === true && type === 'check') {
+      return 'button-checked';
+    } else if (selected[category] === false && type === 'times') {
+      return 'button-checked-times';
     }
     return '';
+  };
+
+  // Função para verificar se todas as categorias foram selecionadas
+  const allCategoriesSelected = () => {
+    const categories = ['Estudos', 'Trabalho', 'Exercício', 'Lazer'];
+    return categories.every((category) => selected[category] !== undefined);
   };
 
   return (
@@ -62,16 +69,12 @@ function RegistroHumorAtividades() {
               <button
                 className={`checkstyle ${getButtonClass(category, 'check')}`}
                 onClick={() => handleCheck(category)}
-                onMouseEnter={() => handleMouseEnter(category, 'check')}
-                onMouseLeave={() => handleMouseLeave(category, 'check')}
               >
                 <i className="fas fa-check"></i>
               </button>
               <button
                 className={`checkstyle ${getButtonClass(category, 'times')}`}
                 onClick={() => handleTimes(category)}
-                onMouseEnter={() => handleMouseEnter(category, 'times')}
-                onMouseLeave={() => handleMouseLeave(category, 'times')}
               >
                 <i className="fas fa-times"></i>
               </button>
@@ -80,12 +83,14 @@ function RegistroHumorAtividades() {
         ))}
       </div>
       <div className="footer">
-        <Link to="/telaListar">
-          <button className="btnVoltar">Voltar</button>
-        </Link>
-        <Link to="/registroHumorAvaliacao">
-          <button className="btnSalvar">Salvar</button>
-        </Link>
+        <button className="btnVoltar" onClick={handleBack}>Voltar</button>
+        <button 
+          className="btnSalvar" 
+          onClick={handleSave} 
+          disabled={!allCategoriesSelected()} // Desabilita se não todas as categorias estiverem preenchidas
+        >
+          Salvar
+        </button>
       </div>
     </div>
   );

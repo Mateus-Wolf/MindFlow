@@ -11,9 +11,8 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
         generalEvaluation: 0,
     });
 
-    // Função auxiliar para renderizar estrelas com base no nível
     const renderStars = (level, keyPrefix) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className="stars-container">
             {[...Array(5)].map((_, index) => {
                 const ratingValue = index + 1;
                 return (
@@ -26,9 +25,8 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
                             style={{ display: 'none' }}
                         />
                         <FaStar
+                            className="star"
                             color={ratingValue <= level ? '#ffc107' : '#e4e5e9'}
-                            size={30}
-                            style={{ cursor: 'pointer' }}
                         />
                     </label>
                 );
@@ -38,25 +36,29 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
 
     const Avaliacao = () => {
         return (
-            <div className="avaliacao-container" style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
+            <div className="avaliacao-container">
+                <div className="avaliacao-row">
                     <div className="avaliacao-item">
-                        <span role="img" aria-label="sono">😴</span>
-                        <p>Qualidade do sono</p>
-                        <div className="stars">{renderStars(ratings.sleepQuality, 'sleepQuality')}</div>
+                        <span role="img" aria-label="sono" className="emoji">😴</span>
+                        <p className="avaliacao-text">Qualidade do sono</p>
+                        {renderStars(ratings.sleepQuality, 'sleepQuality')}
+                    </div>
                     <div className="avaliacao-item">
-                        <span role="img" aria-label="estresse">😡</span>
-                        <p>Nível de estresse</p>
-                        <div className="stars">{renderStars(ratings.stressLevel, 'stressLevel')}</div>
+                        <span role="img" aria-label="estresse" className="emoji">😡</span>
+                        <p className="avaliacao-text">Nível de estresse</p>
+                        {renderStars(ratings.stressLevel, 'stressLevel')}
                     </div>
                 </div>
+                <div className="avaliacao-row">
                     <div className="avaliacao-item">
-                        <span role="img" aria-label="energia">🔥</span>
-                        <p>Nível de energia</p>
-                        <div className="stars">{renderStars(ratings.energyLevel, 'energyLevel')}</div>
+                        <span role="img" aria-label="energia" className="emoji">🔥</span>
+                        <p className="avaliacao-text">Nível de energia</p>
+                        {renderStars(ratings.energyLevel, 'energyLevel')}
+                    </div>
                     <div className="avaliacao-item">
-                        <span role="img" aria-label="geral">🤩</span>
-                        <p>Avaliação geral</p>
-                        <div className="stars">{renderStars(ratings.generalEvaluation, 'generalEvaluation')}</div>
+                        <span role="img" aria-label="geral" className="emoji">🤩</span>
+                        <p className="avaliacao-text">Avaliação geral</p>
+                        {renderStars(ratings.generalEvaluation, 'generalEvaluation')}
                     </div>
                 </div>
             </div>
@@ -64,7 +66,7 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
     };
 
     return (
-        <div>
+        <div className="tudo">
             <Header />
             <h2>{label}</h2>
             <div>{emoji}</div>

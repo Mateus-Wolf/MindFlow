@@ -11,26 +11,23 @@
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    flex-grow: 1;
-    /* Permite que essa parte cresça e ocupe o espaço restante */
+    flex-grow: 1; /* Permite que essa parte cresça e ocupe o espaço restante */
 }
 
 .footer {
     display: flex;
     justify-content: space-between;
     padding: 10px 20px;
-    /* Reduzir o padding para não ultrapassar a altura */
     background-color: var(--roxo-fundo);
-    /* Garantir que o fundo do footer seja roxo também */
+    margin-top: auto; /* Faz o footer ficar na parte inferior */
 }
 
 .btnSalvar {
-    width: 290px;
+    width: 115px; /* Ajustado para que a largura do botão seja consistente */
     background-color: var(--roxo-destaque);
     border-radius: 15px;
     color: whitesmoke;
     padding: 10px;
-    width: 115px;
     border: none;
     font-size: 14px;
     font-weight: bold;
@@ -40,12 +37,11 @@
 }
 
 .btnVoltar {
-    width: 290px;
+    width: 115px; /* Ajustado para que a largura do botão seja consistente */
     background-color: var(--vermelho-cancelar);
     border-radius: 15px;
     color: whitesmoke;
     padding: 10px;
-    width: 115px;
     border: none;
     font-size: 14px;
     font-weight: bold;
@@ -57,11 +53,9 @@
 .buttons {
     margin-top: 20px;
     display: flex;
-    justify-content: center;
-    /* Centralizar os botões */
+    justify-content: center; /* Centralizar os botões */
     align-items: center;
-    gap: 10px;
-    /* Espaçamento entre os botões */
+    gap: 10px; /* Espaçamento entre os botões */
 }
 
 img {
@@ -85,7 +79,7 @@ img {
 }
 
 .button :hover {
-    background: var(--roxo-gradiente)
+    background: var(--roxo-gradiente);
 }
 
 .button-checked {
@@ -98,43 +92,54 @@ img {
     color: white;
 }
 
-  .button-hovered {
+.button-hovered {
     background: var(--roxo-gradiente); /* Cor para o botão de check */
 }
   
-  .button-hovered-times {
+.button-hovered-times {
     background: var(--vermelho-cancelar); /* Cor para o botão de times */
 }
-
-
 
 /* Criando CSS para a tela de Avaliação do Humor */
 .avaliacao-container {
     color: whitesmoke;
     display: flex;
     flex-direction: column;
-    margin-top: -8px;
-    min-height: 100vh; /* Faz com que o container ocupe pelo menos a altura total da tela */
+    flex-grow: 1;
+    margin-top: 35px;
 }
 
-/* Criando CSS para a tela de Avaliação do Humor */
-.avaliacao-container {
-    color: whitesmoke;
+.avaliacao-row {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    background: linear-gradient(to bottom, #000, #6e00ff);
-    padding: 20px;
-    min-height: 100vh; /* Faz com que o container ocupe pelo menos a altura total da tela */
+    justify-content: space-between;
+    gap: 10px; /* Proximidade dos itens */
 }
 
 .avaliacao-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px;
-    flex: 0 1 calc(50% - 20px);
-    max-width: 300px;
+    flex: 1; /* Para que cada item ocupe o mesmo espaço */
 }
 
+.emoji {
+    font-size: 40px; /* Tamanho dos emojis */
+}
 
+.avaliacao-text {
+    font-size: 18px; /* Tamanho do texto */
+    margin: 5px 0; /* Margem entre o texto e as estrelas */
+}
+
+.stars-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.star {
+    cursor: pointer;
+    margin: 0 2px; /* Espaçamento entre estrelas */
+    width: 50px; /* Ajustando a largura das estrelas */
+    height: 50px; /* Ajustando a altura das estrelas */
+}

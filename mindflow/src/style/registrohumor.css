@@ -105,8 +105,7 @@ img {
     color: whitesmoke;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    margin-top: 35px;
+    flex-grow: 1; /* Permite que a avaliação ocupe o espaço restante */
 }
 
 .avaliacao-row {
@@ -142,4 +141,9 @@ img {
     margin: 0 2px; /* Espaçamento entre estrelas */
     width: 50px; /* Ajustando a largura das estrelas */
     height: 50px; /* Ajustando a altura das estrelas */
+    transition: transform 0.2s ease, color 0.2s ease; /* Transições para transformações e cor */
+}
+
+.star:hover {
+    transform: scale(1.3); /* Aumenta a estrela ao passar o mouse */
 }

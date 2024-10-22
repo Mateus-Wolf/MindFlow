@@ -14,24 +14,23 @@ const PacientesLista = () => {
     const handleClick = (id) => {
         navigate(`/telaDados/${id}`);  // Substitua pela rota que leva à página de dados do paciente
     };
-    
 
     // Função para atualizar o estado conforme o usuário digita
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
 
-    // Filtra os pacientes com base no termo de pesquisa
-    const filteredPacientes = pacientes.filter((paciente) =>
-        paciente.nome.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // Obtenha o ID do usuário logado do localStorage e converta para número
+    const usuarioId = localStorage.getItem('usuarioId');
+    console.log('ID do usuário logado:', usuarioId); // Verifique se o ID do usuário está sendo obtido corretamente
 
-    // useEffect para buscar pacientes da API
+    // useEffect para buscar pacientes da API e filtrar por usuarioId
     useEffect(() => {
         const fetchPacientes = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/api/pacientes');
-                setPacientes(response.data);
+                const pacientesFiltrados = response.data.filter(paciente => String(paciente.usuario_id) === String(usuarioId));
+                setPacientes(pacientesFiltrados); // Filtra os pacientes pelo usuarioId
             } catch (error) {
                 console.error('Erro ao obter pacientes:', error);
             } finally {
@@ -40,12 +39,16 @@ const PacientesLista = () => {
         };
 
         fetchPacientes();
-    }, []);
+    }, [usuarioId]);
 
     if (loading) {
         return <div>Carregando...</div>; // Exibe loading enquanto os dados estão sendo carregados
     }
 
+    // Filtra os pacientes com base no termo de pesquisa
+    const filteredPacientes = pacientes.filter((paciente) =>
+        paciente.nome.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     return (
         <div id="tudo">

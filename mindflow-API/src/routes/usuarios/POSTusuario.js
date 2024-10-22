@@ -1,3 +1,4 @@
+// routes/usuarios/POSTlogin.js
 const express = require('express');
 const router = express.Router();
 const pool = require('../../db');
@@ -41,6 +42,5 @@ router.post('/', async (req, res) => {
         res.status(500).json({ error: 'Erro ao realizar login' });
     }
 });
-
 
 module.exports = router;

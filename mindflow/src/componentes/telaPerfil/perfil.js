@@ -30,6 +30,7 @@ const Perfil = () => {
     useEffect(() => {
         const fetchUsuario = async () => {
             const token = localStorage.getItem('token');
+            console.log('Token:', token);
             if (!token) {
                 navigate('/');
                 return;

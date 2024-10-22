@@ -1,5 +1,4 @@
 const express = require('express');
-const bcrypt = require('bcryptjs');
 const db = require('../../db'); // Certifique-se de que o caminho para o seu db está correto
 const jwt = require('jsonwebtoken');
 
@@ -26,8 +25,8 @@ router.get('/me', async (req, res) => {
     }
 
     try {
-        const decoded = jwt.verify(token, 'seu_segredo'); // Verifique o token
-        const usuario = await db.query('SELECT * FROM usuarios WHERE id = $1', [decoded.id]); // Supondo que você tenha um campo ID no token
+        const decoded = jwt.verify(token, 'seu_segredo'); // Verifique se o segredo está correto
+        const usuario = await db.query('SELECT * FROM usuarios WHERE id = $1', [decoded.id]);        
 
         if (usuario.rows.length === 0) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
@@ -36,34 +35,7 @@ router.get('/me', async (req, res) => {
         res.json(usuario.rows[0]); // Retorna os dados do usuário
     } catch (error) {
         console.error('Erro ao verificar token:', error);
-        res.status(500).json({ error: 'Erro ao verificar token' });
-    }
-});
-
-// Rota para registro de novos usuários
-router.post('/register', async (req, res) => {
-    const { nome, email, nascimento, senha, tipo_usuario } = req.body;
-
-    try {
-        // Verifica se o usuário já existe
-        const usuarioExistente = await db.query('SELECT * FROM usuarios WHERE email = $1', [email]);
-        if (usuarioExistente.rows.length > 0) {
-            return res.status(400).json({ error: 'Usuário já existe' });
-        }
-
-        // Hash da senha
-        const hashedPassword = bcrypt.hashSync(senha, 8);
-
-        // Cria um novo usuário
-        const novoUsuario = await db.query(
-            'INSERT INTO usuarios (nome, email, nascimento, senha, tipo_usuario) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [nome, email, nascimento, hashedPassword, tipo_usuario]
-        );
-
-        res.status(201).json(novoUsuario.rows[0]);
-    } catch (error) {
-        console.error('Erro ao registrar usuário:', error);
-        res.status(500).json({ error: 'Erro ao registrar usuário' });
+        return res.status(500).json({ error: 'Erro ao verificar token: ' + error.message });
     }
 });
 

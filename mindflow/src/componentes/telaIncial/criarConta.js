@@ -42,14 +42,14 @@ const CriarConta = ({ voltar }) => {
     });
   
     const data = await response.json();
+    console.log('Dados retornados do servidor:', data); // Adicione este log
   
     if (!response.ok) {
       setErro(`Erro ao criar conta: ${data.error || 'Erro desconhecido'}`);
     } else {
       console.log('Conta criada com sucesso:', data);
-      // Salva o nome e o ID do usuário no localStorage
       localStorage.setItem('nomeUsuario', data.nome);
-      localStorage.setItem('token', data.token); // Caso tenha token, ajustar conforme necessário
+      localStorage.setItem('token', data.token); // Certifique-se de que data.token está disponível
   
       Swal.fire({
         icon: 'success',
@@ -59,6 +59,7 @@ const CriarConta = ({ voltar }) => {
       navigate('/home');
     }
   };
+  
   
 
   return (

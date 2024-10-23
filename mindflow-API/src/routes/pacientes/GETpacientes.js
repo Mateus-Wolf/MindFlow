@@ -2,10 +2,18 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../../db');
 
-// Rota para obter todos os pacientes
+// Rota para obter pacientes por usuario_id
 router.get('/', async (req, res) => {
+    const usuarioId = req.query.usuario_id; // Captura o usuario_id da query
+
     try {
-        const result = await pool.query('SELECT * FROM pacientes');
+        // Se um usuario_id foi fornecido, filtra os pacientes
+        const query = usuarioId 
+            ? 'SELECT * FROM pacientes WHERE usuario_ID = $1'
+            : 'SELECT * FROM pacientes'; // Caso contrário, retorna todos
+
+        const params = usuarioId ? [usuarioId] : [];
+        const result = await pool.query(query, params);
         res.json(result.rows);
     } catch (error) {
         console.error('Erro ao obter pacientes:', error);

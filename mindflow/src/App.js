@@ -14,6 +14,7 @@ import Agendamentos from './componentes/telaAgendamentos/agendamentos';
 import ListarPacientes from './componentes/telasPacientes/telaListar';
 import CadastrarPacientes from './componentes/telasPacientes/telaCadastrar';
 import DadosPacientes from './componentes/telasPacientes/telaDados';
+import RegistroHumor from './componentes/telaRegistrosHumor/registroHumor';
 import RegistroHumorAtividades from './componentes/telaRegistrosHumor/registroHumorAtividades';
 import RegistroHumorAvaliacao from './componentes/telaRegistrosHumor/registroHumorAvaliacao';
 const userId = localStorage.getItem('userId');
@@ -30,8 +31,9 @@ function App() {
         <Route path="/telaCadastrar" element={<CadastrarPacientes />} /> {/* Rota para Perfil */}
         <Route path="/telaListar" element={<ListarPacientes />} /> {/* Rota para Perfil */}
         <Route path="/telaDados/:id" element={<DadosPacientes />} /> {/* Rota para Perfil */}
-        <Route path="/registroHumorAtividades" element={<RegistroHumorAtividades />} /> {/* Rota para Perfil */}
-        <Route path="/registroHumorAvaliacao" element={<RegistroHumorAvaliacao />} /> {/* Rota para Perfil */}
+        <Route path="/RegistroHumor/:id" element={<RegistroHumor />} />
+        <Route path="/registroHumorAtividades/:id" element={<RegistroHumorAtividades />} /> {/* Rota para Perfil */}
+        <Route path="/registroHumorAvaliacao/:id" element={<RegistroHumorAvaliacao />} /> {/* Rota para Perfil */}
       </Routes>
     </Router>
   );

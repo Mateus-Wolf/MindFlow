@@ -15,6 +15,11 @@ const PacientesLista = () => {
         navigate(`/telaDados/${id}`);  // Substitua pela rota que leva à página de dados do paciente
     };
 
+    const handleClickRegistro = (id) => {
+        navigate(`/registroHumor/${id}`); // Passa o ID do paciente na URL
+    };
+
+
     // Função para atualizar o estado conforme o usuário digita
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
@@ -72,9 +77,7 @@ const PacientesLista = () => {
                         </div>
                         <div className="paciente-botoes">
                             <button className="btn-opcao" onClick={() => handleClick(paciente.id)}>Dados</button>
-                            <Link to="/registroHumorAtividades">
-                                <button className="btn-Registros">Registros</button>
-                            </Link>
+                            <button className="btn-Registros" onClick={() => handleClickRegistro(paciente.id)}>Registros</button>
                         </div>
                     </div>
                 ))}

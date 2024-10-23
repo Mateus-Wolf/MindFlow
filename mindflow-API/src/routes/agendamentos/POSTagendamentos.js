@@ -4,7 +4,7 @@ const router = express.Router();
 const db = require('../../db'); // Módulo que você utiliza para conexão com o banco de dados
 
 // Rota para criar agendamentos
-router.post('/api/agendamentos', (req, res) => {
+router.post('/', (req, res) => {
     const { paciente_id, usuario_id, data, hora, descricao, registro_humor_id } = req.body;
 
     // Validação dos dados recebidos

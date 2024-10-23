@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-
 // Importar rotas
 const GETusuarios = require('./routes/usuarios/GETusuarios');
 const POSTlogin = require('./routes/usuarios/POSTusuario');
@@ -11,7 +10,7 @@ const POSTregistroUsuarios = require('./routes/usuarios/POSTregistroUsuarios');
 const PUTusuarios = require('./routes/usuarios/PUTusuarios');
 const PUTsenha = require('./routes/usuarios/PUTsenha');
 
-const PUTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
+const POSTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
 const GETagendamentosRoute = require('./routes/agendamentos/GETagendamentos');
 const GETagendamentosMensaisRoute = require('./routes/agendamentos/GetagendamentosMensais');
 
@@ -20,6 +19,7 @@ const PUTpacientes = require('./routes/pacientes/PUTpacientes');
 const DELETEpacientes = require('./routes/pacientes/DELETEpaciente');
 
 const POSTavaliacaoHumor = require('./routes/avalicaoHumor/POSTavaliacao');
+const GETregistro = require('./routes/avalicaoHumor/GETregistros');
 
 // Configurar o dotenv
 dotenv.config();
@@ -36,17 +36,19 @@ app.use('/api/usuarios', GETusuarios);
 app.use('/api/login', POSTlogin);
 app.use('/api/usuarios', POSTregistroUsuarios);
 app.use('/api/usuarios', PUTusuarios);
-app.use('/api/usuarios', PUTsenha);
+app.use('/api/usuarios/senha', PUTsenha);
 
 app.use('/api/agendamentos', GETagendamentosRoute);
 app.use('/api/agendamentos', GETagendamentosMensaisRoute);
-app.use('/api/agendamentos', PUTagendamentosRoute);
+app.use('/api/agendamentos', POSTagendamentosRoute);
+
 
 app.use('/api/pacientes', GETpacientes);
 app.use('/api/pacientes', PUTpacientes);
 app.use('/api/pacientes', DELETEpacientes);
 
-// Corrigido: Incluindo a barra (/) antes de api
+
+app.use('/api/pacientes', GETregistro);
 app.use('/api/avaliacaoHumor', POSTavaliacaoHumor);
 
 // Rota padrão

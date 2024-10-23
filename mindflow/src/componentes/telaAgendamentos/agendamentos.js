@@ -17,8 +17,9 @@ const Agendamentos = () => {
 
   useEffect(() => {
     const fetchPatients = async () => {
+      const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
       try {
-        const response = await axios.get('http://localhost:3000/api/pacientes');
+        const response = await axios.get(`http://localhost:3000/api/pacientes?usuario_id=${usuarioId}`); // Inclui o usuario_id na requisição
         setPatients(response.data);
       } catch (error) {
         console.error('Erro ao carregar pacientes:', error);
@@ -80,16 +81,18 @@ const Agendamentos = () => {
   const handleDayClick = async (day) => {
     setSelectedDay(day);
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
+  
     try {
-      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}`);
+      const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
+      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}&usuario_id=${usuarioId}`); // Inclui o usuario_id na requisição
       setAppointments(response.data);
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
     }
-
+  
     setPopupVisible(true);
   };
+  
 
   const closePopup = () => {
     setPopupVisible(false);
@@ -106,31 +109,39 @@ const Agendamentos = () => {
   };
 
   const handleCreateAppointment = async () => {
+    if (!selectedPatient || !time || !description) {
+        Swal.fire('Erro', 'Por favor, preencha todos os campos antes de salvar o agendamento!', 'error');
+        return;
+    }
+
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+    const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
+
     const newAppointment = {
-      paciente_id: selectedPatient,
-      data: formattedDate,
-      hora: time, // Incluir a hora aqui
-      descricao: description,
-      usuario_id: 1,
-      registro_humor_id: null
+        paciente_id: selectedPatient,
+        data: formattedDate,
+        hora: time, // Incluir a hora aqui
+        descricao: description,
+        usuario_id: usuarioId, // Aqui está a mudança, usando o usuarioId do localStorage
+        registro_humor_id: null
     };
 
     // Validação para impedir agendamento em hora já passada
     if (selectedDay === new Date().getDate() && isPastTime(time)) {
-      Swal.fire('Erro', 'Você não pode agendar uma hora que já passou!', 'error');
-      return;
+        Swal.fire('Erro', 'Você não pode agendar uma hora que já passou!', 'error');
+        return;
     }
 
     try {
-      await axios.post('http://localhost:3000/api/agendamentos', newAppointment);
-      Swal.fire('Agendamento criado com sucesso!', '', 'success');
-      closePopup();
+        await axios.post('http://localhost:3000/api/agendamentos', newAppointment);
+        Swal.fire('Agendamento criado com sucesso!', '', 'success');
+        closePopup();
     } catch (error) {
-      console.error('Erro ao criar agendamento:', error);
-      Swal.fire('Erro ao criar agendamento. Por favor, tente novamente.', '', 'error');
+        console.error('Erro ao criar agendamento:', error);
+        Swal.fire('Erro ao criar agendamento. Por favor, tente novamente.', '', 'error');
     }
-  };
+};
+
 
   const renderCalendarDays = () => {
     return generateCalendarDays().map((day, index) => {

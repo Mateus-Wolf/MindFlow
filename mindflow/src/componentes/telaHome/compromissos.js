@@ -1,43 +1,67 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const Compromissos = () => {
     const [nomeUsuario, setNomeUsuario] = useState('');
+    const [compromissos, setCompromissos] = useState([]);
+    
+    // Adiciona o ID do usuário
+    const usuarioId = localStorage.getItem('usuarioId');
 
     useEffect(() => {
-        // Função para capitalizar a primeira letra
         const capitalizeFirstLetter = (nome) => {
             return nome.charAt(0).toUpperCase() + nome.slice(1).toLowerCase();
         };
 
-        // Recupera o nome do usuário do localStorage
         const nome = localStorage.getItem('nomeUsuario');
         if (nome) {
-            setNomeUsuario(capitalizeFirstLetter(nome)); // Atualiza o estado com o nome formatado
+            setNomeUsuario(capitalizeFirstLetter(nome));
         }
     }, []);
 
-    const hoje = new Date();
-    const opcoes = { day: '2-digit', month: '2-digit', year: 'numeric' };
-    const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
+    useEffect(() => {
+        const fetchCompromissos = async () => {
+            const hoje = new Date();
+            const opcoes = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
+            
+            try {
+                const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${dataFormatada}&usuario_id=${usuarioId}`);
+                setCompromissos(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar compromissos:', error);
+            }
+        };
+
+        fetchCompromissos();
+    }, [usuarioId]);
+
+    const formatarHora = (hora) => {
+        return hora.split(':').slice(0, 2).join(':');
+    };
 
     return (
         <div id="compromissos">
             <h3>Olá, Dr(a) <span className="destaque">{nomeUsuario ? nomeUsuario : ''}</span></h3>
-            <p id='dataComp'>Compromissos de hoje - Dia {dataFormatada} <span className="ver-todos">Ver todos &gt;</span></p>
+            <p id='dataComp'>Compromissos de hoje <span className="ver-todos">Ver todos &gt;</span></p>
 
-            <div className="compromisso-item">
-                <span className="hora">
-                    <span className="indicador red"></span> 10:20
-                </span>
-                <span className="consulta"> - Consulta Gabo Gabriel</span>
-            </div>
-
-            <div className="compromisso-item">
-                <span className="hora">
-                    <span className="indicador yellow"></span> 13:40
-                </span>
-                <span className="consulta"> - Consulta Luana Santos</span>
-            </div>
+            {compromissos.length > 0 ? (
+                compromissos.map((compromisso) => (
+                    <div className="compromisso-item" key={compromisso.id}>
+                        <span className="hora">
+                            <span className="indicador red"></span> {formatarHora(compromisso.hora)}
+                        </span>
+                        <span className="consulta"> 
+                            <Link to={`/registroHumorAtividades/${compromisso.paciente_id}`} className="link-paciente">
+                                {compromisso.nome}
+                            </Link>
+                        </span>
+                    </div>
+                ))
+            ) : (
+                <p>Não há compromissos agendados para hoje.</p>
+            )}
         </div>
     );
 };

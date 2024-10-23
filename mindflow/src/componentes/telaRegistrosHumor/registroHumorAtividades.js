@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../telaHome/header';
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import estudoIcon from '../../icones/estudo-icone.svg';
 import trabalhoIcon from '../../icones/trabalho-icone.svg';
 import exercicioIcon from '../../icones/exercicio-icone.svg';
@@ -9,6 +9,7 @@ import lazerIcon from '../../icones/lazer-icone.svg';
 function RegistroHumorAtividades() {
   const [selected, setSelected] = useState({}); // Objeto para armazenar seleções
   const navigate = useNavigate(); // Hook para navegação
+  const { id: pacienteId } = useParams(); // Captura o ID do paciente da URL
 
   const handleCheck = (category) => {
     setSelected((prev) => ({
@@ -29,8 +30,9 @@ function RegistroHumorAtividades() {
     Object.keys(selected).forEach((category) => {
       localStorage.setItem(category, selected[category]);
     });
-    // Redireciona para a tela de avaliação
-    navigate('/registroHumorAvaliacao');
+
+    // Redireciona para a tela de avaliação com o ID do paciente
+    navigate(`/registroHumorAvaliacao/${pacienteId}`); // Inclui pacienteId na URL
   };
 
   const handleBack = () => {

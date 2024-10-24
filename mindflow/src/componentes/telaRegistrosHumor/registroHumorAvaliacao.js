@@ -5,7 +5,7 @@ import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
 
 const RegistroHumorAvaliacao = ({ label, emoji }) => {
-    const { id: pacienteId } = useParams(); // Captura o ID da URL diretamente como pacienteId
+    const { id: pacienteId } = useParams();
     const [ratings, setRatings] = useState({
         sleepQuality: 0,
         stressLevel: 0,
@@ -80,7 +80,7 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
         const lazer = localStorage.getItem('Lazer') === 'true';
 
         const data = {
-            id_paciente: pacienteId, // ID do paciente já está sendo enviado aqui
+            id_paciente: pacienteId,
             data_registro: new Date().toISOString().split('T')[0],
             humor_sono: ratings.sleepQuality,
             humor_estresse: ratings.stressLevel,
@@ -111,7 +111,6 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
             <div>{emoji}</div>
             <Avaliacao />
             <div className="footer">
-                {/* Alteração do Link para incluir o ID do paciente */}
                 <Link to={`/registroHumorAtividades/${pacienteId}`}>
                     <button className="btnVoltar">Voltar</button>
                 </Link>

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom'; // Adicione useNavigate
+import { useParams, useNavigate } from 'react-router-dom';
 import Header from '../telaHome/header';
 import Swal from 'sweetalert2';
 
 const PacienteDados = () => {
     const { id } = useParams();
-    const navigate = useNavigate(); // Crie uma instância do navigate
+    const navigate = useNavigate();
     const [paciente, setPaciente] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
@@ -59,7 +59,7 @@ const PacienteDados = () => {
             try {
                 const response = await axios.delete(`http://localhost:3000/api/pacientes/${id}`);
                 Swal.fire('Excluído!', response.data.message, 'success');
-                navigate('/telaListar'); // Redireciona para a tela de listagem
+                navigate('/telaListar');
             } catch (error) {
                 console.error('Erro ao excluir paciente:', error);
                 const errorMessage = error.response?.data?.message || 'Não foi possível excluir o paciente.';

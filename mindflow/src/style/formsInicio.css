@@ -34,7 +34,6 @@
     box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
 }
 
-/* styles.css ou o arquivo CSS que você estiver usando */
 .error-message {
     color: rgb(255, 0, 0);
     font-weight: bold; 
@@ -42,24 +41,23 @@
     margin-left: 3px;
 }
 
-/* styles.css */
 .input-error {
-    border: 2px solid red; /* Borda vermelha */
+    border: 2px solid red; 
 }
 
 
 /* Animação ao focar */
 .form:focus {
-    border-color: #ff5722; /* Cor da borda ao focar */
-    background-color: #fff; /* Cor de fundo ao focar */
-    transform: scale(1.02); /* Expande ligeiramente o campo ao focar */
-    color: #333; /* Garante que a cor do texto permaneça visível */
+    border-color: #ff5722;
+    background-color: #fff;
+    transform: scale(1.02);
+    color: #333;
 }
 
 .form:not(:placeholder-shown) {
-    border-color: #4caf50; /* Cor da borda quando o campo não está vazio */
-    background-color: #e8f5e9; /* Cor de fundo quando o campo não está vazio */
-    color: #333; /* Garante que a cor do texto permaneça visível */
+    border-color: #4caf50;
+    background-color: #e8f5e9;
+    color: #333; 
 }
 
 .password-container {
@@ -67,24 +65,24 @@
 }
 
 .password-input {
-    padding-right: 40px; /* Espaço para o botão de alternância */
+    padding-right: 40px;
 }
 
 .password-toggle {
     position: absolute;
-    right: 8px; /* Ajusta a posição do botão dentro do campo */
-    top: 43%; /* Alinha verticalmente ao centro do campo */
-    transform: translateY(-50%); /* Corrige o alinhamento vertical do botão */
+    right: 8px;
+    top: 43%; 
+    transform: translateY(-50%);
     background: none;
     border: none;
-    color: #7e22ff; /* Cor do ícone do botão */
+    color: #7e22ff; 
     cursor: pointer;
-    font-size: 20px; /* Tamanho do ícone */
-    transition: color 0.3s ease; /* Transição suave para a cor do ícone */
+    font-size: 20px;
+    transition: color 0.3s ease;
 }
 
 .password-toggle:hover {
-    color: #4b2284; /* Cor do ícone ao passar o mouse */
+    color: #4b2284;
 }
 /* Fim da Customização do Formulario */
 
@@ -105,7 +103,7 @@
 
 .forgot-password:hover {
     color: #7b80ff;
-    text-decoration: none; /* Remove o sublinhado ao passar o mouse */
+    text-decoration: none;
 }
 /* Fim da Customização do Esqueci Minha Senha */
 
@@ -125,7 +123,7 @@
     text-decoration: none;
     display: inline-block;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-right: 10px; /* Espaçamento entre os botões */
+    margin-right: 10px;
 }
 
 /* Efeito ao passar o mouse sobre os botões */

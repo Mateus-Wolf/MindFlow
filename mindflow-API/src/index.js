@@ -20,6 +20,7 @@ const DELETEpacientes = require('./routes/pacientes/DELETEpaciente');
 
 const POSTavaliacaoHumor = require('./routes/avalicaoHumor/POSTavaliacao');
 const GETregistro = require('./routes/avalicaoHumor/GETregistros');
+const GETvisualizarHumor = require('./routes/avalicaoHumor/GETvisualizarHumor')
 
 // Configurar o dotenv
 dotenv.config();
@@ -50,6 +51,7 @@ app.use('/api/pacientes', DELETEpacientes);
 
 app.use('/api/pacientes', GETregistro);
 app.use('/api/avaliacaoHumor', POSTavaliacaoHumor);
+app.use('/api', GETvisualizarHumor)
 
 // Rota padrão
 app.get('/', (req, res) => {

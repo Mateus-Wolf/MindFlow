@@ -2,12 +2,12 @@
     color: white;
     padding: 20px;
     height: 100%;
-    background-color: var(--roxo-fundo); /* Fundo mais escuro */
+    background-color: var(--roxo-fundo);
 }
 
 #tudo {
     background-color: var(--roxo-fundo);
-    min-height: 100vh; /* Garante que cubra toda a altura da janela */
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
@@ -41,7 +41,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--roxo-escuro); /* Fundo de cada item do paciente */
+    background-color: var(--roxo-escuro);
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
@@ -62,7 +62,7 @@
 
 .paciente-botoes {
     display: flex;
-    align-items: center; /* Centraliza os botões verticalmente */
+    align-items: center;
     gap: 10px;
 }
 
@@ -70,10 +70,10 @@
     background: var(--roxo-gradiente);
     border: none;
     border-radius: 10px;
-    height: 80px; /* Altura padronizada */
+    height: 80px;
     color: white;
-    padding: 5px 10px; /* Padding padronizado */
-    font-size: 12px; /* Tamanho da fonte padronizado */
+    padding: 5px 10px;
+    font-size: 12px;
     cursor: pointer;
 }
 
@@ -139,7 +139,7 @@ input, select {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 10px; /* Espaçamento entre os botões */
+    margin-right: 10px;
 }
 
 .buttonDados {
@@ -149,16 +149,16 @@ input, select {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-right: 10px; /* Espaçamento entre os botões */
+    margin-right: 10px;
 }
 
 .buttonDados:last-child {
-    margin-right: 0; /* Remove o espaçamento no último botão */
+    margin-right: 0;
 }
 
 .button-group {
     display: flex;
-    gap: 10px; /* Espaçamento entre os botões */
+    gap: 10px;
 }
 
 #paciente-dados{

@@ -16,7 +16,7 @@ const PacienteCadastro = ({ usuarioId }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        const usuarioId = localStorage.getItem('usuarioId'); // ID do usuário logado
+        const usuarioId = localStorage.getItem('usuarioId');
         console.log(usuarioId)
     
         const pacienteData = {
@@ -31,7 +31,6 @@ const PacienteCadastro = ({ usuarioId }) => {
             estado_civil: estadoCivil,
         };
     
-        // Verifica se todos os campos estão preenchidos
         const allFieldsFilled = Object.values(pacienteData).every((value) => value !== undefined && value !== '');
         if (!allFieldsFilled) {
             console.error('Todos os campos devem ser preenchidos.');
@@ -41,19 +40,18 @@ const PacienteCadastro = ({ usuarioId }) => {
         try {
             const response = await axios.post('http://localhost:3000/api/pacientes', pacienteData, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`, // Inclui o token no cabeçalho
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
             console.log('Paciente cadastrado com sucesso:', response.data);
     
-            // Exibe uma mensagem de sucesso
             Swal.fire({
                 title: 'Sucesso!',
                 text: 'Paciente cadastrado com sucesso!',
                 icon: 'success',
                 confirmButtonText: 'Ok'
             }).then(() => {
-                window.location.href = 'telaListar'; // Ajuste a rota conforme necessário
+                window.location.href = 'telaListar';
             });
     
         } catch (error) {

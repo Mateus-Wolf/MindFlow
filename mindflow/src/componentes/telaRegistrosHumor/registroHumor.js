@@ -4,7 +4,7 @@ import axios from 'axios';
 import Header from '../telaHome/header';
 
 const RegistroHumor = () => {
-    const { id } = useParams(); // Obtém o ID do paciente da URL
+    const { id } = useParams();
     const [registros, setRegistros] = useState([]);
     const [nomePaciente, setNomePaciente] = useState('');
 
@@ -13,6 +13,10 @@ const RegistroHumor = () => {
             try {
                 const response = await axios.get(`http://localhost:3000/api/pacientes/${id}/registros`);
                 setRegistros(response.data);
+
+                // Se você precisar do nome do paciente, pode obter aqui
+                const pacienteResponse = await axios.get(`http://localhost:3000/api/pacientes/${id}`);
+                setNomePaciente(pacienteResponse.data.nome);
             } catch (error) {
                 console.error('Erro ao buscar registros:', error);
             }
@@ -21,16 +25,15 @@ const RegistroHumor = () => {
         fetchRegistros();
     }, [id]);
 
-    // Função para formatar a data
+    // Função que formata a data
     const formatarData = (data) => {
-        // Verifica se a data é válida
         const dataObj = new Date(data);
         if (isNaN(dataObj)) {
-            return 'Data inválida'; // Retorna uma mensagem padrão se a data não for válida
+            return 'Data inválida';
         }
 
-        const dia = dataObj.getUTCDate().toString().padStart(2, '0'); // Obtém o dia
-        const mes = dataObj.toLocaleString('pt-BR', { month: 'short' }).toUpperCase(); // Obtém o mês abreviado e o transforma em maiúsculas
+        const dia = dataObj.getUTCDate().toString().padStart(2, '0');
+        const mes = dataObj.toLocaleString('pt-BR', { month: 'short' }).toUpperCase();
 
         return `${dia} ${mes}`;
     };
@@ -53,7 +56,7 @@ const RegistroHumor = () => {
                         registros.map((registro) => (
                             <Link
                                 key={registro.id}
-                                to={`/registroHumorAtividades/${registro.id}`}
+                                to={`/visualizarHumor/${registro.id}`} // Acesse o ID do registro específico
                                 className="bolinha"
                             >
                                 <span className="data-registro">{formatarData(registro.data_registro)}</span>

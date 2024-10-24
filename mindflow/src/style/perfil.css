@@ -1,6 +1,6 @@
 #conteudoPerfil {
-    background-color: var(--roxo-fundo); /* Adicione o ponto e vírgula aqui */
-    color: #fff; /* Cor do texto branca */
+    background-color: var(--roxo-fundo);
+    color: #fff;
     padding-bottom: 30px;
     
 }
@@ -12,7 +12,7 @@
 .avatar-placeholder {
     width: 150px;
     height: 150px;
-    background-color: #555; /* Cor de fundo do avatar */
+    background-color: #555;
     border-radius: 50%;
     margin: 20px auto;
 }
@@ -37,7 +37,7 @@
 a {
     display: block;
     margin: 20px 0;
-    color: #1e90ff; /* Cor do link */
+    color: #1e90ff;
     text-decoration: none;
 }
 
@@ -46,7 +46,7 @@ a:hover {
 }
 
 .delete-account {
-    background-color: #ff4c4c; /* Cor do botão de excluir conta */
+    background-color: #ff4c4c;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -55,11 +55,11 @@ a:hover {
 }
 
 .delete-account:hover {
-    background-color: #ff1c1c; /* Cor do botão ao passar o mouse */
+    background-color: #ff1c1c;
 }
 
 .save-account {
-    background-color: #1bbd10; /* Cor do botão de excluir conta */
+    background-color: #1bbd10; 
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -69,14 +69,14 @@ a:hover {
 }
 
 .save-account:hover {
-    background-color: rgb(28, 145, 17); /* Cor do botão ao passar o mouse */
+    background-color: rgb(28, 145, 17);
 }
 
 #botoes {
     display: flex;
-    justify-content: space-between; /* Espaça os dois contêineres */
-    align-items: center; /* Alinha verticalmente */
-    gap: 10px; /* Espaçamento entre os grupos de botões */
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
 }
 
 .btn-esquerda {
@@ -85,6 +85,6 @@ a:hover {
 
 .btn-direita {
     display: flex;
-    gap: 10px; /* Espaçamento entre os botões da direita */
+    gap: 10px;
     margin-right: 35px;
 }

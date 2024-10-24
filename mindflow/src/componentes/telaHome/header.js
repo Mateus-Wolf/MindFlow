@@ -13,7 +13,7 @@ const Header = () => {
                     <div className="collapse navbar-collapse" id="navbarNavDropdown">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/perfil">Perfil</Link> {/* Use Link e defina a rota */}
+                                <Link className="nav-link" to="/perfil">Perfil</Link>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link" to="/agendamentos">Agendamentos</Link>

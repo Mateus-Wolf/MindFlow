@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"; // Remova useRef se não estiver usando
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from '../telaHome/header';
 import axios from 'axios';
@@ -17,10 +17,10 @@ const Perfil = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('usuarioId'); // Remover o ID do usuário
-        localStorage.removeItem('nomeUsuario'); // Remover o nome do usuário
-        console.log('usuarioId após logout:', localStorage.getItem('usuarioId')); // Deve ser null
-        console.log('nome após logout:', localStorage.getItem('nome')); // Deve ser null
+        localStorage.removeItem('usuarioId');
+        localStorage.removeItem('nomeUsuario');
+        console.log('usuarioId após logout:', localStorage.getItem('usuarioId'));
+        console.log('nome após logout:', localStorage.getItem('nome')); 
         navigate('/'); 
     };
     
@@ -58,9 +58,9 @@ const Perfil = () => {
             const day = String(dateParts[0]).padStart(2, '0');
             const month = String(dateParts[1]).padStart(2, '0');
             const year = dateParts[2];
-            return `${year}-${month}-${day}`; // Retorna no formato YYYY-MM-DD
+            return `${year}-${month}-${day}`;
         }
-        return dateString; // Retorna a string original se não for válida
+        return dateString;
     };
 
     const handleSave = async () => {
@@ -124,7 +124,6 @@ const Perfil = () => {
             <Header />
             <div className="perfil-container">
                 <div className="avatar-placeholder">
-                    {/* Aqui você pode adicionar a imagem do avatar */}
                 </div>
                 <div className="perfil-opcoes">
                     <div className="form-row">
@@ -153,7 +152,7 @@ const Perfil = () => {
                         <div className="form-group">
                             <label htmlFor="nascimento">Nascimento:</label>
                             <InputMask
-                                mask="99/99/9999" // Formato para a data
+                                mask="99/99/9999"
                                 id="nascimento"
                                 value={usuario.nascimento || ''}
                                 onChange={(e) => handleDateChange(e.target.value)}

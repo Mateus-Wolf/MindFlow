@@ -45,11 +45,11 @@ const Login = ({ voltar }) => {
         try {
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
             const { token, nome } = response.data;
-            const userId = response.data.id; // Supondo que você retorne o ID no backend
+            const userId = response.data.id; 
     
             localStorage.setItem('token', token);
-            localStorage.setItem('usuarioId', userId); // Salva o ID do usuário no localStorage
-            localStorage.setItem('nomeUsuario', nome); // Salva o nome do usuário no localStorage
+            localStorage.setItem('usuarioId', userId);
+            localStorage.setItem('nomeUsuario', nome);
     
             Swal.fire({
                 icon: 'success',
@@ -101,7 +101,7 @@ const Login = ({ voltar }) => {
                                 Esqueci minha senha
                             </a>
                         </div>
-                        {mensagemErro && <p className='error-message'>{mensagemErro}</p>} {/* Mensagem de erro */}
+                        {mensagemErro && <p className='error-message'>{mensagemErro}</p>}
                         <button className='btns' onClick={voltar}>Voltar</button>
                         <button
                             className='btns'
@@ -152,7 +152,7 @@ const Login = ({ voltar }) => {
                     <h2>Atualizar Senha</h2>
                     <form onSubmit={(e) => {
                         e.preventDefault();
-                        navigate('/home'); // Redirecionar ao atualizar a senha
+                        navigate('/home');
                     }}>
                         <div className='password-container'>
                             <input

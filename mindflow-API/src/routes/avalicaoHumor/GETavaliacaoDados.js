@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../../db');
 
-
-
 // Rota para obter os registros de humor de um paciente específico
 router.get('/:id/agendamentos', async (req, res) => {
     const { id } = req.params;

@@ -13,14 +13,13 @@ const Agendamentos = () => {
   const [selectedPatient, setSelectedPatient] = useState('');
   const [description, setDescription] = useState('');
   const [totalAppointments, setTotalAppointments] = useState(0);
-  const [time, setTime] = useState([]);
-  const [recentPatients, setRecentPatients] = useState([]);
+  const [time, setTime] = useState('');
 
   useEffect(() => {
     const fetchPatients = async () => {
-      const usuarioId = localStorage.getItem('usuarioId');
+      const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
       try {
-        const response = await axios.get(`http://localhost:3000/api/pacientes?usuario_id=${usuarioId}`);
+        const response = await axios.get(`http://localhost:3000/api/pacientes?usuario_id=${usuarioId}`); // Inclui o usuario_id na requisição
         setPatients(response.data);
       } catch (error) {
         console.error('Erro ao carregar pacientes:', error);
@@ -31,49 +30,28 @@ const Agendamentos = () => {
       const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
       try {
         const response = await axios.get(`http://localhost:3000/api/agendamentos/mensal?mes=${formattedDate}`);
-
-        // Filtrar apenas agendamentos a partir da data atual
-        const today = new Date();
-        const filteredAppointments = response.data.filter(appt => {
-          const appointmentDate = new Date(appt.data);
-          return appointmentDate >= today; // Apenas agendamentos de hoje em diante
-        });
-
-        setTotalAppointments(filteredAppointments.length);
+        setTotalAppointments(response.data.length);
       } catch (error) {
         console.error('Erro ao carregar agendamentos:', error);
       }
     };
 
-    const fetchRecentPatients = async () => {
-      const usuarioId = localStorage.getItem('usuarioId');
-      const threeMonthsAgo = new Date();
-      threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
-      const formattedDate = `${threeMonthsAgo.getFullYear()}-${String(threeMonthsAgo.getMonth() + 1).padStart(2, '0')}-${String(threeMonthsAgo.getDate()).padStart(2, '0')}`;
-
-      try {
-        const response = await axios.get(`http://localhost:3000/api/agendamentos/recent-patients?usuario_id=${usuarioId}&from_date=${formattedDate}`);
-        setRecentPatients(response.data.slice(0, 5)); // Pegando os últimos 5 pacientes
-      } catch (error) {
-        console.error('Erro ao carregar pacientes recentes:', error);
-      }
-    };
-
     fetchPatients();
     fetchTotalAppointments();
-    fetchRecentPatients();
   }, [currentDate]);
 
   const isBeforeToday = (day) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < today;
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate()); // Dia atual
+    return day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < yesterday;
   };
 
   const isPastTime = (selectedTime) => {
     const now = new Date();
     const selectedDateTime = new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay, selectedTime.split(':')[0], selectedTime.split(':')[1]);
-    return selectedDateTime < now && selectedDay === now.getDate();
+    return selectedDateTime < now && selectedDay === now.getDate(); // Verifica se a hora é no mesmo dia e já passou
   };
 
   const daysOfWeek = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
@@ -105,8 +83,8 @@ const Agendamentos = () => {
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
     try {
-      const usuarioId = localStorage.getItem('usuarioId');
-      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}&usuario_id=${usuarioId}`);
+      const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
+      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}&usuario_id=${usuarioId}`); // Inclui o usuario_id na requisição
       setAppointments(response.data);
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
@@ -114,6 +92,7 @@ const Agendamentos = () => {
 
     setPopupVisible(true);
   };
+
 
   const closePopup = () => {
     setPopupVisible(false);
@@ -129,6 +108,41 @@ const Agendamentos = () => {
     setShowCreateForm(true);
   };
 
+  const handleCreateAppointment = async () => {
+    if (!selectedPatient || !time || !description) {
+      Swal.fire('Erro', 'Por favor, preencha todos os campos antes de salvar o agendamento!', 'error');
+      return;
+    }
+
+    const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
+    const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
+
+    const newAppointment = {
+      paciente_id: selectedPatient,
+      data: formattedDate,
+      hora: time,
+      descricao: description,
+      usuario_id: usuarioId,
+      registro_humor_id: null
+    };
+
+    // Validação para impedir agendamento em hora já passada
+    if (selectedDay === new Date().getDate() && isPastTime(time)) {
+      Swal.fire('Erro', 'Você não pode agendar uma hora que já passou!', 'error');
+      return;
+    }
+
+    try {
+      await axios.post('http://localhost:3000/api/agendamentos', newAppointment);
+      Swal.fire('Agendamento criado com sucesso!', '', 'success');
+      closePopup();
+    } catch (error) {
+      console.error('Erro ao criar agendamento:', error);
+      Swal.fire('Erro ao criar agendamento. Por favor, tente novamente.', '', 'error');
+    }
+  };
+
+
   const renderCalendarDays = () => {
     return generateCalendarDays().map((day, index) => {
       const isDisabled = day && isBeforeToday(day);
@@ -137,7 +151,7 @@ const Agendamentos = () => {
         <div
           key={index}
           className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : 'filled') : 'empty'}`}
-          onClick={() => handleDayClick(day)} // Permite clicar em dias antigos
+          onClick={() => !isDisabled && handleDayClick(day)} // Desabilitar o clique em dias desabilitados
         >
           {day}
         </div>
@@ -147,7 +161,7 @@ const Agendamentos = () => {
 
   const monthNames = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
   ];
 
   return (
@@ -200,7 +214,7 @@ const Agendamentos = () => {
                   <button
                     className="btn btnCriar"
                     onClick={openCreateForm}
-                    disabled={isBeforeToday(selectedDay)} // Desabilita o botão se o dia selecionado estiver antes de hoje
+                    disabled={selectedDay && isBeforeToday(selectedDay)} // Desabilitar o botão se o dia estiver antes de hoje - 1
                   >
                     Criar Agendamento
                   </button>
@@ -208,7 +222,57 @@ const Agendamentos = () => {
                 </>
               ) : (
                 <form id='form-Agendamento-PopUp'>
-                  {/* Formulário para criação de agendamento */}
+                  <div className="form-group">
+                    <label>Paciente</label>
+                    <select
+                      className="form-control"
+                      value={selectedPatient}
+                      onChange={(e) => setSelectedPatient(e.target.value)}
+                    >
+                      <option value="">Selecione o paciente</option>
+                      {patients.map((patient) => (
+                        <option key={patient.id} value={patient.id}>
+                          {patient.nome}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Data</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={`${selectedDay}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`}
+                      readOnly
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Hora</label>
+                    <input
+                      type='time'
+                      className="form-control"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Descrição</label>
+                    <textarea
+                      className="form-control"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <div className="popup-buttons">
+                    <button
+                      type="button"
+                      className="btn btnCriar"
+                      onClick={handleCreateAppointment}
+                    >
+                      Salvar Agendamento
+                    </button>
+                    <button className="btn btnCancelar" onClick={closePopup}>Cancelar</button>
+                  </div>
                 </form>
               )}
             </div>

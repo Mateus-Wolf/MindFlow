@@ -1,7 +1,6 @@
--- Cria o banco de dados
+
 CREATE DATABASE MindFlow;
 
--- **Conecte-se ao banco de dados MindFlow antes de executar as próximas instruções**
 
 -- Tabela de usuários
 CREATE TABLE usuarios (
@@ -10,16 +9,17 @@ CREATE TABLE usuarios (
     email VARCHAR(100) UNIQUE NOT NULL,
     nascimento DATE NOT NULL,
     senha VARCHAR(100) NOT NULL,
-    tipo_usuario VARCHAR(20) NOT NULL
+    tipo_usuario VARCHAR(20) NOT NULL,
+    imagem BYTEA
 );
 
 -- Tabela de pacientes
 CREATE TABLE pacientes (
     id SERIAL PRIMARY KEY,
-    medico_id INT REFERENCES usuarios(id) ON DELETE SET NULL, -- Ajuste para permitir que o médico seja removido
+    medico_id INT REFERENCES usuarios(id) ON DELETE SET NULL,
     nome VARCHAR(100) NOT NULL,
     idade INT NOT NULL,
-    cpf VARCHAR(11) UNIQUE NOT NULL,  -- Alterado para VARCHAR(11)
+    cpf VARCHAR(11) UNIQUE NOT NULL, 
     cep VARCHAR(10) NOT NULL,
     genero VARCHAR(10) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -63,6 +63,6 @@ CREATE TABLE agendamentos (
     usuario_id INT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
     registro_humor_id INT REFERENCES registros_humor(id) ON DELETE CASCADE,
     data DATE NOT NULL,
-    descricao TEXT
+    descricao TEXT,
     hora TIME
 );

@@ -2,9 +2,7 @@ import React from 'react';
 
 const PacientesRec = () => {
     return (
-        <div id="pacientes-recentes">
-            <h3>Pacientes recentes <span className="ver-todos">Ver todos &gt;</span></h3>
-            
+        <div id="pacientes-recentes">  
             <div className="paciente-item">
                 <img src="/path/to/image1.jpg" alt="Gabo Gabriel" className="paciente-img" />
                 <div className="paciente-info">
@@ -18,9 +16,9 @@ const PacientesRec = () => {
             </div>
 
             <div className="paciente-item">
-                <img src="/path/to/image2.jpg" alt="Zasryd Griddy" className="paciente-img" />
+                <img src="/path/to/image2.jpg" alt="Griddy" className="paciente-img" />
                 <div className="paciente-info">
-                    <h4>Zasryd Griddy</h4>
+                    <h4>Griddy</h4>
                     <p>Feminino <span className="idade">23</span></p>
                 </div>
                 <div className="paciente-consulta">

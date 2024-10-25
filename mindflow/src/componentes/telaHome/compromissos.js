@@ -60,7 +60,7 @@ const Compromissos = () => {
                     </div>
                 ))
             ) : (
-                <p>Não há compromissos agendados para hoje.</p>
+                <p>Não há consultas agendadas para hoje.</p>
             )}
         </div>
     );

@@ -3,6 +3,7 @@ import Header from '../telaHome/header';
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Importando SweetAlert2
 
 const RegistroHumorAvaliacao = ({ label, emoji }) => {
     const { id: pacienteId } = useParams();
@@ -70,7 +71,11 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
 
     const handleSave = async () => {
         if (ratings.sleepQuality === 0 || ratings.stressLevel === 0 || ratings.energyLevel === 0 || ratings.generalEvaluation === 0) {
-            alert('Por favor, preencha todas as avaliações antes de salvar!');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atenção!',
+                text: 'Por favor, preencha todas as avaliações antes de salvar!',
+            });
             return;
         }
 
@@ -96,11 +101,19 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
 
         try {
             await axios.post('http://localhost:3000/api/avaliacaoHumor/registro-avaliacao', data);
-            alert('Avaliação salva com sucesso!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Avaliação salva com sucesso!',
+            });
             navigate('/telaListar');
         } catch (error) {
             console.error('Erro ao salvar avaliação:', error);
-            alert('Ocorreu um erro ao salvar a avaliação. Tente novamente.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: 'Ocorreu um erro ao salvar a avaliação. Tente novamente.',
+            });
         }
     };
 

@@ -64,9 +64,11 @@ const PacientesLista = () => {
 
                 {filteredPacientes.map((paciente) => (
                     <div key={paciente.id} className="paciente-item">
-                        <img src={paciente.img || '/path/to/image.jpg'} alt={paciente.nome} className="paciente-img" />
+                        {/* Removendo a imagem do paciente */}
                         <div className="paciente-info">
                             <h4>{paciente.nome}</h4>
+                            {/* Adicionando a idade abaixo do nome */}
+                            <p>Idade: {paciente.idade}</p>
                         </div>
                         <div className="paciente-botoes">
                             <button className="btn-opcao" onClick={() => handleClick(paciente.id)}>Dados</button>

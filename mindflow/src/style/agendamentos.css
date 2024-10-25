@@ -46,6 +46,11 @@ body, html {
   border-radius: 5px;
 }
 
+.day-of-week{
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .calendar-days-of-week, .calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);

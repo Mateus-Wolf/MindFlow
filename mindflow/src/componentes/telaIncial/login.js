@@ -40,13 +40,17 @@ const Login = ({ voltar }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMensagemErro('');
-    
+        setMensagemErro(''); // Limpa a mensagem de erro ao iniciar o login
+        
         try {
+            // POST para a API para efetuar o login
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
+            
+            // Extrai o token e o nome do usuário da resposta
             const { token, nome } = response.data;
-            const userId = response.data.id; 
+            const userId = response.data.id;
     
+            // Armazena as informações do usuário no localStorage
             localStorage.setItem('token', token);
             localStorage.setItem('usuarioId', userId);
             localStorage.setItem('nomeUsuario', nome);
@@ -61,7 +65,14 @@ const Login = ({ voltar }) => {
             });
     
         } catch (error) {
-            setMensagemErro('Email ou senha incorretos.'); 
+            setMensagemErro('Email ou senha incorretos.');
+        }
+    };
+    
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && isFormValid) {
+            handleLogin(e);
         }
     };
 
@@ -77,6 +88,7 @@ const Login = ({ voltar }) => {
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            onKeyDown={handleKeyDown}
                             required
                         />
                         <div className='password-container'>
@@ -86,6 +98,7 @@ const Login = ({ voltar }) => {
                                 placeholder="Senha"
                                 value={senha}
                                 onChange={(e) => setSenha(e.target.value)}
+                                onKeyDown={handleKeyDown}
                                 required
                             />
                             <button

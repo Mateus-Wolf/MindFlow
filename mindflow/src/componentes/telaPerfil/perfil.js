@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from '../telaHome/header';
-import axios from 'axios';
+import Header from '../telaHome/header'; 
+import axios from 'axios'; 
 import Swal from 'sweetalert2';
-import InputMask from 'react-input-mask';
+import InputMask from 'react-input-mask'; 
 
 const Perfil = () => {
-    const [editable, setEditable] = useState(false);
+    const [editable, setEditable] = useState(false); //
     const [usuario, setUsuario] = useState({});
     const [novaSenha, setNovaSenha] = useState('');
+    const [imagem, setImagem] = useState(null);
+    const [imagemFile, setImagemFile] = useState(null); 
     const navigate = useNavigate();
 
     const toggleEdit = () => {
@@ -16,21 +18,15 @@ const Perfil = () => {
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('usuarioId');
-        localStorage.removeItem('nomeUsuario');
-        console.log('usuarioId após logout:', localStorage.getItem('usuarioId'));
-        console.log('nome após logout:', localStorage.getItem('nome')); 
-        navigate('/'); 
+        localStorage.removeItem('token'); // Remove o token do localStorage
+        localStorage.removeItem('usuarioId'); // Remove o ID do usuário do localStorage
+        localStorage.removeItem('nomeUsuario'); // Remove o nome do usuário do localStorage
+        navigate('/');
     };
-    
-    
-
 
     useEffect(() => {
         const fetchUsuario = async () => {
             const token = localStorage.getItem('token');
-            console.log('Token:', token);
             if (!token) {
                 navigate('/');
                 return;
@@ -39,10 +35,12 @@ const Perfil = () => {
             try {
                 const response = await axios.get('http://localhost:3000/api/usuarios/me', {
                     headers: {
-                        Authorization: token,
+                        Authorization: token, // Adiciona o token nos headers da requisição
                     },
                 });
-                setUsuario(response.data);
+                setUsuario(response.data); // Armazena os dados do usuário no estado
+                setImagem(response.data.imagem); // Armazena a imagem do usuário
+                console.log(response.data);
             } catch (error) {
                 console.error('Erro ao obter dados do usuário:', error);
                 navigate('/');
@@ -55,12 +53,33 @@ const Perfil = () => {
     const formatDate = (dateString) => {
         const dateParts = dateString.split('/');
         if (dateParts.length === 3) {
-            const day = String(dateParts[0]).padStart(2, '0');
-            const month = String(dateParts[1]).padStart(2, '0');
-            const year = dateParts[2];
-            return `${year}-${month}-${day}`;
+            const day = String(dateParts[0]).padStart(2, '0'); // Formata o dia
+            const month = String(dateParts[1]).padStart(2, '0'); // Formata o mês
+            const year = dateParts[2]; // Obtém o ano
+            return `${year}-${month}-${day}`; // Retorna a data no formato ISO
         }
         return dateString;
+    };
+
+    const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB - limite máximo para o tamanho da imagem
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            // Verifica se o tamanho da imagem excede o limite
+            if (file.size > MAX_IMAGE_SIZE) {
+                Swal.fire('Imagem muito grande!', 'Por favor, selecione uma imagem com tamanho menor que 2MB.', 'error');
+                return; // Interrompe se a imagem for muito grande
+            }
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagem(reader.result); 
+                setImagemFile(file);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSave = async () => {
@@ -68,7 +87,7 @@ const Perfil = () => {
 
         const usuarioToSave = {
             ...usuario,
-            nascimento: formatDate(usuario.nascimento)
+            nascimento: formatDate(usuario.nascimento),
         };
 
         try {
@@ -77,6 +96,23 @@ const Perfil = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+
+            // Envia a imagem se houver uma nova
+            if (imagemFile) {
+                if (!usuario.id) {
+                    throw new Error('ID do usuário não encontrado');
+                }
+
+                const formData = new FormData();
+                formData.append('imagem', imagemFile);
+
+                await axios.put(`http://localhost:3000/api/usuarios/${usuario.id}/imagem`, formData, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            }
 
             if (novaSenha) {
                 await axios.put('http://localhost:3000/api/usuarios/me/senha', { novaSenha }, {
@@ -89,10 +125,10 @@ const Perfil = () => {
 
             Swal.fire('Sucesso!', 'Dados atualizados com sucesso.', 'success');
         } catch (error) {
-            console.error('Erro ao atualizar dados:', error);
-            Swal.fire('Erro!', 'Não foi possível atualizar os dados.', 'error');
+            console.error('Erro ao atualizar dados:', error); 
+            Swal.fire('Erro!', 'Não foi possível atualizar os dados.', 'error'); 
         }
-        toggleEdit();
+        toggleEdit(); // Alterna o modo editável após salvar
     };
 
     const handleDateChange = (value) => {
@@ -110,11 +146,11 @@ const Perfil = () => {
 
             const isValidDate = (d, m, y) => {
                 const date = new Date(`${y}-${m}-${d}`);
-                return date && (date.getMonth() + 1) == m && date.getDate() == d && date.getFullYear() == y;
+                return date && (date.getMonth() + 1) == m && date.getDate() == d && date.getFullYear() == y; // Verifica se a data é válida
             };
 
             if (isValidDate(day, month, year)) {
-                setUsuario({ ...usuario, nascimento: `${year}-${month}-${day}` });
+                setUsuario({ ...usuario, nascimento: `${year}-${month}-${day}` }); // Atualiza a data se for válida
             }
         }
     };
@@ -124,6 +160,11 @@ const Perfil = () => {
             <Header />
             <div className="perfil-container">
                 <div className="avatar-placeholder">
+                    {imagem ? (
+                        <img src={imagem} alt="Imagem do Usuário" className="avatar" />
+                    ) : (
+                        <div className="avatar-placeholder">Imagem não disponível</div>
+                    )}
                 </div>
                 <div className="perfil-opcoes">
                     <div className="form-row">
@@ -171,8 +212,17 @@ const Perfil = () => {
                             />
                         </div>
                     </div>
+                    <div className="form-group">
+                        <label htmlFor="imagem">Foto de Perfil:</label>
+                        <input
+                            type="file"
+                            id="imagem"
+                            onChange={handleImageChange}
+                            disabled={!editable}
+                        />
+                    </div>
                 </div>
-                <div className="button-group">
+                <div className="botoes">
                     {editable ? (
                         <>
                             <button onClick={handleSave} className="buttonDados">Salvar</button>

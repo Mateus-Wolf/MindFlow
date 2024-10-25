@@ -34,19 +34,8 @@
     border-radius: 5px;
 }
 
-a {
-    display: block;
-    margin: 20px 0;
-    color: #1e90ff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
 .delete-account {
-    background-color: #ff4c4c;
+    background-color: var(--vermelho-cancelar);
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -55,36 +44,19 @@ a:hover {
 }
 
 .delete-account:hover {
-    background-color: #ff1c1c;
+    background-color: #ff0000;
 }
 
-.save-account {
-    background-color: #1bbd10; 
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: 15px;
-}
-
-.save-account:hover {
-    background-color: rgb(28, 145, 17);
-}
-
-#botoes {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.btn-esquerda {
-    display: flex;
-}
-
-.btn-direita {
+.botoes {
     display: flex;
     gap: 10px;
-    margin-right: 35px;
+    margin-left: 16px;
 }
+
+.avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+

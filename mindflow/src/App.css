@@ -16,6 +16,11 @@
   --roxo-gradiente: linear-gradient(45deg, #9747FFFA, #680099FA);
 }
 
+#conteudoPagina{
+  height: 100vh;
+  background-color: var(--roxo-fundo);
+}
+
 #conteudoBody {
   display: flex;
   height: 100vh;
@@ -26,6 +31,17 @@
   font-size: 75px;
   margin-top: 85px;
   color: whitesmoke;
+}
+
+a {
+  display: block;
+  margin: 20px 0;
+  color: #1e90ff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 #textoInicial {

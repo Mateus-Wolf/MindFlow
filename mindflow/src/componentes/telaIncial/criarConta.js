@@ -23,44 +23,48 @@ const CriarConta = ({ voltar }) => {
     setMostrarRepetirSenha(!mostrarRepetirSenha);
   };
 
-  const isFormValid = nome && email && nascimento && senha && senhaRepetida;
+  const isFormValid = nome.trim() && email.trim() && nascimento.trim() && senha.trim() && senhaRepetida.trim();
 
   const handleCreateAccount = async (event) => {
     event.preventDefault();
   
+    // Verifica se as senhas inseridas coincidem
     if (senha !== senhaRepetida) {
-      setErro('As SENHAS não coincidem, por favor, verifique!');
-      return;
+        setErro('As SENHAS não coincidem, por favor, verifique!');
+        return; // Interrompe se as senhas não coincidirem
     }
   
+    // POST para a API para criar uma nova conta
     const response = await fetch('http://localhost:3000/api/usuarios/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ nome, email, nascimento, senha, tipo_usuario }),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        // Envia os dados do usuário para a API
+        body: JSON.stringify({ nome, email, nascimento, senha, tipo_usuario }),
     });
   
     const data = await response.json();
     console.log('Dados retornados do servidor:', data);
   
+    // Verifica se a resposta da API foi bem-sucedida
     if (!response.ok) {
-      setErro(`Erro ao criar conta: ${data.error || 'Erro desconhecido'}`);
+        setErro(`Erro ao criar conta: ${data.error || 'Erro desconhecido'}`);
     } else {
-      console.log('Conta criada com sucesso:', data);
-      localStorage.setItem('nomeUsuario', data.nome);
-      localStorage.setItem('token', data.token);
+        // Se a conta for criada com sucesso, armazena as informações no localStorage
+        console.log('Conta criada com sucesso:', data);
+        localStorage.setItem('nomeUsuario', data.nome);
+        localStorage.setItem('usuarioId', data.usuarioId);
+        localStorage.setItem('token', data.token);
   
-      Swal.fire({
-        icon: 'success',
-        title: 'Conta criada com sucesso!',
-        text: 'Você já pode começar a usar o MindFlow agora!',
-      });
-      navigate('/home');
+        Swal.fire({
+            icon: 'success',
+            title: 'Conta criada com sucesso!',
+            text: 'Você já pode começar a usar o MindFlow agora!',
+        });
+        navigate('/home');
     }
-  };
-  
-  
+};
 
   return (
     <div>
@@ -133,7 +137,7 @@ const CriarConta = ({ voltar }) => {
         <button
           className='btns'
           type="submit"
-          disabled={!isFormValid} // Botão desabilitado se o formulário estiver incompleto
+          disabled={!isFormValid} // Desabilita o botão se o formulário estiver incompleto
           style={{
             backgroundColor: isFormValid ? 'rgb(71, 6, 135)' : 'gray',
             cursor: isFormValid ? 'pointer' : 'not-allowed',

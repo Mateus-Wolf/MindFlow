@@ -26,13 +26,20 @@ router.get('/me', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, 'seu_segredo'); // Verifique se o segredo está correto
-        const usuario = await db.query('SELECT * FROM usuarios WHERE id = $1', [decoded.id]);        
+        const usuario = await db.query('SELECT id, nome, email, nascimento, imagem FROM usuarios WHERE id = $1', [decoded.id]);
 
         if (usuario.rows.length === 0) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
-        res.json(usuario.rows[0]); // Retorna os dados do usuário
+        const userData = usuario.rows[0];
+        
+        // Converte a imagem para base64 se ela existir
+        if (userData.imagem) {
+            userData.imagem = `data:image/png;base64,${userData.imagem.toString('base64')}`;
+        }
+
+        res.json(userData); // Retorna os dados do usuário com a imagem em base64
     } catch (error) {
         console.error('Erro ao verificar token:', error);
         return res.status(500).json({ error: 'Erro ao verificar token: ' + error.message });

@@ -90,15 +90,17 @@ const Perfil = () => {
     
         try {
             // Verificar se o novo e-mail já está em uso por outro usuário
-            const emailCheckResponse = await axios.get(`http://localhost:3000/api/usuarios/email/${usuario.email}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            if (usuario.email !== usuarioToSave.email) { // Apenas verifica se o email foi alterado
+                const emailCheckResponse = await axios.get(`http://localhost:3000/api/usuarios/email/${usuarioToSave.email}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
     
-            if (emailCheckResponse.data.exists) {
-                Swal.fire('Erro!', 'Este e-mail já está em uso por outro usuário.', 'error');
-                return; // Impedir que o código prossiga caso o e-mail já exista
+                if (emailCheckResponse.data.exists) {
+                    Swal.fire('Erro!', 'Este e-mail já está em uso por outro usuário.', 'error');
+                    return; // Impedir que o código prossiga caso o e-mail já exista
+                }
             }
     
             // Continuar com a atualização do usuário
@@ -125,11 +127,11 @@ const Perfil = () => {
             }
     
             if (novaSenha) {
-                await axios.put('http://localhost:3000/api/usuarios/me/senha', { novaSenha }, {
+                await axios.put('http://localhost:3000/api/usuarios/novaSenha', { novaSenha }, {
                     headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                        Authorization: `Bearer ${token}`, // Certifique-se de passar o token de autorização aqui
+                    }
+                });                                           
                 Swal.fire('Sucesso!', 'Senha atualizada com sucesso.', 'success');
             }
     

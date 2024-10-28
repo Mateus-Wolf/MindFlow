@@ -7,7 +7,7 @@ const GETusuarios = require('./routes/usuarios/GETusuarios');
 const POSTlogin = require('./routes/usuarios/POSTusuario');
 const POSTregistroUsuarios = require('./routes/usuarios/POSTregistroUsuarios');
 const PUTusuarios = require('./routes/usuarios/PUTusuarios');
-const PUTsenha = require('./routes/usuarios/PUTsenha');
+const PUTnovaSenha  = require('./routes/usuarios/PUTnovaSenha');
 const CRUDfotos = require('./routes/usuarios/CRUDfotos');
 
 const POSTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
@@ -38,7 +38,7 @@ app.use('/api/usuarios', GETusuarios);
 app.use('/api/login', POSTlogin);
 app.use('/api/usuarios', POSTregistroUsuarios);
 app.use('/api/usuarios', PUTusuarios);
-app.use('/api/usuarios/senha', PUTsenha);
+app.use('/api/usuarios', PUTnovaSenha);
 app.use('/api/usuarios', CRUDfotos);
 
 app.use('/api/agendamentos', GETagendamentosRoute);

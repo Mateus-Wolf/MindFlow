@@ -3,6 +3,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 
 // Importar rotas
+
+//usuarios
 const GETusuarios = require('./routes/usuarios/GETusuarios');
 const POSTlogin = require('./routes/usuarios/POSTusuario');
 const POSTregistroUsuarios = require('./routes/usuarios/POSTregistroUsuarios');
@@ -10,14 +12,17 @@ const PUTusuarios = require('./routes/usuarios/PUTusuarios');
 const PUTnovaSenha  = require('./routes/usuarios/PUTnovaSenha');
 const CRUDfotos = require('./routes/usuarios/CRUDfotos');
 
+//agendamentos
 const POSTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
 const GETagendamentosRoute = require('./routes/agendamentos/GETagendamentos');
 const GETagendamentosMensaisRoute = require('./routes/agendamentos/GetagendamentosMensais');
 
+//pacientes
 const GETpacientes = require('./routes/pacientes/GETpacientes');
 const PUTpacientes = require('./routes/pacientes/PUTpacientes');
 const DELETEpacientes = require('./routes/pacientes/DELETEpaciente');
 
+//avaliação humor
 const POSTavaliacaoHumor = require('./routes/avalicaoHumor/POSTavaliacao');
 const GETregistro = require('./routes/avalicaoHumor/GETregistros');
 const GETvisualizarHumor = require('./routes/avalicaoHumor/GETvisualizarHumor');
@@ -34,6 +39,8 @@ app.use(express.urlencoded({ limit: '5mb', extended: true }));
 app.use(cors());
 
 // Definindo as rotas
+
+//usuarios
 app.use('/api/usuarios', GETusuarios);
 app.use('/api/login', POSTlogin);
 app.use('/api/usuarios', POSTregistroUsuarios);
@@ -41,14 +48,17 @@ app.use('/api/usuarios', PUTusuarios);
 app.use('/api/usuarios', PUTnovaSenha);
 app.use('/api/usuarios', CRUDfotos);
 
+//agendamentos
 app.use('/api/agendamentos', GETagendamentosRoute);
 app.use('/api/agendamentos', GETagendamentosMensaisRoute);
 app.use('/api/agendamentos', POSTagendamentosRoute);
 
+//pacientes
 app.use('/api/pacientes', GETpacientes);
 app.use('/api/pacientes', PUTpacientes);
 app.use('/api/pacientes', DELETEpacientes);
 
+//avaliação humor
 app.use('/api/pacientes', GETregistro);
 app.use('/api/avaliacaoHumor', POSTavaliacaoHumor);
 app.use('/api', GETvisualizarHumor);

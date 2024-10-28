@@ -19,7 +19,9 @@ const PacientesLista = () => {
     };
 
     const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
+        const value = e.target.value;
+        const formattedValue = value.charAt(0).toUpperCase() + value.slice(1);
+        setSearchTerm(formattedValue);
     };
 
     const usuarioId = localStorage.getItem('usuarioId');
@@ -64,10 +66,8 @@ const PacientesLista = () => {
 
                 {filteredPacientes.map((paciente) => (
                     <div key={paciente.id} className="paciente-item">
-                        {/* Removendo a imagem do paciente */}
                         <div className="paciente-info">
                             <h4>{paciente.nome}</h4>
-                            {/* Adicionando a idade abaixo do nome */}
                             <p>Idade: {paciente.idade}</p>
                         </div>
                         <div className="paciente-botoes">

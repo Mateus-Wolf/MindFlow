@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Header = () => {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleDropdown = (e) => {
+        e.preventDefault(); // Evita o comportamento padrão do link
+        setIsOpen(prev => !prev);
+    };
+
     return (
         <div id="header">
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
                     <Link className="navbar-brand" id="tituloHeader" to="/home">MINDFLOW</Link>
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <button
+                        className="navbar-toggler"
+                        type="button"
+                        onClick={() => setIsOpen(prev => !prev)}
+                        aria-expanded={isOpen}
+                        aria-label="Toggle navigation"
+                    >
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse" id="navbarNavDropdown">
+                    <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
                         <ul className="navbar-nav">
                             <li className="nav-item">
                                 <Link className="nav-link" to="/perfil">Perfil</Link>
@@ -19,13 +33,26 @@ const Header = () => {
                                 <Link className="nav-link" to="/agendamentos">Agendamentos</Link>
                             </li>
                             <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <a
+                                    className="nav-link dropdown-toggle"
+                                    href="#"
+                                    role="button"
+                                    onClick={toggleDropdown}
+                                    aria-expanded={isOpen}
+                                >
                                     Pacientes
                                 </a>
-                                <ul className="dropdown-menu">
+                                <motion.ul
+                                    className={`dropdown-menu ${isOpen ? 'show' : ''}`}
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: isOpen ? 1 : 0, height: isOpen ? "auto" : 0 }}
+                                    exit={{ opacity: 0, height: 0 }} // Animação ao sair
+                                    transition={{ duration: 0.3 }}
+                                    style={{ overflow: 'hidden' }} // Impede que o conteúdo transborde durante a animação
+                                >
                                     <li><Link className="dropdown-item" to="/telaListar">Todos Pacientes</Link></li>
                                     <li><Link className="dropdown-item" to="/telaCadastrar">Cadastrar Paciente</Link></li>
-                                </ul>
+                                </motion.ul>
                             </li>
                         </ul>
                     </div>

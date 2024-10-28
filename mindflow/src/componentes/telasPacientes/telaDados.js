@@ -85,13 +85,13 @@ const PacienteDados = () => {
 
     const handleSave = async () => {
         try {
-            // Verificar se o CPF já existe
+            // Verificar se o CPF já existe, mas não verificar se é o mesmo do paciente que está sendo editado
             const cpfResponse = await axios.get(`http://localhost:3000/api/pacientes/cpf/${formData.cpf}`);
-            if (cpfResponse.data.exists) {
+            if (cpfResponse.data.exists && formData.cpf !== paciente.cpf) {
                 return Swal.fire('Erro!', 'Este CPF já está em uso.', 'error');
             }
     
-            // Se o CPF não existe, prosseguir com a atualização
+            // Se o CPF não existe ou é o mesmo do paciente, prosseguir com a atualização
             const response = await axios.put(`http://localhost:3000/api/pacientes/${id}`, formData);
             setPaciente(response.data);
             setIsEditing(false);

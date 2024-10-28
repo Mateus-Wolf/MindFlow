@@ -4,17 +4,18 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-// Rota para obter todos os usuários
+// Rota para obter todos os usuários sem a imagem
 router.get('/', async (req, res) => {
     try {
-        // Consulta todos os usuários no banco de dados
-        const usuarios = await db.query('SELECT * FROM usuarios');
+        // Consulta todos os usuários no banco de dados, excluindo a coluna de imagem
+        const usuarios = await db.query('SELECT id, nome, email, nascimento, senha FROM usuarios');
         res.status(200).json(usuarios.rows);
     } catch (error) {
         console.error('Erro ao obter usuários:', error);
         res.status(500).json({ error: 'Erro ao obter usuários' });
     }
 });
+
 
 // Rota para obter dados do usuário logado
 router.get('/me', async (req, res) => {
@@ -45,5 +46,24 @@ router.get('/me', async (req, res) => {
         return res.status(500).json({ error: 'Erro ao verificar token: ' + error.message });
     }
 });
+
+// Rota para verificar se um e-mail já está em uso
+router.get('/email/:email', async (req, res) => {
+    const { email } = req.params;
+
+    try {
+        const emailCheck = await db.query('SELECT id FROM usuarios WHERE email = $1', [email]);
+
+        if (emailCheck.rows.length > 0) {
+            return res.status(200).json({ exists: true });
+        }
+
+        res.status(200).json({ exists: false });
+    } catch (error) {
+        console.error('Erro ao verificar e-mail:', error);
+        res.status(500).json({ error: 'Erro ao verificar e-mail' });
+    }
+});
+
 
 module.exports = router;

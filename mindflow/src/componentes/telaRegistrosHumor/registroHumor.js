@@ -7,11 +7,12 @@ const RegistroHumor = () => {
     const { id } = useParams();
     const [registros, setRegistros] = useState([]);
     const [nomePaciente, setNomePaciente] = useState('');
+    const [anoAtual, setAnoAtual] = useState(new Date().getFullYear()); // Adicionando estado para o ano atual
 
     useEffect(() => {
         const fetchRegistros = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/pacientes/${id}/registros`);
+                const response = await axios.get(`http://localhost:3000/api/pacientes/${id}/registros?ano=${anoAtual}`); // Passando o ano na requisição
                 setRegistros(response.data);
 
                 // Se você precisar do nome do paciente, pode obter aqui
@@ -23,7 +24,7 @@ const RegistroHumor = () => {
         };
 
         fetchRegistros();
-    }, [id]);
+    }, [id, anoAtual]); // Incluindo anoAtual nas dependências
 
     // Função que formata a data
     const formatarData = (data) => {
@@ -38,18 +39,28 @@ const RegistroHumor = () => {
         return `${dia} ${mes}`;
     };
 
+    // Função para alterar o ano
+    const handlePrevYear = () => {
+        setAnoAtual(anoAtual - 1);
+    };
+
+    const handleNextYear = () => {
+        setAnoAtual(anoAtual + 1);
+    };
+
     return (
         <div className="tudo">
             <Header />
             <div id='registros-container'>
-                <h2 className="titulo">Registros Paciente</h2>
-                <h3 className="nome-paciente">{nomePaciente}</h3>
-
+                <h2 className="titulo">Registros do Paciente</h2>
+                <h3 className="nome-paciente"><b>{nomePaciente}</b></h3>
                 <div className="ano-navegacao">
-                    <span className="seta-esquerda">&lt;</span>
-                    <span className="ano">2024</span>
-                    <span className="seta-direita">&gt;</span>
+                    <button onClick={handlePrevYear}>&lt;</button>
+                    <span className="ano">{anoAtual}</span>
+                    <button onClick={handleNextYear}>&gt;</button> 
                 </div>
+
+                <hr></hr>
 
                 <div className="registros-datas">
                     {registros.length > 0 ? (
@@ -61,7 +72,6 @@ const RegistroHumor = () => {
                             >
                                 <span className="data-registro">{formatarData(registro.data_registro)}</span>
                             </Link>
-
                         ))
                     ) : (
                         <p>Nenhum registro encontrado.</p>

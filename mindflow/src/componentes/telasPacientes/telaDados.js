@@ -20,6 +20,7 @@ const PacienteDados = () => {
                 setFormData(response.data);
             } catch (error) {
                 console.error('Erro ao obter dados do paciente:', error);
+                Swal.fire('Erro!', 'Não foi possível obter os dados do paciente.', 'error');
             } finally {
                 setLoading(false);
             }
@@ -45,6 +46,20 @@ const PacienteDados = () => {
         }));
     };
 
+    const formatCPF = (cpf) => {
+        return cpf
+            .replace(/\D/g, '') // Remove tudo que não é dígito
+            .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto entre os 3 primeiros e os demais
+            .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto entre os 3 primeiros e os demais
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen entre os últimos números
+    };
+
+    const formatCEP = (cep) => {
+        return cep
+            .replace(/\D/g, '') // Remove tudo que não é dígito
+            .replace(/(\d{5})(\d)/, '$1-$2'); // Coloca hífen após os 5 primeiros dígitos
+    };
+
     const handleDelete = async () => {
         const confirmation = await Swal.fire({
             title: 'Tem certeza?',
@@ -67,6 +82,28 @@ const PacienteDados = () => {
             }
         }
     };
+
+    const handleSave = async () => {
+        try {
+            // Verificar se o CPF já existe
+            const cpfResponse = await axios.get(`http://localhost:3000/api/pacientes/cpf/${formData.cpf}`);
+            if (cpfResponse.data.exists) {
+                return Swal.fire('Erro!', 'Este CPF já está em uso.', 'error');
+            }
+    
+            // Se o CPF não existe, prosseguir com a atualização
+            const response = await axios.put(`http://localhost:3000/api/pacientes/${id}`, formData);
+            setPaciente(response.data);
+            setIsEditing(false);
+            Swal.fire('Sucesso!', 'Dados do paciente atualizados com sucesso.', 'success');
+        } catch (error) {
+            console.error('Erro ao salvar dados do paciente:', error);
+            Swal.fire('Erro!', 'Não foi possível salvar os dados do paciente.', 'error');
+        }
+    };
+
+    const formattedCPF = formData.cpf ? formatCPF(formData.cpf) : '';
+    const formattedCEP = formData.cep ? formatCEP(formData.cep) : '';
 
     if (loading) {
         return <div>Carregando...</div>;
@@ -107,7 +144,7 @@ const PacienteDados = () => {
                             type="text"
                             id="cpf"
                             name="cpf"
-                            value={formData.cpf}
+                            value={isEditing ? formData.cpf : formattedCPF}
                             onChange={handleChange}
                             disabled={!isEditing}
                         />
@@ -118,7 +155,7 @@ const PacienteDados = () => {
                             type="text"
                             id="cep"
                             name="cep"
-                            value={formData.cep}
+                            value={isEditing ? formData.cep : formattedCEP}
                             onChange={handleChange}
                             disabled={!isEditing}
                         />
@@ -186,7 +223,7 @@ const PacienteDados = () => {
                     {isEditing ? (
                         <>
                             <button onClick={handleCancel} className="buttonDados">Cancelar</button>
-                            <button onClick={handleEdit} className="buttonDados">Salvar</button>
+                            <button onClick={handleSave} className="buttonDados">Salvar</button>
                         </>
                     ) : (
                         <>

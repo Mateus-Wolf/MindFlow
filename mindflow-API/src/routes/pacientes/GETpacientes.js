@@ -66,4 +66,22 @@ router.post('/', async (req, res) => {
     }
 });
 
+// Rota para verificar se um CPF já está em uso
+router.get('/cpf/:cpf', async (req, res) => {
+    const { cpf } = req.params;
+
+    try {
+        const cpfCheck = await pool.query('SELECT id FROM pacientes WHERE cpf = $1', [cpf]);
+
+        if (cpfCheck.rows.length > 0) {
+            return res.status(200).json({ exists: true });
+        }
+
+        res.status(200).json({ exists: false });
+    } catch (error) {
+        console.error('Erro ao verificar CPF:', error);
+        res.status(500).json({ error: 'Erro ao verificar CPF' });
+    }
+});
+
 module.exports = router;

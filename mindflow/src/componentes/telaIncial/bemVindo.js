@@ -34,8 +34,7 @@ function Body() {
         )}
 
         {telaAtiva === "login" && <Login voltar={voltar} />}
-
-        {telaAtiva === "criarConta" && <CriarConta voltar={voltar} />}
+        {telaAtiva === "criarConta" && <CriarConta voltar={voltar} irParaLogin={mostrarLogin} />}
       </div>
     </div>
   );

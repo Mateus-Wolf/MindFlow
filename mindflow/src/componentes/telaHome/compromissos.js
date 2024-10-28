@@ -43,7 +43,7 @@ const Compromissos = () => {
 
     return (
         <div id="compromissos">
-            <h3>Olá, Dr(a) <span className="destaque">{nomeUsuario ? nomeUsuario : ''}</span></h3>
+            <h3>Olá, Dr(a). <span className="destaque">{nomeUsuario ? nomeUsuario : ''}</span></h3>
             <p id='dataComp'>Compromissos de hoje <span className="ver-todos">Ver todos &gt;</span></p>
 
             {compromissos.length > 0 ? (

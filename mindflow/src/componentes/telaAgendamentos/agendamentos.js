@@ -17,9 +17,9 @@ const Agendamentos = () => {
 
   useEffect(() => {
     const fetchPatients = async () => {
-      const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
+      const usuarioId = localStorage.getItem('usuarioId');
       try {
-        const response = await axios.get(`http://localhost:3000/api/pacientes?usuario_id=${usuarioId}`); // Inclui o usuario_id na requisição
+        const response = await axios.get(`http://localhost:3000/api/pacientes?usuario_id=${usuarioId}`);
         setPatients(response.data);
       } catch (error) {
         console.error('Erro ao carregar pacientes:', error);
@@ -27,15 +27,19 @@ const Agendamentos = () => {
     };
 
     const fetchTotalAppointments = async () => {
+      const usuarioId = localStorage.getItem('usuarioId'); // ID do usuário logado
       const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+    
       try {
-        const response = await axios.get(`http://localhost:3000/api/agendamentos/mensal?mes=${formattedDate}`);
+        const response = await axios.get(`http://localhost:3000/api/agendamentos/mensal/${usuarioId}`, {
+          params: { mes: formattedDate }
+        });
         setTotalAppointments(response.data.length);
       } catch (error) {
         console.error('Erro ao carregar agendamentos:', error);
       }
     };
-
+    
     fetchPatients();
     fetchTotalAppointments();
   }, [currentDate]);

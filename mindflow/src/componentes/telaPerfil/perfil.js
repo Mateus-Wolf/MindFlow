@@ -25,6 +25,20 @@ const Perfil = () => {
         navigate('/');
     };
 
+    const displayFormattedDate = (dateString) => {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+
+    const saveFormattedDate = (dateString) => {
+        const [day, month, year] = dateString.split('/');
+        return `${year}-${month}-${day}`;
+    };
+
     useEffect(() => {
         const fetchUsuario = async () => {
             const token = localStorage.getItem('token');
@@ -39,7 +53,14 @@ const Perfil = () => {
                         Authorization: token,
                     },
                 });
-                setUsuario(response.data);
+
+                if (response.data.nascimento) {
+                    // Exibe a data formatada para o usuário
+                    setUsuario({ ...response.data, nascimento: displayFormattedDate(response.data.nascimento) });
+                } else {
+                    setUsuario(response.data);
+                }
+
                 setImagem(response.data.imagem);
             } catch (error) {
                 Swal.fire('Erro!', 'Erro ao obter dados do usuário.', 'error');
@@ -49,17 +70,6 @@ const Perfil = () => {
 
         fetchUsuario();
     }, [navigate]);
-
-    const formatDate = (dateString) => {
-        const dateParts = dateString.split('/');
-        if (dateParts.length === 3) {
-            const day = String(dateParts[0]).padStart(2, '0');
-            const month = String(dateParts[1]).padStart(2, '0');
-            const year = dateParts[2];
-            return `${year}-${month}-${day}`;
-        }
-        return dateString;
-    };
 
     const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
 
@@ -85,9 +95,9 @@ const Perfil = () => {
         const token = localStorage.getItem('token');
         const usuarioToSave = {
             ...usuario,
-            nascimento: formatDate(usuario.nascimento),
+            nascimento: saveFormattedDate(usuario.nascimento), // Converte a data para o formato YYYY-MM-DD ao salvar
         };
-    
+
         try {
             // Verificar se o novo e-mail já está em uso por outro usuário
             if (usuario.email !== usuarioToSave.email) { // Apenas verifica se o email foi alterado
@@ -96,28 +106,28 @@ const Perfil = () => {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-    
+
                 if (emailCheckResponse.data.exists) {
                     Swal.fire('Erro!', 'Este e-mail já está em uso por outro usuário.', 'error');
                     return; // Impedir que o código prossiga caso o e-mail já exista
                 }
             }
-    
+
             // Continuar com a atualização do usuário
             await axios.put('http://localhost:3000/api/usuarios/me', usuarioToSave, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
-    
+
             if (imagemFile) {
                 if (!usuario.id) {
                     throw new Error('ID do usuário não encontrado');
                 }
-    
+
                 const formData = new FormData();
                 formData.append('imagem', imagemFile);
-    
+
                 await axios.put(`http://localhost:3000/api/usuarios/${usuario.id}/imagem`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -125,45 +135,25 @@ const Perfil = () => {
                     },
                 });
             }
-    
+
             if (novaSenha) {
                 await axios.put('http://localhost:3000/api/usuarios/novaSenha', { novaSenha }, {
                     headers: {
-                        Authorization: `Bearer ${token}`, // Certifique-se de passar o token de autorização aqui
+                        Authorization: `Bearer ${token}`,
                     }
-                });                                           
+                });
                 Swal.fire('Sucesso!', 'Senha atualizada com sucesso.', 'success');
             }
-    
+
             Swal.fire('Sucesso!', 'Dados atualizados com sucesso.', 'success');
         } catch (error) {
             Swal.fire('Erro!', 'Não foi possível atualizar os dados.', 'error');
         }
         toggleEdit();
-    };    
+    };
 
     const handleDateChange = (value) => {
         setUsuario({ ...usuario, nascimento: value });
-    };
-
-    const handleDateBlur = () => {
-        const { nascimento } = usuario;
-        const dateParts = nascimento.split('/');
-
-        if (dateParts.length === 3) {
-            const day = dateParts[0];
-            const month = dateParts[1];
-            const year = dateParts[2];
-
-            const isValidDate = (d, m, y) => {
-                const date = new Date(`${y}-${m}-${d}`);
-                return date && (date.getMonth() + 1) == m && date.getDate() == d && date.getFullYear() == y;
-            };
-
-            if (isValidDate(day, month, year)) {
-                setUsuario({ ...usuario, nascimento: `${year}-${month}-${day}` });
-            }
-        }
     };
 
     return (
@@ -208,7 +198,6 @@ const Perfil = () => {
                                 id="nascimento"
                                 value={usuario.nascimento || ''}
                                 onChange={(e) => handleDateChange(e.target.value)}
-                                onBlur={handleDateBlur}
                                 disabled={!editable}
                             />
                         </div>

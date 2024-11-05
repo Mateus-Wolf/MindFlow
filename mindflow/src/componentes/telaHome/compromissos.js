@@ -6,7 +6,6 @@ const Compromissos = () => {
     const [nomeUsuario, setNomeUsuario] = useState('');
     const [compromissos, setCompromissos] = useState([]);
     
-    // Adiciona o ID do usuário
     const usuarioId = localStorage.getItem('usuarioId');
 
     useEffect(() => {
@@ -28,7 +27,8 @@ const Compromissos = () => {
             
             try {
                 const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${dataFormatada}&usuario_id=${usuarioId}`);
-                setCompromissos(response.data);
+                const compromissosFiltrados = response.data.filter(compromisso => compromisso.status_id === 1);
+                setCompromissos(compromissosFiltrados);
             } catch (error) {
                 console.error('Erro ao buscar compromissos:', error);
             }

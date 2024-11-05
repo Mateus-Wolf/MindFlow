@@ -29,7 +29,7 @@ const Agendamentos = () => {
     const fetchTotalAppointments = async () => {
       const usuarioId = localStorage.getItem('usuarioId'); // ID do usuário logado
       const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-    
+
       try {
         const response = await axios.get(`http://localhost:3000/api/agendamentos/mensal/${usuarioId}`, {
           params: { mes: formattedDate }
@@ -39,7 +39,7 @@ const Agendamentos = () => {
         console.error('Erro ao carregar agendamentos:', error);
       }
     };
-    
+
     fetchPatients();
     fetchTotalAppointments();
   }, [currentDate]);
@@ -99,14 +99,14 @@ const Agendamentos = () => {
 
   const handleCancelAppointment = async (appointmentId) => {
     try {
-        await axios.put(`http://localhost:3000/api/agendamentos/${appointmentId}/cancelar`);
-        Swal.fire('Agendamento cancelado com sucesso!', '', 'success');
-        setAppointments(prevAppointments => prevAppointments.filter(appt => appt.id !== appointmentId));
+      await axios.put(`http://localhost:3000/api/agendamentos/${appointmentId}/cancelar`);
+      Swal.fire('Agendamento cancelado com sucesso!', '', 'success');
+      setAppointments(prevAppointments => prevAppointments.filter(appt => appt.id !== appointmentId));
     } catch (error) {
-        console.error('Erro ao cancelar o agendamento:', error);
-        Swal.fire('Erro ao cancelar o agendamento. Por favor, tente novamente.', '', 'error');
+      console.error('Erro ao cancelar o agendamento:', error);
+      Swal.fire('Erro ao cancelar o agendamento. Por favor, tente novamente.', '', 'error');
     }
-};
+  };
 
 
   const closePopup = () => {
@@ -161,18 +161,20 @@ const Agendamentos = () => {
   const renderCalendarDays = () => {
     return generateCalendarDays().map((day, index) => {
       const isDisabled = day && isBeforeToday(day);
+      const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date()); // Verifica se o dia é passado
 
       return (
         <div
           key={index}
-          className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : 'filled') : 'empty'}`}
-          onClick={() => !isDisabled && handleDayClick(day)} // Desabilitar o clique em dias desabilitados
+          className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : isPast ? 'filled past-day' : 'filled') : 'empty'}`}
+          onClick={() => handleDayClick(day)} // Permite clique em todos os dias
         >
           {day}
         </div>
       );
     });
   };
+
 
   const monthNames = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -204,32 +206,35 @@ const Agendamentos = () => {
       </div>
 
       {popupVisible && (
-          <div className="popup">
-            <div className="popup-content">
-              <h3>Agendamentos para {selectedDay}/{currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h3>
-              <hr />
-              {appointments.length > 0 ? (
-                <ul>
-                  {appointments.map((appt, index) => {
-                    const patient = patients.find(patient => patient.id === appt.paciente_id);
-                    return (
-                      <li id='agendamentosDoDia' key={index}>
-                        {appt.hora} - {patient ? patient.nome : 'Paciente não encontrado'}
-                        <button 
-                          onClick={() => handleCancelAppointment(appt.id)} 
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Agendamentos para {selectedDay}/{currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h3>
+            <hr />
+            {appointments.length > 0 ? (
+              <ul>
+                {appointments.map((appt, index) => {
+                  const patient = patients.find(patient => patient.id === appt.paciente_id);
+                  return (
+                    <li id='agendamentosDoDia' key={index}>
+                      {appt.hora} - {patient ? patient.nome : 'Paciente não encontrado'}
+                      {!isBeforeToday(selectedDay) && (
+                        <button
+                          onClick={() => handleCancelAppointment(appt.id)}
                           className="cancel-button"
                         >
                           X
                         </button>
-                        <hr />
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <p>Não há agendamentos para este dia.</p>
-              )}
-              <div className="popup-buttons">
+                      )}
+                      <hr />
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p>Não há agendamentos para este dia.</p>
+            )}
+
+            <div className="popup-buttons">
               {!showCreateForm ? (
                 <>
                   <button

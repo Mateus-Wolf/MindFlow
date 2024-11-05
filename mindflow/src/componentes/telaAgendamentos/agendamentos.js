@@ -34,7 +34,10 @@ const Agendamentos = () => {
         const response = await axios.get(`http://localhost:3000/api/agendamentos/mensal/${usuarioId}`, {
           params: { mes: formattedDate }
         });
-        setTotalAppointments(response.data.length);
+
+        // Filtra os agendamentos para contar apenas aqueles com status_id igual a 1 (Em Aberto)
+        const filteredAppointments = response.data.filter(appointment => appointment.status_id === 1);
+        setTotalAppointments(filteredAppointments.length);
       } catch (error) {
         console.error('Erro ao carregar agendamentos:', error);
       }
@@ -88,7 +91,7 @@ const Agendamentos = () => {
 
     try {
       const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
-      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}&usuario_id=${usuarioId}`); // Inclui o usuario_id na requisição
+      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}&usuario_id=${usuarioId}`);
       setAppointments(response.data);
     } catch (error) {
       console.error('Erro ao buscar agendamentos:', error);
@@ -101,13 +104,26 @@ const Agendamentos = () => {
     try {
       await axios.put(`http://localhost:3000/api/agendamentos/${appointmentId}/cancelar`);
       Swal.fire('Agendamento cancelado com sucesso!', '', 'success');
-      setAppointments(prevAppointments => prevAppointments.filter(appt => appt.id !== appointmentId));
+
+      await fetchAppointmentsForSelectedDay(selectedDay);
     } catch (error) {
       console.error('Erro ao cancelar o agendamento:', error);
       Swal.fire('Erro ao cancelar o agendamento. Por favor, tente novamente.', '', 'error');
     }
   };
 
+  // Função para buscar agendamentos para o dia selecionado
+  const fetchAppointmentsForSelectedDay = async (day) => {
+    const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+    try {
+      const usuarioId = localStorage.getItem('usuarioId');
+      const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}&usuario_id=${usuarioId}`);
+      setAppointments(response.data);
+    } catch (error) {
+      console.error('Erro ao buscar agendamentos:', error);
+    }
+  };
 
   const closePopup = () => {
     setPopupVisible(false);
@@ -130,7 +146,7 @@ const Agendamentos = () => {
     }
 
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDay).padStart(2, '0')}`;
-    const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
+    const usuarioId = localStorage.getItem('usuarioId');
 
     const newAppointment = {
       paciente_id: selectedPatient,
@@ -161,13 +177,13 @@ const Agendamentos = () => {
   const renderCalendarDays = () => {
     return generateCalendarDays().map((day, index) => {
       const isDisabled = day && isBeforeToday(day);
-      const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date()); // Verifica se o dia é passado
+      const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date());
 
       return (
         <div
           key={index}
           className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : isPast ? 'filled past-day' : 'filled') : 'empty'}`}
-          onClick={() => handleDayClick(day)} // Permite clique em todos os dias
+          onClick={() => handleDayClick(day)}
         >
           {day}
         </div>
@@ -217,7 +233,7 @@ const Agendamentos = () => {
                   return (
                     <li id='agendamentosDoDia' key={index}>
                       {appt.hora} - {patient ? patient.nome : 'Paciente não encontrado'}
-                      {!isBeforeToday(selectedDay) && (
+                      {!isBeforeToday(selectedDay) && appt.status_id !== 3 && (
                         <button
                           onClick={() => handleCancelAppointment(appt.id)}
                           className="cancel-button"
@@ -229,6 +245,7 @@ const Agendamentos = () => {
                     </li>
                   );
                 })}
+
               </ul>
             ) : (
               <p>Não há agendamentos para este dia.</p>

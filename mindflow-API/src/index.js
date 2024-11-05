@@ -1,8 +1,10 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const cron = require('node-cron');
+const db = require('./db'); // Importe seu módulo de conexão com o banco de dados
 
-// Importar rotas
+// Importação das Rotas
 
 //usuarios
 const GETusuarios = require('./routes/usuarios/GETusuarios');
@@ -14,6 +16,7 @@ const CRUDfotos = require('./routes/usuarios/CRUDfotos');
 
 //agendamentos
 const POSTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
+const PUTagendamentosRoute = require('./routes/agendamentos/PUTagendamentos');
 const GETagendamentosRoute = require('./routes/agendamentos/GETagendamentos');
 const GETagendamentosMensaisRoute = require('./routes/agendamentos/GetagendamentosMensais');
 
@@ -52,6 +55,7 @@ app.use('/api/usuarios', CRUDfotos);
 app.use('/api/agendamentos', GETagendamentosRoute);
 app.use('/api/agendamentos', GETagendamentosMensaisRoute);
 app.use('/api/agendamentos', POSTagendamentosRoute);
+app.use('/api/agendamentos', PUTagendamentosRoute);
 
 //pacientes
 app.use('/api/pacientes', GETpacientes);
@@ -67,6 +71,30 @@ app.use('/api', GETvisualizarHumor);
 app.get('/', (req, res) => {
     res.send('API do MindFlow');
 });
+
+// Função para atualizar o status dos agendamentos para Cancelado
+const atualizarStatusAgendamentos = async () => {
+    try {
+        const now = new Date();
+        const query = `
+            UPDATE agendamentos
+            SET status = 4
+            WHERE id = 1 AND data_hora < $1
+            RETURNING *;
+        `;
+
+        const result = await db.query(query, [now]);
+
+        if (result.rowCount > 0) {
+            console.log('Status dos agendamentos atualizado com sucesso!', result.rows);
+        } else {
+            console.log('Nenhum agendamento encontrado para atualizar.');
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar o status dos agendamentos:', error);
+    }
+};
+cron.schedule('0 0 * * *', atualizarStatusAgendamentos);
 
 // Iniciar o servidor
 const PORT = process.env.PORT || 3000;

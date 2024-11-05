@@ -1,7 +1,6 @@
-// Importações necessárias
 const express = require('express');
 const router = express.Router();
-const db = require('../../db'); // Módulo que você utiliza para conexão com o banco de dados
+const db = require('../../db');
 
 // Rota para criar agendamentos
 router.post('/', (req, res) => {

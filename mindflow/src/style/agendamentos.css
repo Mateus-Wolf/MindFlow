@@ -36,6 +36,15 @@ body, html {
   color: #D6A4FF;
 }
 
+.cancel-button {
+  background: none;
+  color: red;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+
 .calendar-header button {
   background-color: var(--roxo-destaque);
   border: none;

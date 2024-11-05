@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../telaHome/header';
 import { useNavigate, useParams } from "react-router-dom";
 import estudoIcon from '../../icones/estudo-icone.svg';
@@ -10,6 +10,12 @@ function RegistroHumorAtividades() {
   const [selected, setSelected] = useState({}); // Objeto para armazenar seleções
   const navigate = useNavigate(); // Hook para navegação
   const { id: pacienteId } = useParams(); // Captura o ID do paciente da URL
+  const agendamentoId = localStorage.getItem('agendamentoId'); // Recupera o ID do agendamento do localStorage
+
+  useEffect(() => {
+    // Se necessário, você pode usar o ID do agendamento aqui
+    console.log('ID do Agendamento:', agendamentoId);
+  }, [agendamentoId]);
 
   const handleCheck = (category) => {
     setSelected((prev) => ({
@@ -31,7 +37,7 @@ function RegistroHumorAtividades() {
       localStorage.setItem(category, selected[category]);
     });
 
-    // Redireciona para a tela de avaliação com o ID do paciente
+    // Redireciona para a tela de avaliação com o ID do paciente e ID do agendamento
     navigate(`/registroHumorAvaliacao/${pacienteId}`); // Inclui pacienteId na URL
   };
 

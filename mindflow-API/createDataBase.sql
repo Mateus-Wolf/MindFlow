@@ -1,6 +1,6 @@
-
 CREATE DATABASE MindFlow;
 
+\c MindFlow
 
 -- Tabela de usuários
 CREATE TABLE usuarios (
@@ -25,7 +25,7 @@ CREATE TABLE pacientes (
     email VARCHAR(100) UNIQUE NOT NULL,
     telefone VARCHAR(15) NOT NULL,
     estado_civil VARCHAR(20) NOT NULL,
-    usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE -- Movido para cá
+    usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 -- Tabela de relatórios
@@ -56,6 +56,18 @@ CREATE TABLE registros_humor (
     tarefas_lazer BOOLEAN
 );
 
+-- Tabela de Status de Agendamentos
+CREATE TABLE agendamento_status (
+    id SERIAL PRIMARY KEY,
+    descricao VARCHAR(50) NOT NULL
+);
+
+INSERT INTO agendamento_status (descricao) VALUES
+('Agendado'),
+('Consulta Realizada'),
+('Consulta Cancelada'),
+('Consulta Atrasada');
+
 -- Tabela de agendamentos
 CREATE TABLE agendamentos (
     id SERIAL PRIMARY KEY,
@@ -66,3 +78,6 @@ CREATE TABLE agendamentos (
     descricao TEXT,
     hora TIME
 );
+
+ALTER TABLE agendamentos
+ADD COLUMN status_id INT REFERENCES agendamento_status(id) DEFAULT 1;

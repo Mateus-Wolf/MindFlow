@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const cron = require('node-cron');
-const db = require('./db'); // Importe seu módulo de conexão com o banco de dados
+const db = require('./db')
 
 // Importação das Rotas
 
@@ -11,8 +11,9 @@ const GETusuarios = require('./routes/usuarios/GETusuarios');
 const POSTlogin = require('./routes/usuarios/POSTusuario');
 const POSTregistroUsuarios = require('./routes/usuarios/POSTregistroUsuarios');
 const PUTusuarios = require('./routes/usuarios/PUTusuarios');
-const PUTnovaSenha  = require('./routes/usuarios/PUTnovaSenha');
+const POSTrecuperarSenha  = require('./routes/usuarios/POSTrecuperarSenha');
 const CRUDfotos = require('./routes/usuarios/CRUDfotos');
+const { enviarEmail } = require('./emailService');
 
 //agendamentos
 const POSTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
@@ -48,7 +49,7 @@ app.use('/api/usuarios', GETusuarios);
 app.use('/api/login', POSTlogin);
 app.use('/api/usuarios', POSTregistroUsuarios);
 app.use('/api/usuarios', PUTusuarios);
-app.use('/api/usuarios', PUTnovaSenha);
+app.use('/api', POSTrecuperarSenha);
 app.use('/api/usuarios', CRUDfotos);
 
 //agendamentos

@@ -8,9 +8,12 @@ const Login = ({ voltar }) => {
     const [telaEsqueciSenha, setTelaEsqueciSenha] = useState(false);
     const [telaAtualizarSenha, setTelaAtualizarSenha] = useState(false);
     const [codigoEnviado, setCodigoEnviado] = useState(false);
-    const [email, setEmail] = useState(''); 
+    const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [codigo, setCodigo] = useState('');
     const [mensagemErro, setMensagemErro] = useState('');
+    const [novaSenha, setNovaSenha] = useState('');
+    const [confirmarSenha, setConfirmarSenha] = useState('');
 
     const navigate = useNavigate();
 
@@ -32,11 +35,48 @@ const Login = ({ voltar }) => {
         setCodigoEnviado(false);
     };
 
-    const enviarCodigoEmail = () => {
-        setCodigoEnviado(true);
+    const enviarCodigoEmail = async () => {
+        try {
+            const response = await axios.post('http://localhost:3000/api/recuperar-senha', { email });
+            if (response.status === 200) {
+                setCodigoEnviado(true);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Código enviado!',
+                    text: 'Verifique seu e-mail para o código de recuperação.',
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao enviar código',
+                text: 'Não foi possível enviar o código. Tente novamente.',
+            });
+        }
     };
 
-    const isFormValid = email && senha;
+    const verificarCodigo = async (e) => {
+        e.preventDefault();
+        if (novaSenha !== confirmarSenha) {
+            setMensagemErro('As senhas não coincidem.');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:3000/api/verificar-codigo', { email, codigo, novaSenha });
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Código verificado!',
+                    text: 'Agora você pode atualizar sua senha.',
+                });
+                setTelaAtualizarSenha(true);
+                setTelaEsqueciSenha(false);
+            }
+        } catch (error) {
+            setMensagemErro('Código inválido ou expirado.');
+        }
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -68,10 +108,9 @@ const Login = ({ voltar }) => {
             setMensagemErro('Email ou senha incorretos.');
         }
     };
-    
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && isFormValid) {
+        if (e.key === 'Enter' && email && senha) {
             handleLogin(e);
         }
     };
@@ -119,10 +158,10 @@ const Login = ({ voltar }) => {
                         <button
                             className='btns'
                             type="submit"
-                            disabled={!isFormValid}
+                            disabled={!email || !senha}
                             style={{
-                                backgroundColor: isFormValid ? 'rgb(71, 6, 135)' : 'gray', 
-                                cursor: isFormValid ? 'pointer' : 'not-allowed', 
+                                backgroundColor: email && senha ? 'rgb(71, 6, 135)' : 'gray',
+                                cursor: email && senha ? 'pointer' : 'not-allowed',
                             }}
                         >
                             Enviar
@@ -136,10 +175,17 @@ const Login = ({ voltar }) => {
                     <h2>Recuperar Senha</h2>
                     <form onSubmit={(e) => {
                         e.preventDefault();
-                        mostrarTelaAtualizarSenha();
+                        enviarCodigoEmail();
                     }}>
                         <div className="email-container">
-                            <input className='form' type="email" placeholder="Digite seu e-mail" required />
+                            <input 
+                                className='form' 
+                                type="email" 
+                                placeholder="Digite seu e-mail" 
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required 
+                            />
                             <button
                                 type="button"
                                 className='email-send-btn'
@@ -153,9 +199,16 @@ const Login = ({ voltar }) => {
                             <p className='codigo-enviado-msg'>O Código de verificação foi enviado para o seu e-mail!</p>
                         )}
 
-                        <input className='form' type="text" placeholder="Digite o código de verificação" required />
+                        <input 
+                            className='form' 
+                            type="text" 
+                            placeholder="Digite o código de verificação"
+                            value={codigo}
+                            onChange={(e) => setCodigo(e.target.value)}
+                            required 
+                        />
                         <button className='btns' onClick={voltarParaLogin}>Voltar</button>
-                        <button className='btns' type="submit">Verificar Código</button>
+                        <button className='btns' onClick={verificarCodigo}>Verificar Código</button>
                     </form>
                 </>
             ) : null}
@@ -163,15 +216,14 @@ const Login = ({ voltar }) => {
             {telaAtualizarSenha ? (
                 <>
                     <h2>Atualizar Senha</h2>
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        navigate('/home');
-                    }}>
+                    <form onSubmit={verificarCodigo}>
                         <div className='password-container'>
                             <input
                                 className='form password-input'
                                 type={mostrarSenha ? "text" : "password"}
                                 placeholder="Nova Senha"
+                                value={novaSenha}
+                                onChange={(e) => setNovaSenha(e.target.value)}
                                 required
                             />
                             <button
@@ -187,6 +239,8 @@ const Login = ({ voltar }) => {
                                 className='form password-input'
                                 type={mostrarSenha ? "text" : "password"}
                                 placeholder="Confirme a Nova Senha"
+                                value={confirmarSenha}
+                                onChange={(e) => setConfirmarSenha(e.target.value)}
                                 required
                             />
                             <button
@@ -197,8 +251,9 @@ const Login = ({ voltar }) => {
                                 <i className={`fa ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
                             </button>
                         </div>
+                        {mensagemErro && <p className='error-message'>{mensagemErro}</p>}
                         <button className='btns' onClick={voltarParaLogin}>Voltar</button>
-                        <button className='btns' type="submit">Atualizar Senha e Realizar Login</button>
+                        <button className='btns' type="submit">Atualizar Senha</button>
                     </form>
                 </>
             ) : null}

@@ -35,9 +35,52 @@ const Login = ({ voltar }) => {
         setCodigoEnviado(false);
     };
 
+    const atualizarSenha = async (e) => {
+        e.preventDefault();
+    
+        if (novaSenha !== confirmarSenha) {
+            setMensagemErro('As senhas não coincidem.');
+            return;
+        }
+    
+        const dados = {
+            email,
+            novaSenha,
+            codigoRecuperacao: codigo,
+        };
+    
+        try {
+            const resposta = await fetch('http://localhost:3000/api/atualizar-senha', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados),
+            });
+    
+            if (resposta.ok) {
+                const json = await resposta.json();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Senha Atualizada!',
+                    text: 'Sua senha foi atualizada com sucesso! Você já pode usar o MindFlow!',
+                }).then(() => {
+                    navigate('/home');
+                });
+            } else {
+                const erro = await resposta.json();
+                console.error('Erro ao atualizar senha:', erro);  
+                setMensagemErro(erro.message || 'Erro ao atualizar a senha');
+            }
+        } catch (error) {
+            console.error('Erro na requisição de atualização de senha:', error);
+            setMensagemErro('Erro ao atualizar a senha. Tente novamente.');
+        }
+    };  
+    
     const enviarCodigoEmail = async () => {
         try {
-            const response = await axios.post('http://localhost:3000/api/recuperar-senha', { email });
+            const response = await axios.post('http://localhost:3000/api/verificar-email', { email }); // Alteração da rota
             if (response.status === 200) {
                 setCodigoEnviado(true);
                 Swal.fire({
@@ -57,13 +100,14 @@ const Login = ({ voltar }) => {
 
     const verificarCodigo = async (e) => {
         e.preventDefault();
-        if (novaSenha !== confirmarSenha) {
-            setMensagemErro('As senhas não coincidem.');
+        console.log(email, codigo);
+        if (!email || !codigo) {
+            setMensagemErro('Por favor, preencha todos os campos.');
             return;
         }
 
         try {
-            const response = await axios.post('http://localhost:3000/api/verificar-codigo', { email, codigo, novaSenha });
+            const response = await axios.post('http://localhost:3000/api/verificar-codigo', { email, codigo });
             if (response.status === 200) {
                 Swal.fire({
                     icon: 'success',
@@ -81,20 +125,20 @@ const Login = ({ voltar }) => {
     const handleLogin = async (e) => {
         e.preventDefault();
         setMensagemErro(''); // Limpa a mensagem de erro ao iniciar o login
-        
+
         try {
             // POST para a API para efetuar o login
             const response = await axios.post('http://localhost:3000/api/login', { email, senha });
-            
+
             // Extrai o token e o nome do usuário da resposta
             const { token, nome } = response.data;
             const userId = response.data.id;
-    
+
             // Armazena as informações do usuário no localStorage
             localStorage.setItem('token', token);
             localStorage.setItem('usuarioId', userId);
             localStorage.setItem('nomeUsuario', nome);
-    
+
             Swal.fire({
                 icon: 'success',
                 title: 'Login bem-sucedido!',
@@ -103,7 +147,7 @@ const Login = ({ voltar }) => {
             }).then(() => {
                 navigate('/home');
             });
-    
+
         } catch (error) {
             setMensagemErro('Email ou senha incorretos.');
         }
@@ -178,13 +222,13 @@ const Login = ({ voltar }) => {
                         enviarCodigoEmail();
                     }}>
                         <div className="email-container">
-                            <input 
-                                className='form' 
-                                type="email" 
-                                placeholder="Digite seu e-mail" 
+                            <input
+                                className='form'
+                                type="email"
+                                placeholder="Digite seu e-mail"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                required 
+                                required
                             />
                             <button
                                 type="button"
@@ -199,13 +243,13 @@ const Login = ({ voltar }) => {
                             <p className='codigo-enviado-msg'>O Código de verificação foi enviado para o seu e-mail!</p>
                         )}
 
-                        <input 
-                            className='form' 
-                            type="text" 
+                        <input
+                            className='form'
+                            type="text"
                             placeholder="Digite o código de verificação"
                             value={codigo}
                             onChange={(e) => setCodigo(e.target.value)}
-                            required 
+                            required
                         />
                         <button className='btns' onClick={voltarParaLogin}>Voltar</button>
                         <button className='btns' onClick={verificarCodigo}>Verificar Código</button>
@@ -216,7 +260,7 @@ const Login = ({ voltar }) => {
             {telaAtualizarSenha ? (
                 <>
                     <h2>Atualizar Senha</h2>
-                    <form onSubmit={verificarCodigo}>
+                    <form onSubmit={atualizarSenha}>
                         <div className='password-container'>
                             <input
                                 className='form password-input'

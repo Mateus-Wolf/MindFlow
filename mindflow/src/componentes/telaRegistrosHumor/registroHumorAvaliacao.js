@@ -3,7 +3,7 @@ import Header from '../telaHome/header';
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // Importando SweetAlert2
+import Swal from 'sweetalert2';
 
 const RegistroHumorAvaliacao = ({ label, emoji }) => {
     const { id: pacienteId } = useParams();
@@ -70,6 +70,7 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
     };
 
     const handleSave = async () => {
+        // Validação
         if (ratings.sleepQuality === 0 || ratings.stressLevel === 0 || ratings.energyLevel === 0 || ratings.generalEvaluation === 0) {
             Swal.fire({
                 icon: 'warning',
@@ -78,12 +79,12 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
             });
             return;
         }
-
+    
         const estudo = localStorage.getItem('Estudos') === 'true';
         const trabalho = localStorage.getItem('Trabalho') === 'true';
         const exercicio = localStorage.getItem('Exercício') === 'true';
         const lazer = localStorage.getItem('Lazer') === 'true';
-
+    
         const data = {
             id_paciente: pacienteId,
             data_registro: new Date().toISOString().split('T')[0],
@@ -96,17 +97,21 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
             exercicio,
             lazer
         };
-
+    
         console.log('Dados enviados para a API:', data);
-
+    
         try {
-            await axios.post('http://localhost:3000/api/avaliacaoHumor/registro-avaliacao', data);
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: 'Avaliação salva com sucesso!',
-            });
-            navigate('/telaListar');
+            const response = await axios.post('http://localhost:3000/api/avaliacaoHumor/registro-avaliacao', data);
+            console.log('Resposta da API:', response.data);
+    
+            if (response.status === 201) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sucesso!',
+                    text: `Avaliação salva com sucesso!`,
+                });
+                navigate('/telaListar');
+            }
         } catch (error) {
             console.error('Erro ao salvar avaliação:', error);
             Swal.fire({
@@ -116,6 +121,7 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
             });
         }
     };
+     
 
     return (
         <div className="tudo">

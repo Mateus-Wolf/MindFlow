@@ -46,13 +46,16 @@ const Header = () => {
                                     className={`dropdown-menu ${isOpen ? 'show' : ''}`}
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ opacity: isOpen ? 1 : 0, height: isOpen ? "auto" : 0 }}
-                                    exit={{ opacity: 0, height: 0 }} // Animação ao sair
+                                    exit={{ opacity: 0, height: 0 }}
                                     transition={{ duration: 0.3 }}
-                                    style={{ overflow: 'hidden' }} // Impede que o conteúdo transborde durante a animação
+                                    style={{ overflow: 'hidden' }}
                                 >
                                     <li><Link className="dropdown-item" to="/telaListar">Todos Pacientes</Link></li>
                                     <li><Link className="dropdown-item" to="/telaCadastrar">Cadastrar Paciente</Link></li>
                                 </motion.ul>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/historicoConsultas">Histórico de Consultas</Link>
                             </li>
                         </ul>
                     </div>

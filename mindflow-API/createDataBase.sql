@@ -45,7 +45,7 @@ CREATE TABLE relatorios (
 CREATE TABLE registros_humor (
     id SERIAL PRIMARY KEY,
     paciente_id INT REFERENCES pacientes(id) ON DELETE CASCADE,
-    relatorio_id INT REFERENCES relatorios(id) ON DELETE CASCADE,
+    agendamento_id INT REFERENCES agendamentos(id) ON DELETE CASCADE,
     data DATE NOT NULL,
     qualidade_sono INT CHECK (qualidade_sono BETWEEN 1 AND 5),
     nivel_estresse INT CHECK (nivel_estresse BETWEEN 1 AND 5),
@@ -62,6 +62,7 @@ CREATE TABLE agendamento_status (
     descricao VARCHAR(50) NOT NULL
 );
 
+-- Inserção dos tipos de status de agendamentos
 INSERT INTO agendamento_status (descricao) VALUES
 ('Agendado'),
 ('Consulta Realizada'),
@@ -73,11 +74,13 @@ CREATE TABLE agendamentos (
     id SERIAL PRIMARY KEY,
     paciente_id INT NOT NULL REFERENCES pacientes(id) ON DELETE CASCADE,
     usuario_id INT NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
-    registro_humor_id INT REFERENCES registros_humor(id) ON DELETE CASCADE,
     data DATE NOT NULL,
     descricao TEXT,
-    hora TIME
+    hora TIME,
+    status_id INT REFERENCES agendamento_status(id) DEFAULT 1 
 );
 
-ALTER TABLE agendamentos
-ADD COLUMN status_id INT REFERENCES agendamento_status(id) DEFAULT 1;
+-- Adicionando colunas para recuperação de senha no usuário
+ALTER TABLE usuarios
+ADD COLUMN codigo_recuperacao VARCHAR(255),
+ADD COLUMN expiracao_codigo TIMESTAMP;

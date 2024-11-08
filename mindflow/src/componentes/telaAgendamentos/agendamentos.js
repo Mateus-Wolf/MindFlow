@@ -202,7 +202,7 @@ const Agendamentos = () => {
       <Header />
       <div className="calendar-container">
         <p className="no-appointments">
-          {totalAppointments > 0 ? `Você tem ${totalAppointments} agendamentos marcados para este mês.` : 'Você não tem agendamentos marcados para esse mês.'}
+          {totalAppointments > 0 ? `Você tem ${totalAppointments} consultas agendadas para este mês.` : 'Você não tem consultas agendadas para esse mês.'}
         </p>
         <div className="calendar-header">
           <button onClick={handlePrevMonth}>&lt;</button>

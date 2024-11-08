@@ -164,9 +164,10 @@ const Perfil = () => {
                     {imagem ? (
                         <img src={imagem} alt="Imagem do Usuário" className="avatar" />
                     ) : (
-                        <div className="avatar-placeholder">Imagem não disponível</div>
+                        <img src="mindflow\src\icones\perfil_PlaceHolder.png" alt="Imagem de Placeholder" className="avatar" />
                     )}
                 </div>
+
                 <div className="perfil-opcoes">
                     <div className="form-row">
                         <div className="form-group">
@@ -202,24 +203,14 @@ const Perfil = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="senha">Senha:</label>
+                            <label htmlFor="imagem">Foto de Perfil:</label>
                             <input
-                                type="password"
-                                id="senha"
-                                placeholder="Alterar senha"
-                                onChange={(e) => setNovaSenha(e.target.value)}
+                                type="file"
+                                id="imagem"
+                                onChange={handleImageChange}
                                 disabled={!editable}
                             />
                         </div>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="imagem">Foto de Perfil:</label>
-                        <input
-                            type="file"
-                            id="imagem"
-                            onChange={handleImageChange}
-                            disabled={!editable}
-                        />
                     </div>
                 </div>
                 <div className="botoes">

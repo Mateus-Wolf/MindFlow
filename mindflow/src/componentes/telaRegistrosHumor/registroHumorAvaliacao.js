@@ -88,15 +88,16 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
         const data = {
             id_paciente: pacienteId,
             data_registro: new Date().toISOString().split('T')[0],
-            humor_sono: ratings.sleepQuality,
-            humor_estresse: ratings.stressLevel,
+            qualidade_sono: ratings.sleepQuality,  // Renomeado para 'qualidade_sono'
+            nivel_estresse: ratings.stressLevel,  // Renomeado para 'nivel_estresse'
             nivel_energia: ratings.energyLevel,
-            humor_geral: ratings.generalEvaluation,
-            estudo,
-            trabalho,
-            exercicio,
-            lazer
+            avaliacao_geral: ratings.generalEvaluation,  // Renomeado para 'avaliacao_geral'
+            tarefas_estudo: estudo,  // Renomeado para 'tarefas_estudo'
+            tarefas_trabalho: trabalho,  // Renomeado para 'tarefas_trabalho'
+            tarefas_exercicio: exercicio,  // Renomeado para 'tarefas_exercicio'
+            tarefas_lazer: lazer  // Renomeado para 'tarefas_lazer'
         };
+        
     
         console.log('Dados enviados para a API:', data);
     
@@ -112,14 +113,19 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
                 });
                 navigate('/telaListar');
             }
-        } catch (error) {
-            console.error('Erro ao salvar avaliação:', error);
+         } catch (error) {
+            if (error.response) {
+              console.error('Erro da API:', error.response.data);
+            } else {
+              console.error('Erro desconhecido:', error);
+            }
             Swal.fire({
-                icon: 'error',
-                title: 'Erro!',
-                text: 'Ocorreu um erro ao salvar a avaliação. Tente novamente.',
+              icon: 'error',
+              title: 'Erro!',
+              text: 'Ocorreu um erro ao salvar a avaliação. Tente novamente.',
             });
-        }
+          }
+          
     };
      
 

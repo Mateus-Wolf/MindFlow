@@ -1,6 +1,17 @@
 CREATE DATABASE MindFlow;
 
-\c MindFlow
+-- Tabela de Status de Agendamentos
+CREATE TABLE agendamento_status (
+    id SERIAL PRIMARY KEY,
+    descricao VARCHAR(50) NOT NULL
+);
+
+-- Inserção dos tipos de status de agendamentos
+INSERT INTO agendamento_status (descricao) VALUES
+('Agendado'),
+('Consulta Realizada'),
+('Consulta Cancelada'),
+('Consulta Atrasada');
 
 -- Tabela de usuários
 CREATE TABLE usuarios (
@@ -28,47 +39,6 @@ CREATE TABLE pacientes (
     usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
--- Tabela de relatórios
-CREATE TABLE relatorios (
-    id SERIAL PRIMARY KEY,
-    paciente_id INT REFERENCES pacientes(id) ON DELETE CASCADE,
-    mes INT NOT NULL,
-    ano INT NOT NULL,
-    dias_com_5_estrelas INT,
-    dias_na_media INT,
-    dias_com_1_estrela INT,
-    relacao_5_estrelas_tarefas TEXT,
-    relacao_1_estrela_tarefas TEXT
-);
-
--- Tabela de registros de humor
-CREATE TABLE registros_humor (
-    id SERIAL PRIMARY KEY,
-    paciente_id INT REFERENCES pacientes(id) ON DELETE CASCADE,
-    agendamento_id INT REFERENCES agendamentos(id) ON DELETE CASCADE,
-    data DATE NOT NULL,
-    qualidade_sono INT CHECK (qualidade_sono BETWEEN 1 AND 5),
-    nivel_estresse INT CHECK (nivel_estresse BETWEEN 1 AND 5),
-    avaliacao_geral INT CHECK (avaliacao_geral BETWEEN 1 AND 5),
-    tarefas_estudo BOOLEAN,
-    tarefas_trabalho BOOLEAN,
-    tarefas_exercicio BOOLEAN,
-    tarefas_lazer BOOLEAN
-);
-
--- Tabela de Status de Agendamentos
-CREATE TABLE agendamento_status (
-    id SERIAL PRIMARY KEY,
-    descricao VARCHAR(50) NOT NULL
-);
-
--- Inserção dos tipos de status de agendamentos
-INSERT INTO agendamento_status (descricao) VALUES
-('Agendado'),
-('Consulta Realizada'),
-('Consulta Cancelada'),
-('Consulta Atrasada');
-
 -- Tabela de agendamentos
 CREATE TABLE agendamentos (
     id SERIAL PRIMARY KEY,
@@ -80,7 +50,23 @@ CREATE TABLE agendamentos (
     status_id INT REFERENCES agendamento_status(id) DEFAULT 1 
 );
 
+-- Tabela de registros de humor
+CREATE TABLE registros_humor (
+    id SERIAL PRIMARY KEY,
+    paciente_id INT REFERENCES pacientes(id) ON DELETE CASCADE,
+    agendamento_id INT REFERENCES agendamentos(id) ON DELETE CASCADE,
+    data DATE NOT NULL,
+    qualidade_sono INT CHECK (qualidade_sono BETWEEN 1 AND 5),
+    nivel_estresse INT CHECK (nivel_estresse BETWEEN 1 AND 5),
+    nivel_energia INT CHECK (nivel_energia BETWEEN 1 AND 5),
+    avaliacao_geral INT CHECK (avaliacao_geral BETWEEN 1 AND 5),
+    tarefas_estudo BOOLEAN,
+    tarefas_trabalho BOOLEAN,
+    tarefas_exercicio BOOLEAN,
+    tarefas_lazer BOOLEAN
+);
+
 -- Adicionando colunas para recuperação de senha no usuário
 ALTER TABLE usuarios
 ADD COLUMN codigo_recuperacao VARCHAR(255),
-ADD COLUMN expiracao_codigo TIMESTAMP;
+ADD COLUMN expiracao_codigo TIMESTAMP;  

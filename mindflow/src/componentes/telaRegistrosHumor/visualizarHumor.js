@@ -6,6 +6,7 @@ import estudoIcon from '../../icones/estudo-icone.svg';
 import trabalhoIcon from '../../icones/trabalho-icone.svg';
 import exercicioIcon from '../../icones/exercicio-icone.svg';
 import lazerIcon from '../../icones/lazer-icone.svg';
+import { parseISO, format } from 'date-fns';
 
 const VisualizarHumor = () => {
     const { id } = useParams(); 
@@ -16,12 +17,12 @@ const VisualizarHumor = () => {
         const fetchRegistro = async () => {
             try {
                 const response = await axios.get(`http://localhost:3000/api/agendamentos/${id}`);
+                console.log('Resposta da API:', response.data);
                 setRegistro(response.data);
             } catch (error) {
                 console.error('Erro ao buscar registro:', error);
             }
         };
-
         fetchRegistro();
     }, [id]);
 
@@ -41,6 +42,15 @@ const VisualizarHumor = () => {
         }
     };
 
+    // Verificação para garantir que a data seja válida antes de formatar
+    const formatDate = (dateString) => {
+        // Parse a data ISO para um objeto Date
+        const date = parseISO(dateString);
+        
+        // Formata a data no formato desejado, levando em consideração o fuso horário local
+        return isNaN(date) ? 'Data Inválida' : format(date, 'dd/MM/yyyy');
+    };
+
     if (!registro) return <div>Carregando...</div>;
 
     const handleAvancar = () => {
@@ -51,18 +61,29 @@ const VisualizarHumor = () => {
         <div className="tudo">
             <Header />
             <h2>Registro de Humor</h2>
-            <h3>Data: {new Date(registro.data_registro).toLocaleDateString()}</h3> {/* Exibe a data do registro */}
+            <h3>Data: {formatDate(registro.data)}</h3> {/* Exibe a data com verificação */}
             <div className="categories">
                 {['Estudos', 'Trabalho', 'Exercício', 'Lazer'].map((category) => (
                     <div className="category" key={category}>
                         <h2>{category}</h2>
                         <img src={getIcon(category)} alt={`${category} Icon`} />
                         <div className="buttons">
-                            <button className={`checkstyle ${registro[category.toLowerCase()] ? 'button-checked' : ''}`} disabled>
+                            {/* Exibe a data dentro da bolinha */}
+                            <button 
+                                className={`checkstyle ${registro[category.toLowerCase()] ? 'button-checked' : ''}`} 
+                                disabled
+                                title={`Data: ${formatDate(registro.data)}`}  // Adicionando data como 'title'
+                            >
                                 <i className="fas fa-check"></i>
+                                <span className="date-label">{formatDate(registro.data)}</span> {/* Exibe a data na bolinha */}
                             </button>
-                            <button className={`checkstyle ${!registro[category.toLowerCase()] ? 'button-checked-times' : ''}`} disabled>
+                            <button 
+                                className={`checkstyle ${!registro[category.toLowerCase()] ? 'button-checked-times' : ''}`} 
+                                disabled
+                                title={`Data: ${formatDate(registro.data)}`}  // Adicionando data como 'title'
+                            >
                                 <i className="fas fa-times"></i>
+                                <span className="date-label">{formatDate(registro.data)}</span> {/* Exibe a data na bolinha */}
                             </button>
                         </div>
                     </div>

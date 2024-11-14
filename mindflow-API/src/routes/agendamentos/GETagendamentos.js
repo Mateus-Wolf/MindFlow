@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../../db'); // Certifique-se de que este caminho está correto
+const db = require('../../db');
 
 // Rota para buscar agendamentos por data com dados do paciente
 router.get('/', async (req, res) => {
@@ -44,4 +44,23 @@ router.get('/mensal/:usuario_id', async (req, res) => {
     }
 });
   
+// Rota para buscar todos os agendamentos de um usuário específico
+router.get('/usuario/:usuario_id', async (req, res) => {
+  const { usuario_id } = req.params;
+
+  try {
+      const agendamentos = await db.query(`
+          SELECT a.*, p.nome 
+          FROM agendamentos a 
+          JOIN pacientes p ON a.paciente_id = p.id 
+          WHERE a.usuario_id = $1
+      `, [usuario_id]);
+      
+      res.json(agendamentos.rows);
+  } catch (error) {
+      console.error('Erro ao buscar agendamentos do usuário:', error);
+      res.status(500).json({ message: 'Erro ao buscar agendamentos do usuário.' });
+  }
+});
+
 module.exports = router;

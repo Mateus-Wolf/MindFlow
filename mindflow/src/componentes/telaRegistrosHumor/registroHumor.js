@@ -7,15 +7,14 @@ const RegistroHumor = () => {
     const { id } = useParams();
     const [registros, setRegistros] = useState([]);
     const [nomePaciente, setNomePaciente] = useState('');
-    const [anoAtual, setAnoAtual] = useState(new Date().getFullYear()); // Adicionando estado para o ano atual
+    const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
 
     useEffect(() => {
         const fetchRegistros = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/pacientes/${id}/registros?ano=${anoAtual}`); // Passando o ano na requisição
+                const response = await axios.get(`http://localhost:3000/api/pacientes/${id}/registros?ano=${anoAtual}`);
                 setRegistros(response.data);
 
-                // Se você precisar do nome do paciente, pode obter aqui
                 const pacienteResponse = await axios.get(`http://localhost:3000/api/pacientes/${id}`);
                 setNomePaciente(pacienteResponse.data.nome);
             } catch (error) {
@@ -24,7 +23,7 @@ const RegistroHumor = () => {
         };
 
         fetchRegistros();
-    }, [id, anoAtual]); // Incluindo anoAtual nas dependências
+    }, [id, anoAtual]);
 
     // Função que formata a data
     const formatarData = (data) => {
@@ -67,7 +66,7 @@ const RegistroHumor = () => {
                         registros.map((registro) => (
                             <Link
                                 key={registro.id}
-                                to={`/visualizarHumor/${registro.id}`} // Acesse o ID do registro específico
+                                to={`/visualizarHumor/${registro.id}`}
                                 className="bolinha"
                             >
                                 <span className="data-registro">{formatarData(registro.data_registro)}</span>

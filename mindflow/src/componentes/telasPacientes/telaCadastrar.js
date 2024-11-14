@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../telaHome/header';
 import axios from 'axios';
-import Swal from 'sweetalert2'; // Importa SweetAlert
+import Swal from 'sweetalert2';
 
 const PacienteCadastro = ({ usuarioId }) => {
     const [nome, setNome] = useState('');

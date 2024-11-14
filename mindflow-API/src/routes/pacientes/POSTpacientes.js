@@ -3,7 +3,6 @@ const router = express.Router();
 const pool = require('../../db');
 
 // Rota para cadastrar pacientes
-// Rota para cadastrar pacientes
 router.post('/', async (req, res) => {
     const token = req.headers.authorization;
 
@@ -13,8 +12,8 @@ router.post('/', async (req, res) => {
 
     let usuarioId;
     try {
-        const decoded = jwt.verify(token, 'seu_segredo'); // Verifica o token
-        usuarioId = decoded.id; // Obtém o ID do usuário do token
+        const decoded = jwt.verify(token, 'seu_segredo');
+        usuarioId = decoded.id; 
     } catch (error) {
         return res.status(401).json({ error: 'Token inválido' });
     }
@@ -33,7 +32,7 @@ router.post('/', async (req, res) => {
         );
 
         const novoPaciente = result.rows[0];
-        res.status(201).json(novoPaciente); // Retorna o paciente cadastrado
+        res.status(201).json(novoPaciente);
     } catch (error) {
         console.error('Erro ao cadastrar paciente:', error);
         res.status(500).json({ error: 'Erro ao cadastrar paciente' });

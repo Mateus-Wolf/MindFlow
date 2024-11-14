@@ -29,7 +29,7 @@ const Perfil = () => {
         if (!dateString) return '';
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mês começa em 0
+        const month = String(date.getMonth() + 1).padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     };
@@ -55,7 +55,6 @@ const Perfil = () => {
                 });
 
                 if (response.data.nascimento) {
-                    // Exibe a data formatada para o usuário
                     setUsuario({ ...response.data, nascimento: displayFormattedDate(response.data.nascimento) });
                 } else {
                     setUsuario(response.data);
@@ -95,12 +94,12 @@ const Perfil = () => {
         const token = localStorage.getItem('token');
         const usuarioToSave = {
             ...usuario,
-            nascimento: saveFormattedDate(usuario.nascimento), // Converte a data para o formato YYYY-MM-DD ao salvar
+            nascimento: saveFormattedDate(usuario.nascimento),
         };
 
         try {
             // Verificar se o novo e-mail já está em uso por outro usuário
-            if (usuario.email !== usuarioToSave.email) { // Apenas verifica se o email foi alterado
+            if (usuario.email !== usuarioToSave.email) {
                 const emailCheckResponse = await axios.get(`http://localhost:3000/api/usuarios/email/${usuarioToSave.email}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -109,11 +108,10 @@ const Perfil = () => {
 
                 if (emailCheckResponse.data.exists) {
                     Swal.fire('Erro!', 'Este e-mail já está em uso por outro usuário.', 'error');
-                    return; // Impedir que o código prossiga caso o e-mail já exista
+                    return;
                 }
             }
 
-            // Continuar com a atualização do usuário
             await axios.put('http://localhost:3000/api/usuarios/me', usuarioToSave, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -157,14 +155,14 @@ const Perfil = () => {
     };
 
     return (
-        <div id="conteudoPerfil">
+        <div id="tudo">
             <Header />
             <div className="perfil-container">
                 <div className="avatar-placeholder">
                     {imagem ? (
                         <img src={imagem} alt="Imagem do Usuário" className="avatar" />
                     ) : (
-                        <img src="mindflow\src\icones\perfil_PlaceHolder.png" alt="Imagem de Placeholder" className="avatar" />
+                        <img src="mindflow\src\icones\perfil_PlaceHolder.png" className="avatar" />
                     )}
                 </div>
 

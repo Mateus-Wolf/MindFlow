@@ -51,7 +51,7 @@ const Agendamentos = () => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const yesterday = new Date(today);
-    yesterday.setDate(today.getDate()); // Dia atual
+    yesterday.setDate(today.getDate());
     return day && new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < yesterday;
   };
 
@@ -90,7 +90,7 @@ const Agendamentos = () => {
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
     try {
-      const usuarioId = localStorage.getItem('usuarioId'); // Captura o ID do usuário logado
+      const usuarioId = localStorage.getItem('usuarioId');
       const response = await axios.get(`http://localhost:3000/api/agendamentos?data=${formattedDate}&usuario_id=${usuarioId}`);
       setAppointments(response.data);
     } catch (error) {
@@ -112,7 +112,6 @@ const Agendamentos = () => {
     }
   };
 
-  // Função para buscar agendamentos para o dia selecionado
   const fetchAppointmentsForSelectedDay = async (day) => {
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
@@ -172,7 +171,6 @@ const Agendamentos = () => {
       Swal.fire('Erro ao criar agendamento. Por favor, tente novamente.', '', 'error');
     }
   };
-
 
   const renderCalendarDays = () => {
     return generateCalendarDays().map((day, index) => {

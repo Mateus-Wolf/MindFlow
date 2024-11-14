@@ -1,9 +1,9 @@
 const express = require('express');
 const multer = require('multer');
 const router = express.Router();
-const db = require('../../db'); // ajuste o caminho conforme necessário
+const db = require('../../db');
 
-const upload = multer(); // Configuração do multer
+const upload = multer(); 
 
 const atualizarImagemUsuario = async (req, res) => {
     const { id } = req.params;
@@ -40,7 +40,7 @@ const obterImagemUsuario = async (req, res) => {
         }
 
         // Define o cabeçalho para conteúdo de imagem e envia o buffer da imagem
-        res.setHeader('Content-Type', 'image/jpeg'); // Ajuste o tipo conforme necessário
+        res.setHeader('Content-Type', 'image/jpeg');
         res.send(result.rows[0].imagem);
     } catch (error) {
         console.error('Erro ao obter imagem:', error);

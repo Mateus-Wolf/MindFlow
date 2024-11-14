@@ -1,11 +1,10 @@
-// routes/agendamentos/GETagendamentosMensais.js
 const express = require('express');
 const router = express.Router();
-const db = require('../../db'); // Ajuste o caminho se necessário
+const db = require('../../db');
 
 // Rota para buscar agendamentos mensais
 router.get('/mensal', async (req, res) => {
-    const { mes } = req.query; // Mes enviado como query
+    const { mes } = req.query;
     if (!mes) {
         return res.status(400).json({ error: 'Mês não fornecido' });
     }

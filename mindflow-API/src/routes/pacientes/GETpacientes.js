@@ -4,13 +4,13 @@ const pool = require('../../db');
 
 // Rota para obter pacientes por usuario_id
 router.get('/', async (req, res) => {
-    const usuarioId = req.query.usuario_id; // Captura o usuario_id da query
+    const usuarioId = req.query.usuario_id; 
 
     try {
         // Se um usuario_id foi fornecido, filtra os pacientes
         const query = usuarioId 
             ? 'SELECT * FROM pacientes WHERE usuario_ID = $1'
-            : 'SELECT * FROM pacientes'; // Caso contrário, retorna todos
+            : 'SELECT * FROM pacientes';
 
         const params = usuarioId ? [usuarioId] : [];
         const result = await pool.query(query, params);

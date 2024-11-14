@@ -34,7 +34,6 @@ const CriarConta = ({ voltar, irParaLogin }) => {
         return; // Interrompe se as senhas não coincidirem
     }
 
-    // POST para a API para criar uma nova conta
     const response = await fetch('http://localhost:3000/api/usuarios/register', {
         method: 'POST',
         headers: {

@@ -16,7 +16,7 @@ router.get('/agendamentos/:id', async (req, res) => {
             [registroId]
         );
         if (result.rows.length > 0) {
-            res.json(result.rows[0]); // Retorna apenas o registro encontrado
+            res.json(result.rows[0]);
         } else {
             res.status(404).json({ error: 'Registro não encontrado' });
         }
@@ -35,11 +35,11 @@ router.get('/avaliacaoHumor/:id', async (req, res) => {
     }
     try {
         const result = await pool.query(
-            'SELECT * FROM registros_humor WHERE id = $1', // Altere se necessário
+            'SELECT * FROM registros_humor WHERE id = $1',
             [registroId]
         );
         if (result.rows.length > 0) {
-            res.json(result.rows[0]); // Retorna apenas a avaliação encontrada
+            res.json(result.rows[0]);
         } else {
             res.status(404).json({ error: 'Avaliação não encontrada' });
         }

@@ -70,3 +70,7 @@ CREATE TABLE registros_humor (
 ALTER TABLE usuarios
 ADD COLUMN codigo_recuperacao VARCHAR(255),
 ADD COLUMN expiracao_codigo TIMESTAMP;  
+
+-- Adicionando colunas para registro de humor
+ALTER TABLE agendamentos 
+ADD COLUMN registro_humor_id INTEGER ;

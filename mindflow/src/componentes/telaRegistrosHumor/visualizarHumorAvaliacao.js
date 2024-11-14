@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../telaHome/header';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
-const VisualizarHumorAvaliacao = () => {
+const RegistroHumorAvaliacao = ({ label, emoji }) => {
     const { id: pacienteId } = useParams();
     const [ratings, setRatings] = useState({
         sleepQuality: 0,
@@ -14,37 +15,24 @@ const VisualizarHumorAvaliacao = () => {
     });
     const navigate = useNavigate();
 
-    useEffect(() => {
-        console.log(`Buscando avaliações para o paciente ID: ${pacienteId}`);
-        const fetchRatings = async () => {
-            try {
-                const response = await axios.get(`http://localhost:3000/api/avaliacaoHumor/${pacienteId}`);
-                const { humor_sono, humor_estresse, nivel_energia, humor_geral } = response.data;
-
-                setRatings({
-                    sleepQuality: humor_sono,
-                    stressLevel: humor_estresse,
-                    energyLevel: nivel_energia,
-                    generalEvaluation: humor_geral,
-                });
-            } catch (error) {
-                console.error('Erro ao buscar avaliações:', error);
-            }
-        };
-
-        fetchRatings();
-    }, [pacienteId]);
-
-    const renderStars = (level) => (
+    const renderStars = (level, keyPrefix) => (
         <div className="stars-container">
             {[...Array(5)].map((_, index) => {
                 const ratingValue = index + 1;
                 return (
-                    <FaStar
-                        key={index}
-                        className="star"
-                        color={ratingValue <= level ? '#ffc107' : '#e4e5e9'}
-                    />
+                    <label key={`${keyPrefix}-${index}`}>
+                        <input
+                            type="radio"
+                            name={keyPrefix}
+                            value={ratingValue}
+                            onClick={() => setRatings((prev) => ({ ...prev, [keyPrefix]: ratingValue }))} 
+                            style={{ display: 'none' }}
+                        />
+                        <FaStar
+                            className="star"
+                            color={ratingValue <= level ? '#ffc107' : '#e4e5e9'}
+                        />
+                    </label>
                 );
             })}
         </div>
@@ -57,40 +45,106 @@ const VisualizarHumorAvaliacao = () => {
                     <div className="avaliacao-item">
                         <span role="img" aria-label="sono" className="emoji">😴</span>
                         <p className="avaliacao-text">Qualidade do sono</p>
-                        {renderStars(ratings.sleepQuality)}
+                        {renderStars(ratings.sleepQuality, 'sleepQuality')}
                     </div>
                     <div className="avaliacao-item">
                         <span role="img" aria-label="estresse" className="emoji">😡</span>
                         <p className="avaliacao-text">Nível de estresse</p>
-                        {renderStars(ratings.stressLevel)}
+                        {renderStars(ratings.stressLevel, 'stressLevel')}
                     </div>
                 </div>
                 <div className="avaliacao-row">
                     <div className="avaliacao-item">
                         <span role="img" aria-label="energia" className="emoji">🔥</span>
                         <p className="avaliacao-text">Nível de energia</p>
-                        {renderStars(ratings.energyLevel)}
+                        {renderStars(ratings.energyLevel, 'energyLevel')}
                     </div>
                     <div className="avaliacao-item">
                         <span role="img" aria-label="geral" className="emoji">🤩</span>
                         <p className="avaliacao-text">Avaliação geral</p>
-                        {renderStars(ratings.generalEvaluation)}
+                        {renderStars(ratings.generalEvaluation, 'generalEvaluation')}
                     </div>
                 </div>
             </div>
         );
     };
 
+    const handleSave = async () => {
+        // Verifica se todos os campos obrigatórios foram preenchidos
+        if (ratings.sleepQuality === 0 || ratings.stressLevel === 0 || ratings.energyLevel === 0 || ratings.generalEvaluation === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Atenção!',
+                text: 'Por favor, preencha todas as avaliações antes de salvar!',
+            });
+            return;
+        }
+    
+        const estudo = localStorage.getItem('Estudos') === 'true';
+        const trabalho = localStorage.getItem('Trabalho') === 'true';
+        const exercicio = localStorage.getItem('Exercício') === 'true';
+        const lazer = localStorage.getItem('Lazer') === 'true';
+    
+        const dataRegistro = new Date();
+        const dataFormatada = dataRegistro.toLocaleDateString('pt-BR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).split('/').reverse().join('-');
+        
+        console.log(dataFormatada);
+        
+
+        const data = {
+            id_paciente: pacienteId,
+            data_registro: dataFormatada,
+            qualidade_sono: ratings.sleepQuality,
+            nivel_estresse: ratings.stressLevel,
+            nivel_energia: ratings.energyLevel,
+            avaliacao_geral: ratings.generalEvaluation,
+            tarefas_estudo: estudo,
+            tarefas_trabalho: trabalho,
+            tarefas_exercicio: exercicio,
+            tarefas_lazer: lazer
+        };
+    
+        try {
+            const response = await axios.post('http://localhost:3000/api/avaliacaoHumor/registro-avaliacao', data);
+            
+            if (response.status === 201) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sucesso!',
+                    text: 'Avaliação salva com sucesso!',
+                });
+                navigate('/home');
+            }
+        } catch (error) {
+            console.error('Erro ao salvar a avaliação:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro!',
+                text: 'Ocorreu um erro ao salvar a avaliação. Tente novamente.',
+            });
+        }
+    };
+    
     return (
         <div className="tudo">
             <Header />
-            <h2>Avaliação de Humor</h2>
+            <h2>{label}</h2>
+            <div>{emoji}</div>
             <Avaliacao />
             <div className="footer">
-                <button className="btnVoltar" onClick={() => navigate(-1)}>Voltar</button>
+                <Link to={`/registroHumorAtividades/${pacienteId}`}>
+                    <button className="btnVoltar">Voltar</button>
+                </Link>
+                <button className="btnSalvar" onClick={handleSave}>
+                    Salvar
+                </button>
             </div>
         </div>
     );
 };
 
-export default VisualizarHumorAvaliacao;
+export default RegistroHumorAvaliacao;

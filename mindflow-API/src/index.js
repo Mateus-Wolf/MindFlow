@@ -40,7 +40,10 @@ app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3001', // Permite apenas o frontend rodando na porta 3001
+    methods: 'GET, POST, PUT, DELETE', // Métodos permitidos
+}));
 
 // Definindo as rotas
 

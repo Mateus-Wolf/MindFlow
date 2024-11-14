@@ -1,4 +1,3 @@
-// routes/usuarios/POSTlogin.js
 const express = require('express');
 const router = express.Router();
 const pool = require('../../db');
@@ -34,7 +33,7 @@ router.post('/', async (req, res) => {
         const token = jwt.sign({ id: usuario.id, tipo_usuario: usuario.tipo_usuario }, 'seu_segredo', {
             expiresIn: '1h',
         });
-        console.log('Token gerado:', token); // Log do token gerado
+        console.log('Token gerado:', token);
 
         res.json({ token, nome: usuario.nome, id: usuario.id });
     } catch (error) {

@@ -22,8 +22,8 @@ router.post('/verificar-email', async (req, res) => {
         }
 
         // Gera um código de recuperação e uma data de expiração
-        const codigo = crypto.randomBytes(3).toString('hex'); // Código de 6 caracteres
-        const expiracaoCodigo = new Date(Date.now() + 15 * 60 * 1000); // 15 minutos a partir de agora
+        const codigo = crypto.randomBytes(3).toString('hex'); 
+        const expiracaoCodigo = new Date(Date.now() + 15 * 60 * 1000);
 
         // Armazena o código e a expiração no banco de dados
         await pool.query(
@@ -62,7 +62,7 @@ router.post('/verificar-codigo', async (req, res) => {
 
         res.status(200).json({ message: 'Código verificado com sucesso!' });
     } catch (error) {
-        console.error(error.message || error); // Exibe mensagem de erro mais detalhada
+        console.error(error.message || error);
         res.status(500).send('Erro ao verificar código.');
     }
 });

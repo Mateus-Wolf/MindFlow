@@ -48,16 +48,16 @@ const PacienteDados = () => {
 
     const formatCPF = (cpf) => {
         return cpf
-            .replace(/\D/g, '') // Remove tudo que não é dígito
-            .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto entre os 3 primeiros e os demais
-            .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto entre os 3 primeiros e os demais
-            .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen entre os últimos números
+            .replace(/\D/g, '') 
+            .replace(/(\d{3})(\d)/, '$1.$2') 
+            .replace(/(\d{3})(\d)/, '$1.$2') 
+            .replace(/(\d{3})(\d{1,2})$/, '$1-$2'); 
     };
 
     const formatCEP = (cep) => {
         return cep
-            .replace(/\D/g, '') // Remove tudo que não é dígito
-            .replace(/(\d{5})(\d)/, '$1-$2'); // Coloca hífen após os 5 primeiros dígitos
+            .replace(/\D/g, '')
+            .replace(/(\d{5})(\d)/, '$1-$2'); 
     };
 
     const handleDelete = async () => {

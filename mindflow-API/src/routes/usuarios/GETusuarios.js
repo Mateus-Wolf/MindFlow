@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('../../db'); // Certifique-se de que o caminho para o seu db está correto
+const db = require('../../db');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -26,7 +26,7 @@ router.get('/me', async (req, res) => {
     }
 
     try {
-        const decoded = jwt.verify(token, 'seu_segredo'); // Verifique se o segredo está correto
+        const decoded = jwt.verify(token, 'seu_segredo');
         const usuario = await db.query('SELECT id, nome, email, nascimento, imagem FROM usuarios WHERE id = $1', [decoded.id]);
 
         if (usuario.rows.length === 0) {

@@ -7,27 +7,26 @@ import exercicioIcon from '../../icones/exercicio-icone.svg';
 import lazerIcon from '../../icones/lazer-icone.svg';
 
 function RegistroHumorAtividades() {
-  const [selected, setSelected] = useState({}); // Objeto para armazenar seleções
-  const navigate = useNavigate(); // Hook para navegação
-  const { id: pacienteId } = useParams(); // Captura o ID do paciente da URL
-  const agendamentoId = localStorage.getItem('agendamentoId'); // Recupera o ID do agendamento do localStorage
+  const [selected, setSelected] = useState({}); 
+  const navigate = useNavigate();
+  const { id: pacienteId } = useParams(); 
+  const agendamentoId = localStorage.getItem('agendamentoId');
 
   useEffect(() => {
-    // Se necessário, você pode usar o ID do agendamento aqui
     console.log('ID do Agendamento:', agendamentoId);
   }, [agendamentoId]);
 
   const handleCheck = (category) => {
     setSelected((prev) => ({
       ...prev,
-      [category]: true, // Armazena como true
+      [category]: true,
     }));
   };
 
   const handleTimes = (category) => {
     setSelected((prev) => ({
       ...prev,
-      [category]: false, // Armazena como false
+      [category]: false, 
     }));
   };
 
@@ -38,7 +37,7 @@ function RegistroHumorAtividades() {
     });
 
     // Redireciona para a tela de avaliação com o ID do paciente e ID do agendamento
-    navigate(`/registroHumorAvaliacao/${pacienteId}`); // Inclui pacienteId na URL
+    navigate(`/registroHumorAvaliacao/${pacienteId}`);
   };
 
   const handleBack = () => {
@@ -95,7 +94,7 @@ function RegistroHumorAtividades() {
         <button 
           className="btnSalvar" 
           onClick={handleSave} 
-          disabled={!allCategoriesSelected()} // Desabilita se não todas as categorias estiverem preenchidas
+          disabled={!allCategoriesSelected()}
         >
           Salvar
         </button>

@@ -1,9 +1,7 @@
-// Importações necessárias
 const express = require('express');
 const router = express.Router();
 const pool = require('../../db');
 
-// Rota para obter os registros de humor de um paciente específico
 // Rota para obter os registros de humor de um paciente específico
 router.get('/:id/registros', async (req, res) => {
     const { id } = req.params;

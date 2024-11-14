@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../../db'); // Certifique-se de importar a conexão com o banco de dados
+const pool = require('../../db');
 
 // Rota PUT para marcar um agendamento como Cancelado
 router.put('/:id/cancelar', async (req, res) => {
@@ -36,10 +36,7 @@ router.put('/:id/concluir', async (req, res) => {
 // Rota PUT para marcar um agendamento como Perdido
 router.put('/status', async (req, res) => {
     try {
-        // Obter a data e hora atuais
         const now = new Date();
-        
-        // Query para atualizar o status
         const query = `
             UPDATE agendamentos
             SET status_id = 4

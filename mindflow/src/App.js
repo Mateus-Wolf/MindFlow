@@ -5,6 +5,7 @@ import './style/perfil.css';
 import './style/pacientes.css';
 import './style/agendamentos.css';
 import './style/registrohumor.css';
+import './style/historico.css'
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './componentes/telaIncial/bemVindo';
@@ -19,6 +20,7 @@ import VisualizarHumorAvaliacao from './componentes/telaRegistrosHumor/visualiza
 import RegistroHumor from './componentes/telaRegistrosHumor/registroHumor';
 import RegistroHumorAtividades from './componentes/telaRegistrosHumor/registroHumorAtividades';
 import RegistroHumorAvaliacao from './componentes/telaRegistrosHumor/registroHumorAvaliacao';
+import HistoricoConsultas from './componentes/telaHistorico/historicoConsultas';
 
 const userId = localStorage.getItem('userId');
 
@@ -33,11 +35,12 @@ function App() {
         <Route path="/telaCadastrar" element={<CadastrarPacientes />} />
         <Route path="/telaListar" element={<ListarPacientes />} />
         <Route path="/telaDados/:id" element={<DadosPacientes />} />
-        <Route path="/registroHumor/:id" element={<RegistroHumor />} /> {/* Corrigido para "registroHumor" */}
-        <Route path="/visualizarHumor/:id" element={<VisualizarHumor />} /> {/* Corrigido para incluir ":id" */}
-        <Route path="/visualizarHumorAvaliacao/:id" element={<VisualizarHumorAvaliacao />} /> {/* Corrigido para incluir ":id" */}
+        <Route path="/registroHumor/:id" element={<RegistroHumor />} />
+        <Route path="/visualizarHumor/:id" element={<VisualizarHumor />} />
+        <Route path="/visualizarHumorAvaliacao/:id" element={<VisualizarHumorAvaliacao />} />
         <Route path="/registroHumorAtividades/:id" element={<RegistroHumorAtividades />} />
         <Route path="/registroHumorAvaliacao/:id" element={<RegistroHumorAvaliacao />} />
+        <Route path="/historicoConsultas/:id" element={<HistoricoConsultas />} />
       </Routes>
     </Router>
   );

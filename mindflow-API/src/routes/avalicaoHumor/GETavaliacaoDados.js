@@ -5,8 +5,6 @@ const pool = require('../../db');
 // Rota para obter os registros de humor de um paciente específico
 router.get('/:id/agendamentos', async (req, res) => {
     const { id } = req.params;
-
-    // Verifica se o ID é um número válido
     const pacienteId = parseInt(id, 10);
 
     if (isNaN(pacienteId)) {

@@ -8,21 +8,21 @@ import exercicioIcon from '../../icones/exercicio-icone.svg';
 import lazerIcon from '../../icones/lazer-icone.svg';
 
 const VisualizarHumor = () => {
-    const { id } = useParams(); // Captura o ID do registro da URL
-    const [registro, setRegistro] = useState(null); // Armazena o registro obtido
-    const navigate = useNavigate(); // Hook para navegação
+    const { id } = useParams(); 
+    const [registro, setRegistro] = useState(null); 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchRegistro = async () => {
             try {
-                const response = await axios.get(`http://localhost:3000/api/agendamentos/${id}`); // Busca o registro pelo ID
-                setRegistro(response.data); // Armazena o registro na variável de estado
+                const response = await axios.get(`http://localhost:3000/api/agendamentos/${id}`);
+                setRegistro(response.data);
             } catch (error) {
                 console.error('Erro ao buscar registro:', error);
             }
         };
 
-        fetchRegistro(); // Chama a função para buscar o registro
+        fetchRegistro();
     }, [id]);
 
     // Função para obter o ícone com base na categoria
@@ -41,9 +41,8 @@ const VisualizarHumor = () => {
         }
     };
 
-    if (!registro) return <div>Carregando...</div>; // Exibe um carregando enquanto os dados não são buscados
+    if (!registro) return <div>Carregando...</div>;
 
-    // Função para navegar para a tela de VisualizarHumorAvaliacao
     const handleAvancar = () => {
         navigate(`/visualizarHumorAvaliacao/${registro.id}`, { state: { dadosHumor: registro } });
     };

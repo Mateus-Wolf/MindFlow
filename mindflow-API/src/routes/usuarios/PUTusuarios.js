@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 router.put('/me', async (req, res) => {
-    const token = req.headers.authorization; // Pegando o token do cabeçalho
+    const token = req.headers.authorization;
 
     if (!token) {
         return res.status(401).json({ error: 'Token não fornecido' });
@@ -22,7 +22,7 @@ router.put('/me', async (req, res) => {
         // Criptografar nova senha se ela foi fornecida
         let hashedPassword = null;
         if (senha) {
-            const salt = await bcrypt.genSalt(10); // Geração do salt
+            const salt = await bcrypt.genSalt(10);
             hashedPassword = await bcrypt.hash(senha, salt);
         }
 
@@ -38,14 +38,14 @@ router.put('/me', async (req, res) => {
         const result = await pool.query(query, values);
 
         // Log para verificar a nova senha hashada
-        console.log('Senha armazenada após atualização:', result.rows[0].senha); // Log do resultado armazenado
-        console.log('Dados atualizados:', result.rows[0]); // Log dos dados atualizados
+        console.log('Senha armazenada após atualização:', result.rows[0].senha);
+        console.log('Dados atualizados:', result.rows[0]);
 
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
-        res.json(result.rows[0]); // Retorna os dados atualizados
+        res.json(result.rows[0]); 
     } catch (error) {
         console.error('Erro ao atualizar usuário:', error);
         res.status(500).json({ error: 'Erro ao atualizar usuário' });

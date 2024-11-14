@@ -9,7 +9,6 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 });
 
-// Teste de conexão
 pool.connect()
     .then(client => {
         console.log('Conectado ao banco de dados com sucesso')

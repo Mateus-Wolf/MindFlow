@@ -5,8 +5,10 @@ import { motion } from "framer-motion";
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
 
+    const usuarioId = localStorage.getItem('usuarioId');
+
     const toggleDropdown = (e) => {
-        e.preventDefault(); // Evita o comportamento padrão do link
+        e.preventDefault();
         setIsOpen(prev => !prev);
     };
 
@@ -55,7 +57,7 @@ const Header = () => {
                                 </motion.ul>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/historicoConsultas">Histórico de Consultas</Link>
+                                <Link className="nav-link" to={`/historicoConsultas/${usuarioId}`}>Histórico de Consultas</Link>
                             </li>
                         </ul>
                     </div>

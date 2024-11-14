@@ -88,14 +88,14 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
         const data = {
             id_paciente: pacienteId,
             data_registro: new Date().toISOString().split('T')[0],
-            qualidade_sono: ratings.sleepQuality,  // Renomeado para 'qualidade_sono'
-            nivel_estresse: ratings.stressLevel,  // Renomeado para 'nivel_estresse'
+            qualidade_sono: ratings.sleepQuality, 
+            nivel_estresse: ratings.stressLevel, 
             nivel_energia: ratings.energyLevel,
-            avaliacao_geral: ratings.generalEvaluation,  // Renomeado para 'avaliacao_geral'
-            tarefas_estudo: estudo,  // Renomeado para 'tarefas_estudo'
-            tarefas_trabalho: trabalho,  // Renomeado para 'tarefas_trabalho'
-            tarefas_exercicio: exercicio,  // Renomeado para 'tarefas_exercicio'
-            tarefas_lazer: lazer  // Renomeado para 'tarefas_lazer'
+            avaliacao_geral: ratings.generalEvaluation, 
+            tarefas_estudo: estudo, 
+            tarefas_trabalho: trabalho, 
+            tarefas_exercicio: exercicio, 
+            tarefas_lazer: lazer
         };
         
     

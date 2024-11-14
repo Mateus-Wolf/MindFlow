@@ -80,7 +80,7 @@ const Login = ({ voltar }) => {
     
     const enviarCodigoEmail = async () => {
         try {
-            const response = await axios.post('http://localhost:3000/api/verificar-email', { email }); // Alteração da rota
+            const response = await axios.post('http://localhost:3000/api/verificar-email', { email });
             if (response.status === 200) {
                 setCodigoEnviado(true);
                 Swal.fire({
@@ -124,7 +124,7 @@ const Login = ({ voltar }) => {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        setMensagemErro(''); // Limpa a mensagem de erro ao iniciar o login
+        setMensagemErro('');
 
         try {
             // POST para a API para efetuar o login

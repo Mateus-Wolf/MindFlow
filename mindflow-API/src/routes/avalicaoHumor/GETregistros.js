@@ -13,7 +13,12 @@ router.get('/:id/registros', async (req, res) => {
     }
 
     try {
-        const result = await pool.query('SELECT * FROM registros_humor WHERE paciente_id = $1', [pacienteId]);
+        const result = await pool.query(`
+            SELECT id, paciente_id, TO_CHAR(data, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS data_registro
+            FROM registros_humor
+            WHERE paciente_id = $1
+        `, [pacienteId]);
+        
         res.json(result.rows);
     } catch (error) {
         console.error('Erro ao obter registros de humor:', error);

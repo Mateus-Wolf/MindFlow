@@ -20,6 +20,7 @@ const POSTagendamentosRoute = require('./routes/agendamentos/POSTagendamentos');
 const PUTagendamentosRoute = require('./routes/agendamentos/PUTagendamentos');
 const GETagendamentosRoute = require('./routes/agendamentos/GETagendamentos');
 const GETagendamentosMensaisRoute = require('./routes/agendamentos/GetagendamentosMensais');
+const GETagendamentosRecentes = require('./routes/agendamentos/GETagendamentosRecentes');
 
 //pacientes
 const GETpacientes = require('./routes/pacientes/GETpacientes');
@@ -60,6 +61,7 @@ app.use('/api/agendamentos', GETagendamentosRoute);
 app.use('/api/agendamentos', GETagendamentosMensaisRoute);
 app.use('/api/agendamentos', POSTagendamentosRoute);
 app.use('/api/agendamentos', PUTagendamentosRoute);
+app.use('/api/agendamentos', GETagendamentosRecentes);
 
 //pacientes
 app.use('/api/pacientes', GETpacientes);

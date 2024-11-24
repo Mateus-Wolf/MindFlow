@@ -32,22 +32,25 @@ const RegistroHumor = () => {
 
     // Função para formatar a data
     const formatarData = (data) => {
-        if (!data) return 'Data inválida';  // Verifica se a data é nula ou indefinida
-        
-        // Converte a string de data para objeto Date
-        const dataFormatada = new Date(data);
-        
-        // Verifica se a data é válida
-        if (isNaN(dataFormatada.getTime())) {
+        if (!data) return 'Data inválida';
+    
+        try {
+            const dataFormatada = new Date(data);
+    
+            if (isNaN(dataFormatada.getTime())) {
+                return 'Data inválida';
+            }
+    
+            const dia = dataFormatada.getUTCDate().toString().padStart(2, '0');
+            const mes = dataFormatada.toLocaleString('pt-BR', { month: 'short' }).toUpperCase();
+    
+            return `${dia} ${mes}`;
+        } catch (error) {
+            console.error('Erro ao formatar data:', error);
             return 'Data inválida';
         }
-
-        // Obtém o dia e o mês
-        const dia = dataFormatada.getUTCDate().toString().padStart(2, '0');
-        const mes = dataFormatada.toLocaleString('pt-BR', { month: 'short' }).toUpperCase();
-
-        return `${dia} ${mes}`;  // Retorna a data formatada
     };
+    
 
     // Função para navegar para o ano anterior
     const handlePrevYear = () => {

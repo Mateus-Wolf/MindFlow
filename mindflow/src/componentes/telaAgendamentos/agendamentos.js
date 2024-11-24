@@ -14,38 +14,39 @@ const Agendamentos = () => {
   const [description, setDescription] = useState('');
   const [totalAppointments, setTotalAppointments] = useState(0);
   const [time, setTime] = useState('');
+  const [openAppointments, setOpenAppointments] = useState([]);
 
   useEffect(() => {
-    const fetchPatients = async () => {
+    const fetchAppointments = async () => {
       const usuarioId = localStorage.getItem('usuarioId');
-      try {
-        const response = await axios.get(`http://localhost:3000/api/pacientes?usuario_id=${usuarioId}`);
-        setPatients(response.data);
-      } catch (error) {
-        console.error('Erro ao carregar pacientes:', error);
-      }
-    };
-
-    const fetchTotalAppointments = async () => {
-      const usuarioId = localStorage.getItem('usuarioId'); // ID do usuário logado
       const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-
+      
       try {
+        // Buscar agendamentos
         const response = await axios.get(`http://localhost:3000/api/agendamentos/mensal/${usuarioId}`, {
           params: { mes: formattedDate }
         });
-
-        // Filtra os agendamentos para contar apenas aqueles com status_id igual a 1 (Em Aberto)
-        const filteredAppointments = response.data.filter(appointment => appointment.status_id === 1);
-        setTotalAppointments(filteredAppointments.length);
+  
+        // Filtrar os agendamentos para pegar apenas os que têm status_id = 1 (Em Aberto)
+        const openAppointments = response.data.filter(appointment => appointment.status_id === 1);
+        setOpenAppointments(openAppointments);
+        
+        // Atualiza a quantidade total de agendamentos em aberto
+        setTotalAppointments(openAppointments.length);
+  
+        // Buscar pacientes
+        const patientsResponse = await axios.get('http://localhost:3000/api/pacientes', {
+          params: { usuario_id: usuarioId }
+        });
+        setPatients(patientsResponse.data); // Atualizar o estado com os pacientes
       } catch (error) {
-        console.error('Erro ao carregar agendamentos:', error);
+        console.error('Erro ao carregar agendamentos ou pacientes:', error);
       }
     };
-
-    fetchPatients();
-    fetchTotalAppointments();
+  
+    fetchAppointments();
   }, [currentDate]);
+  
 
   const isBeforeToday = (day) => {
     const today = new Date();
@@ -174,20 +175,22 @@ const Agendamentos = () => {
 
   const renderCalendarDays = () => {
     return generateCalendarDays().map((day, index) => {
-      const isDisabled = day && isBeforeToday(day);
-      const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date());
+        const isDisabled = day && isBeforeToday(day);
+        const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date());
+        const hasOpenAppointment = openAppointments.some(appointment => new Date(appointment.data).getDate() === day);
 
-      return (
-        <div
-          key={index}
-          className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : isPast ? 'filled past-day' : 'filled') : 'empty'}`}
-          onClick={() => handleDayClick(day)}
-        >
-          {day}
-        </div>
-      );
+        return (
+            <div
+                key={index}
+                className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : isPast ? 'filled past-day' : 'filled') : 'empty'} ${hasOpenAppointment ? 'open-appointment' : ''}`}
+                onClick={() => handleDayClick(day)}
+            >
+                {day}
+            </div>
+        );
     });
-  };
+};
+
 
 
   const monthNames = [

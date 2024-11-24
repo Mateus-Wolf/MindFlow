@@ -1,7 +1,6 @@
 body, html {
   height: 100%;
   margin: 0;
-  
 }
 
 .app-container {
@@ -44,7 +43,6 @@ body, html {
   margin-left: 5px;
 }
 
-
 .calendar-header button {
   background-color: var(--roxo-destaque);
   border: none;
@@ -81,6 +79,9 @@ body, html {
   cursor: pointer;
 }
 
+.calendar-day.has-appointment:hover {
+  background-color: #9B0069; /* Rosa escuro ao passar o mouse */
+}
 
 .no-appointments {
   margin-top: 20px;
@@ -152,4 +153,7 @@ body, html {
   color: #aaa;
 }
 
-
+.open-appointment {
+  background-color: rgb(225, 0, 255);
+  color: white;
+}

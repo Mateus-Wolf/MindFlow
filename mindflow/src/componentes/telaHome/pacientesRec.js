@@ -32,10 +32,9 @@ const PacientesRec = () => {
                 <p>Nenhum paciente encontrado.</p>
             ) : (
                 <>
-                    <h3>Pacientes Recentes</h3>
+                    <h3>Pacientes Recentes:</h3>
                     {pacientes.map((paciente) => (
                         <div className="paciente-item" key={paciente.id}>
-                            <img src={`/path/to/image-placeholder.jpg`} alt={paciente.nome} className="paciente-img" />
                             <div className="paciente-info">
                                 <h4>{paciente.nome}</h4>
                                 <p>
@@ -43,10 +42,9 @@ const PacientesRec = () => {
                                 </p>
                             </div>
                             <div className="paciente-consulta">
-                                <button className="btn-horario">{paciente.horaConsulta}</button>
-                                <button className="btn-horario secundario">
-                                    {new Date(paciente.dataConsulta).toLocaleDateString()} {paciente.horaConsulta}
-                                </button>
+                                <p className="btn-horario secundario">
+                                    {new Date(paciente.dataConsulta).toLocaleDateString()} {paciente.horaConsulta.slice(0, 5)}
+                                </p>
                             </div>
                         </div>
                     ))}

@@ -1,0 +1,62 @@
+
+.historico-container {
+    margin: 20px;
+    padding: 20px;
+}
+
+.historico-titulos {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    cursor: pointer;
+}
+
+.historico-titulos h3 {
+    color: black;
+    background-color: var(--roxo-destaque);
+    transition: color 0.3s ease;
+    margin-top: 45px;
+    padding: 10px;
+    border-radius: 25px;
+}
+
+.historico-titulos h3:hover {
+    color: #ffffff;
+    background-color: var(--roxo-escuro);
+}
+
+.historico-item ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.historico-item li {
+    font-size: 16px;
+}
+
+.historico-item .concluido {
+    color: rgb(0, 255, 0);
+    font-size: 20px;
+}
+
+.historico-item .cancelado {
+    color: red;
+    font-size: 20px;
+}
+
+.historico-item .atrasado {
+    color: purple;
+    font-size: 20px;
+}
+
+.ativo {
+    color: #ffffff;
+    background-color: var(--roxo-escuro);
+}
+
+p {
+    color: #666;
+    font-size: 20px;
+}

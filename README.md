@@ -1,4 +1,4 @@
-Repositório do projeto MindFlow da matéria de PMI no curso de Analise e Desenvolvimento de Sistemas da UNICESUSC
+Por problemas no repositório antigo, este é o *NOVO* repositório do projeto MindFlow da matéria de PMI no curso de Analise e Desenvolvimento de Sistemas da UNICESUSC
 
 O MindFlow é uma aplicação web feita em React que permite que psicólogos e terapeutas organizem suas consultas e registrem o humor, a rotina e as emoções de seus pacientes, e assim, o MindFlow mapeia esses dados, criando um diário com as ações e os sentimentos.
 

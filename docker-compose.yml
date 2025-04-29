@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15
+    restart: always
+    container_name: mindflow-db
+    environment:
+      POSTGRES_USER: mindflow
+      POSTGRES_PASSWORD: mindflow123
+      POSTGRES_DB: mindflow
+    volumes:
+      - ./mindflow-API/db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mindflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./mindflow-API
+      dockerfile: Dockerfile
+    restart: always
+    container_name: mindflow-api
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: mindflow
+      DB_PASSWORD: mindflow123
+      DB_NAME: mindflow
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build: ./mindflow-Front
+    restart: always
+    container_name: mindflow-front
+    ports:
+      - "3001:3000"
+    depends_on:
+      - backend

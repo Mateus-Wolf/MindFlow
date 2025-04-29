@@ -1,0 +1,160 @@
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.calendar-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--roxo-fundo);
+  color: white;
+  padding: 20px;
+}
+
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 800px;
+  margin-top: 25px;
+  margin-bottom: 50px;
+}
+
+.calendar-header h2 {
+  font-size: 2rem;
+  color: #D6A4FF;
+}
+
+.cancel-button {
+  background: none;
+  color: red;
+  border: none;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.calendar-header button {
+  background-color: var(--roxo-destaque);
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.day-of-week{
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.calendar-days-of-week, .calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.calendar-day {
+  background-color: var(--roxo-destaque);
+  text-align: center;
+  padding: 20px;
+  font-size: 1.2rem;
+  border-radius: 5px;
+}
+
+.calendar-day:hover {
+  background-color: #2a0061;
+  cursor: pointer;
+}
+
+.calendar-day.has-appointment:hover {
+  background-color: #9B0069; /* Rosa escuro ao passar o mouse */
+}
+
+.no-appointments {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #BBBBBB;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: var(--roxo-fundo);
+  text-align: center;
+  color: whitesmoke;
+  padding: 40px; 
+  border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.popup-content h3 {
+  margin: 0 0 10px;
+}
+
+.popup-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between; 
+  gap: 55px;
+}
+
+.btnCriar {
+  background-color: #2a0061;
+  color: whitesmoke;
+}
+
+.btnCancelar {
+  background-color: var(--vermelho-cancelar);
+  color: whitesmoke;
+}
+
+#form-Agendamento-PopUp {
+  margin-left: 100px;
+}
+
+#agendamentosDoDia {
+  font-size: 15px;
+  text-align: left;
+}
+
+.calendar-day.empty {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.calendar-day.filled.before-today {
+  background-color: var(--roxo-escuro);
+  color: #aaa;
+}
+
+.open-appointment {
+  background-color: rgb(225, 0, 255);
+  color: white;
+}

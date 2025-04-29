@@ -1,0 +1,133 @@
+/* Inicio da Customização das Fontes */
+@font-face {
+    font-family: 'textosGerais';
+    src: url(../fontes/quicksand/Quicksand-VariableFont_wght.ttf);
+  }
+
+* {
+    font-family: 'textosGerais';
+}
+/* Fim da Customização das Fontes */
+
+
+
+/* Inicio da Customização do H2 */
+#titulo{
+    margin-bottom: 35px;
+}
+/* Fim da Customização do H2 */
+
+
+
+/* Customização dos Formularios */
+.form {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 16px;
+    color: #333; /* Cor do texto */
+    transition: all 0.3s ease; /* Transição suave para todas as propriedades */
+    background-color: #f9f9f9; /* Cor de fundo base */
+    outline: none; /* Remove a borda padrão de foco */
+    margin-bottom: 15px; /* Espaçamento entre os campos */
+    width: 100%; /* Garante que os campos tenham o mesmo tamanho */
+    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
+}
+
+.error-message {
+    color: rgb(255, 0, 0);
+    font-weight: bold; 
+    font-size: 15px;
+    margin-left: 3px;
+}
+
+.input-error {
+    border: 2px solid red; 
+}
+
+
+/* Animação ao focar */
+.form:focus {
+    border-color: #ff5722;
+    background-color: #fff;
+    transform: scale(1.02);
+    color: #333;
+}
+
+.form:not(:placeholder-shown) {
+    border-color: #4caf50;
+    background-color: #e8f5e9;
+    color: #333; 
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-input {
+    padding-right: 40px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 8px;
+    top: 43%; 
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #7e22ff; 
+    cursor: pointer;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: #4b2284;
+}
+/* Fim da Customização do Formulario */
+
+
+
+/* Customização do Esqueci Minha Senha */
+.forgot-password {
+    display: block;
+    color: #ece8ff;
+    text-decoration: none;
+    font-size: 16px;
+    margin-bottom: 15px;
+    transition: color 0.3s ease;
+    text-align: left;
+    margin-top: -15px;
+    margin-left: 5px;
+}
+
+.forgot-password:hover {
+    color: #7b80ff;
+    text-decoration: none;
+}
+/* Fim da Customização do Esqueci Minha Senha */
+
+
+
+/* Customização dos Botões */
+.btns {
+    width: 290px;
+    background-color: rgb(71, 6, 135);
+    border-radius: 15px;
+    color: whitesmoke;
+    padding: 15px 30px;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-right: 10px;
+}
+
+/* Efeito ao passar o mouse sobre os botões */
+.btns:hover {
+    background-color: rgb(103, 24, 229);
+    transform: scale(1.05);
+}

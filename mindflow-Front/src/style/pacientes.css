@@ -1,0 +1,174 @@
+#pacientes-lista {
+    color: white;
+    padding: 20px;
+    height: 100%;
+    background-color: var(--roxo-fundo);
+}
+
+#tudo {
+    background-color: var(--roxo-fundo);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: -10px;
+}
+
+.search-input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: none;
+    margin: 0 10px;
+}
+
+.btn-back, .btn-search {
+    background-color: #333;
+    border: none;
+    color: white;
+    font-size: 18px;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.paciente-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--roxo-escuro);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.paciente-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.paciente-info {
+    flex-grow: 1;
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.paciente-botoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-opcao, .btn-Registros {
+    background: var(--roxo-gradiente);
+    border: none;
+    border-radius: 10px;
+    height: 80px;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+
+.form-container {
+    background-color: var(--roxo-fundo);
+    padding: 10px;
+    padding: 15px;
+}
+  
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+  
+.form-group {
+    flex: 1;
+    margin-right: 10px;
+}
+  
+.form-group:last-child {
+    margin-right: 0;
+}
+  
+label {
+    display: block;
+    color: #fff;
+    margin-bottom: 5px;
+}
+  
+input, select {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+}
+  
+.submit-button {
+    background-color: var(--roxo-destaque);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 25px;
+}
+
+.delete-button {
+    background-color: var(--vermelho-cancelar);
+    border-radius: 15px;
+    color: whitesmoke;
+    border: none;
+    width: 100px;
+    height: 40px;
+}
+
+.delete-small-button {
+    padding: 10px 20px;
+    background-color: var(--vermelho-cancelar);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.buttonDados {
+    padding: 10px 20px;
+    background-color: var(--roxo-destaque);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.buttonDados:last-child {
+    margin-right: 0;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+#paciente-dados{
+    padding: 15px;
+}
+
+/* Estilo geral para os campos */
+.form-group input[disabled], .form-group select[disabled], .form-group textarea[disabled] {
+    background-color: var(--roxo-escuro);
+    color: #ffffff;
+    width: 100%;
+  }
+  

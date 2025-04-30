@@ -1,1 +1,1 @@
-repositório do MindFlow na versão configurada para rodar no Docker
+Repositório provisório do MindFlow, essa versão foi configurada para rodar no Docker

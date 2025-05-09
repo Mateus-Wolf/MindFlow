@@ -26,6 +26,14 @@ const PacientesLista = () => {
 
     const usuarioId = localStorage.getItem('usuarioId');
 
+    const capitalizarNome = (nome) => {
+        return nome
+            .toLowerCase()
+            .split(' ')
+            .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+            .join(' ');
+    };
+    
     useEffect(() => {
         const fetchPacientes = async () => {
             try {
@@ -67,7 +75,7 @@ const PacientesLista = () => {
                 {filteredPacientes.map((paciente) => (
                     <div key={paciente.id} className="paciente-item">
                         <div className="paciente-info">
-                            <h4>{paciente.nome}</h4>
+                        <h4>{capitalizarNome(paciente.nome)}</h4>
                             <p>Idade: {paciente.idade}</p>
                         </div>
                         <div className="paciente-botoes">

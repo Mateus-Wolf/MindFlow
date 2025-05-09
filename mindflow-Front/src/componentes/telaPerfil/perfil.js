@@ -154,6 +154,14 @@ const Perfil = () => {
         setUsuario({ ...usuario, nascimento: value });
     };
 
+    const capitalizarNome = (nome) => {
+        return nome
+            .toLowerCase()
+            .split(' ')
+            .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+            .join(' ');
+    };    
+
     return (
         <div id="tudo">
             <Header />
@@ -165,62 +173,63 @@ const Perfil = () => {
                         <img src="mindflow\src\icones\perfil_PlaceHolder.png" className="avatar" />
                     )}
                 </div>
-
-                <div className="perfil-opcoes">
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="nome">Nome:</label>
-                            <input
-                                type="text"
-                                id="nome"
-                                value={usuario.nome || ''}
-                                onChange={(e) => setUsuario({ ...usuario, nome: e.target.value })}
-                                disabled={!editable}
-                            />
+                <div id="dadosPerfil">
+                    <div className="perfil-opcoes">
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="nome">Nome:</label>
+                                <input
+                                    type="text"
+                                    id="nome"
+                                    value={editable ? usuario.nome || '' : capitalizarNome(usuario.nome || '')}
+                                    onChange={(e) => setUsuario({ ...usuario, nome: e.target.value })}
+                                    disabled={!editable}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">Email:</label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    value={usuario.email || ''}
+                                    onChange={(e) => setUsuario({ ...usuario, email: e.target.value })}
+                                    disabled={!editable}
+                                />
+                            </div>
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email:</label>
-                            <input
-                                type="email"
-                                id="email"
-                                value={usuario.email || ''}
-                                onChange={(e) => setUsuario({ ...usuario, email: e.target.value })}
-                                disabled={!editable}
-                            />
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="nascimento">Nascimento:</label>
+                                <InputMask
+                                    mask="99/99/9999"
+                                    id="nascimento"
+                                    value={usuario.nascimento || ''}
+                                    onChange={(e) => handleDateChange(e.target.value)}
+                                    disabled={!editable}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="imagem">Foto de Perfil:</label>
+                                <input
+                                    type="file"
+                                    id="imagem"
+                                    onChange={handleImageChange}
+                                    disabled={!editable}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="nascimento">Nascimento:</label>
-                            <InputMask
-                                mask="99/99/9999"
-                                id="nascimento"
-                                value={usuario.nascimento || ''}
-                                onChange={(e) => handleDateChange(e.target.value)}
-                                disabled={!editable}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="imagem">Foto de Perfil:</label>
-                            <input
-                                type="file"
-                                id="imagem"
-                                onChange={handleImageChange}
-                                disabled={!editable}
-                            />
-                        </div>
+                    <div className="botoes">
+                        {editable ? (
+                            <>
+                                <button onClick={handleSave} className="buttonDados">Salvar</button>
+                                <button onClick={toggleEdit} className="buttonDados">Cancelar</button>
+                            </>
+                        ) : (
+                            <button onClick={toggleEdit} className="buttonDados">Editar</button>
+                        )}
+                        <button className="delete-account" onClick={handleLogout}>Sair</button>
                     </div>
-                </div>
-                <div className="botoes">
-                    {editable ? (
-                        <>
-                            <button onClick={handleSave} className="buttonDados">Salvar</button>
-                            <button onClick={toggleEdit} className="buttonDados">Cancelar</button>
-                        </>
-                    ) : (
-                        <button onClick={toggleEdit} className="buttonDados">Editar</button>
-                    )}
-                    <button className="delete-account" onClick={handleLogout}>Sair</button>
                 </div>
             </div>
         </div>

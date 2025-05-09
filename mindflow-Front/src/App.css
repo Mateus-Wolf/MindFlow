@@ -28,9 +28,30 @@
 
 #tituloPrincipal {
   font-family: 'tituloAnurati';
-  font-size: 75px;
+  font-size: 80px;
   margin-top: 85px;
+  text-align: center;
   color: whitesmoke;
+}
+
+#slogan {
+  color: whitesmoke;
+  font-size: 22px;
+  margin-top: 6px;
+  text-align: center;
+}
+
+#nomeAutor {
+  color: whitesmoke;
+  font-size: 30px;
+  text-align: center;
+}
+
+#textoFrase {
+  color: whitesmoke;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 95px;
 }
 
 a {
@@ -70,7 +91,7 @@ a:hover {
   background-image: url('./imagens/backgroundHome.jpg');
   background-size: 150%;
   background-repeat: no-repeat;
-  filter: blur(8px);
+  filter: blur(11px);
   z-index: -1;
 }
 

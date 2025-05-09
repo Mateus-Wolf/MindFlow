@@ -4,6 +4,11 @@
     padding: 20px;
 }
 
+#tituloBusca {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
 .historico-titulos {
     display: flex;
     justify-content: center;
@@ -23,6 +28,11 @@
 .historico-titulos h3:hover {
     color: #ffffff;
     background-color: var(--roxo-escuro);
+}
+
+.historico-titulos h3.ativo {
+    background-color: var(--roxo-escuro);
+    color: #ffffff;
 }
 
 .historico-item ul {

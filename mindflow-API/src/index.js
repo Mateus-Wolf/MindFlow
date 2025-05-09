@@ -3,7 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const cron = require('node-cron');
 const db = require('./db')
-const allowedOrigins = ['http://localhost:3001', 'http://mindflow-api:3000'];
+const allowedOrigins = ['http://localhost:3001', 'http://mindflow-api:3000', 'http://localhost:3000'];
 
 
 // Importação das Rotas

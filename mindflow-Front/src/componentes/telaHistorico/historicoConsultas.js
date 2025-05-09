@@ -90,11 +90,11 @@ function HistoricoConsultas() {
         <div className="tudo">
             <Header />
             <div className="historico-container">
-                <h2 style={{ textAlign: 'center' }}>Histórico de Consultas</h2>
+                <h2 id='tituloBusca'>Histórico de Consultas</h2>
 
                 <input 
                     type="text" 
-                    placeholder="Buscar por nome do paciente" 
+                    placeholder="Buscar por nome de paciente" 
                     value={searchTerm} 
                     onChange={(e) => setSearchTerm(e.target.value)} 
                     style={{ marginBottom: '20px', padding: '10px', width: '100%' }}

@@ -105,10 +105,6 @@ const PacienteDados = () => {
     const formattedCPF = formData.cpf ? formatCPF(formData.cpf) : '';
     const formattedCEP = formData.cep ? formatCEP(formData.cep) : '';
 
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
-
     return (
         <div id="tudo">
             <Header />

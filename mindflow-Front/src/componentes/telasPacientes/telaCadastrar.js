@@ -12,56 +12,107 @@ const PacienteCadastro = ({ usuarioId }) => {
     const [email, setEmail] = useState('');
     const [telefone, setTelefone] = useState('');
     const [estadoCivil, setEstadoCivil] = useState('casado');
+    
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        const usuarioId = localStorage.getItem('usuarioId');
-        console.log(usuarioId)
-    
-        const pacienteData = {
-            usuario_ID: usuarioId,
-            nome,
-            idade,
-            cpf,
-            cep,
-            genero,
-            email,
-            telefone,
-            estado_civil: estadoCivil,
-        };
-    
-        const allFieldsFilled = Object.values(pacienteData).every((value) => value !== undefined && value !== '');
-        if (!allFieldsFilled) {
-            console.error('Todos os campos devem ser preenchidos.');
-            return;
-        }
-    
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/pacientes`, pacienteData, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            console.log('Paciente cadastrado com sucesso:', response.data);
-    
-            Swal.fire({
-                title: 'Sucesso!',
-                text: 'Paciente cadastrado com sucesso!',
-                icon: 'success',
-                confirmButtonText: 'Ok'
-            }).then(() => {
-                window.location.href = 'telaListar';
-            });
-    
-        } catch (error) {
-            console.log("Dados enviados:", JSON.stringify(pacienteData, null, 2));
+    const usuarioId = localStorage.getItem('usuarioId');
 
-            console.error('Erro ao cadastrar paciente:', error.response ? error.response.data : error.message);
-        }
+    const cpfLimpo = cpf.replace(/\D/g, '');
+    const cepLimpo = cep.replace(/\D/g, '');
+    const telefoneLimpo = telefone.replace(/\D/g, '');
+
+    const pacienteData = {
+        usuario_ID: usuarioId,
+        nome,
+        idade,
+        cpf: cpfLimpo,
+        cep: cepLimpo,
+        genero,
+        email,
+        telefone: telefoneLimpo,
+        estado_civil: estadoCivil,
     };
-    
-    
+
+    // Validações
+    if (!nome || nome.trim().length < 2) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'Nome inválido',
+            text: 'O nome deve conter pelo menos 2 caracteres.',
+        });
+    }
+
+    if (!idade || isNaN(idade) || parseInt(idade) <= 0) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'Idade inválida',
+            text: 'A idade deve ser um número positivo.',
+        });
+    }
+
+    if (!cpfLimpo || cpfLimpo.length !== 11) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'CPF inválido',
+            text: 'O CPF deve conter exatamente 11 números.',
+        });
+    }
+
+    if (!cepLimpo || cepLimpo.length !== 8) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'CEP inválido',
+            text: 'O CEP deve conter exatamente 8 números.',
+        });
+    }
+
+    if (!telefoneLimpo || telefoneLimpo.length < 8) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'Telefone inválido',
+            text: 'O telefone deve conter pelo menos 8 números.',
+        });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'Email inválido',
+            text: 'Digite um email válido no formato: exemplo@email.com',
+        });
+    }
+
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/pacientes`, pacienteData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+
+        Swal.fire({
+            title: 'Sucesso!',
+            text: 'Paciente cadastrado com sucesso!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        }).then(() => {
+            window.location.href = 'telaListar';
+        });
+
+    } catch (error) {
+        console.log("Dados enviados:", JSON.stringify(pacienteData, null, 2));
+        console.error('Erro ao cadastrar paciente:', error.response ? error.response.data : error.message);
+
+        Swal.fire({
+            title: 'Erro!',
+            text: 'Erro ao cadastrar paciente. Verifique os dados e tente novamente.',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        });
+    }
+};
+
     return (
         <div id="tudo">
             <Header />

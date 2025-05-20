@@ -265,7 +265,7 @@ const Agendamentos = () => {
                   <button className="btn btnCancelar" onClick={closePopup}>Fechar</button>
                 </>
               ) : (
-                <form id='form-Agendamento-PopUp'>
+                <form id='form-Agendamento-PopUp' className="create-form-animate">
                   <div className="form-group">
                     <label>Paciente</label>
                     <select

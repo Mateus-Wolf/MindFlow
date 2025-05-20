@@ -7,6 +7,10 @@ const PacientesLista = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [pacientes, setPacientes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const capitalizarPrimeiraLetra = (palavra) => {
+        if (!palavra) return '';
+        return palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase();
+    };
 
     const navigate = useNavigate();
 
@@ -33,7 +37,7 @@ const PacientesLista = () => {
             .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
             .join(' ');
     };
-    
+
     useEffect(() => {
         const fetchPacientes = async () => {
             try {
@@ -49,10 +53,6 @@ const PacientesLista = () => {
 
         fetchPacientes();
     }, [usuarioId]);
-
-    if (loading) {
-        return <div>Carregando...</div>;
-    }
 
     const filteredPacientes = pacientes.filter((paciente) =>
         paciente.nome.toLowerCase().includes(searchTerm.toLowerCase())
@@ -71,12 +71,12 @@ const PacientesLista = () => {
                         onChange={handleSearchChange}
                     />
                 </div>
-
                 {filteredPacientes.map((paciente) => (
                     <div key={paciente.id} className="paciente-item">
                         <div className="paciente-info">
-                        <h4>{capitalizarNome(paciente.nome)}</h4>
-                            <p>Idade: {paciente.idade}</p>
+                            <h4>{capitalizarNome(paciente.nome)}</h4>
+                            <p>{paciente.idade}</p>
+                            <p>{capitalizarPrimeiraLetra(paciente.genero)}</p>
                         </div>
                         <div className="paciente-botoes">
                             <button className="btn-opcao" onClick={() => handleClick(paciente.id)}>Dados</button>
@@ -84,6 +84,7 @@ const PacientesLista = () => {
                         </div>
                     </div>
                 ))}
+
             </div>
         </div>
     );

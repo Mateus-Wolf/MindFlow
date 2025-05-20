@@ -37,27 +37,25 @@ const Login = ({ voltar }) => {
 
     const atualizarSenha = async (e) => {
         e.preventDefault();
-    
+
         if (novaSenha !== confirmarSenha) {
             setMensagemErro('As senhas não coincidem.');
             return;
         }
-    
+
         const dados = {
             email,
             novaSenha,
             codigoRecuperacao: codigo,
         };
-    
+
         try {
-            const resposta = await fetch('http://mindflow-api:3000/api/atualizar-senha', {
+            const resposta = await fetch(`${process.env.REACT_APP_API_URL}/api/atualizar-senha`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(dados),
             });
-    
+
             if (resposta.ok) {
                 const json = await resposta.json();
                 Swal.fire({
@@ -69,15 +67,15 @@ const Login = ({ voltar }) => {
                 });
             } else {
                 const erro = await resposta.json();
-                console.error('Erro ao atualizar senha:', erro);  
+                console.error('Erro ao atualizar senha:', erro);
                 setMensagemErro(erro.message || 'Erro ao atualizar a senha');
             }
         } catch (error) {
             console.error('Erro na requisição de atualização de senha:', error);
             setMensagemErro('Erro ao atualizar a senha. Tente novamente.');
         }
-    };  
-    
+    };
+
     const enviarCodigoEmail = async () => {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/verificar-email`, { email });

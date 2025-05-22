@@ -54,4 +54,25 @@ router.put('/:id/imagem', upload.single('imagem'), atualizarImagemUsuario);
 // Nova rota para obter a imagem
 router.get('/:id/imagem', obterImagemUsuario);
 
+// Nova função para remover a imagem do usuário
+const removerImagemUsuario = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await db.query('UPDATE usuarios SET imagem = NULL WHERE id = $1', [id]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Usuário não encontrado.' });
+        }
+
+        return res.status(200).json({ message: 'Imagem removida com sucesso.' });
+    } catch (error) {
+        console.error('Erro ao remover imagem:', error);
+        return res.status(500).json({ error: 'Erro ao remover imagem: ' + error.message });
+    }
+};
+
+// Rota para remover imagem
+router.delete('/:id/imagem', removerImagemUsuario);
+
 module.exports = router;

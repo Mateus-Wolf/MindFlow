@@ -84,6 +84,19 @@
 .password-toggle:hover {
     color: #4b2284;
 }
+
+.form:focus {
+    border-color: #ff5722;
+    background-color: #fff;
+    transform: scale(1.02);
+    color: #333;
+}
+
+.form:focus {
+    box-shadow: 0 0 10px rgba(255, 87, 34, 0.2);
+}
+
+
 /* Fim da Customização do Formulario */
 
 

@@ -90,6 +90,22 @@ const Perfil = () => {
         }
     };
 
+    const handleRemoveImage = () => {
+        Swal.fire({
+            title: 'Remover imagem?',
+            text: 'Sua foto de perfil será removida.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sim, remover',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setImagem(null);
+                setImagemFile(null);
+            }
+        });
+    };
+
     const handleSave = async () => {
         const token = localStorage.getItem('token');
         const usuarioToSave = {
@@ -98,7 +114,6 @@ const Perfil = () => {
         };
 
         try {
-            // Verificar se o novo e-mail já está em uso por outro usuário
             if (usuario.email !== usuarioToSave.email) {
                 const emailCheckResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/usuarios/email/${usuarioToSave.email}`, {
                     headers: {
@@ -119,10 +134,6 @@ const Perfil = () => {
             });
 
             if (imagemFile) {
-                if (!usuario.id) {
-                    throw new Error('ID do usuário não encontrado');
-                }
-
                 const formData = new FormData();
                 formData.append('imagem', imagemFile);
 
@@ -130,6 +141,12 @@ const Perfil = () => {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'multipart/form-data',
+                    },
+                });
+            } else if (imagem === null) {
+                await axios.delete(`${process.env.REACT_APP_API_URL}/api/usuarios/${usuario.id}/imagem`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
                     },
                 });
             }
@@ -160,7 +177,7 @@ const Perfil = () => {
             .split(' ')
             .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
             .join(' ');
-    };    
+    };
 
     return (
         <div id="tudo">
@@ -170,7 +187,7 @@ const Perfil = () => {
                     {imagem ? (
                         <img src={imagem} alt="Imagem do Usuário" className="avatar" />
                     ) : (
-                        <img src="mindflow\src\icones\perfil_PlaceHolder.png" className="avatar" />
+                        <img src="mindflow/src/icones/perfil_PlaceHolder.png" className="avatar" />
                     )}
                 </div>
                 <div id="dadosPerfil">
@@ -208,15 +225,35 @@ const Perfil = () => {
                                     disabled={!editable}
                                 />
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="imagem">Foto de Perfil:</label>
-                                <input
-                                    type="file"
-                                    id="imagem"
-                                    onChange={handleImageChange}
-                                    disabled={!editable}
-                                />
-                            </div>
+<div className="form-group">
+    <label htmlFor="imagem">Foto de Perfil:</label>
+
+    <input
+        type="file"
+        id="imagem"
+        onChange={handleImageChange}
+        disabled={!editable}
+        style={{ display: 'none' }}
+    />
+
+    {editable && (
+        <div className="upload-button-group">
+            <label htmlFor="imagem" className="custom-upload-button">
+                Enviar nova imagem
+            </label>
+            {imagem && (
+                <button
+                    type="button"
+                    className="buttonRemoverFoto"
+                    onClick={handleRemoveImage}
+                >
+                    Remover Foto
+                </button>
+            )}
+        </div>
+    )}
+</div>
+
                         </div>
                     </div>
                     <div className="botoes">

@@ -1,63 +1,106 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaUser, FaCalendarAlt, FaUsers, FaHistory, FaChevronDown } from "react-icons/fa";
 
 const Header = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const usuarioId = localStorage.getItem("usuarioId");
 
-    const usuarioId = localStorage.getItem('usuarioId');
-
+    const toggleMenu = () => setMenuOpen((prev) => !prev);
     const toggleDropdown = (e) => {
         e.preventDefault();
-        setIsOpen(prev => !prev);
+        setDropdownOpen((prev) => !prev);
     };
 
     return (
         <div id="header">
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" id="tituloHeader" to="/home">MINDFLOW</Link>
+                    <Link className="navbar-brand" id="tituloHeader" to="/home">
+                        MINDFLOW
+                    </Link>
                     <button
                         className="navbar-toggler"
                         type="button"
-                        onClick={() => setIsOpen(prev => !prev)}
-                        aria-expanded={isOpen}
+                        onClick={toggleMenu}
+                        aria-expanded={menuOpen}
                         aria-label="Toggle navigation"
                     >
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}>
+
+                    <div className={`collapse navbar-collapse ${menuOpen ? "show" : ""}`}>
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/perfil">Perfil</Link>
+                                <Link className="nav-link" to="/perfil">
+                                    <FaUser className="icon-margin-right" />
+                                    Perfil
+                                </Link>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/agendamentos">Agendamentos</Link>
+                                <Link className="nav-link" to="/agendamentos">
+                                    <FaCalendarAlt className="icon-margin-right" />
+                                    Agendamentos
+                                </Link>
                             </li>
-                            <li className="nav-item dropdown">
+
+                            <li className="nav-item dropdown" style={{ position: "relative" }}>
                                 <a
-                                    className="nav-link dropdown-toggle"
                                     href="#"
+                                    className="nav-link"
                                     role="button"
                                     onClick={toggleDropdown}
-                                    aria-expanded={isOpen}
+                                    aria-expanded={dropdownOpen}
+                                    aria-haspopup="true"
                                 >
-                                    Pacientes
+                                    <FaUsers className="icon-margin-right" />
+                                    Pacientes <FaChevronDown className="icon-margin-left" size={12} />
                                 </a>
-                                <motion.ul
-                                    className={`dropdown-menu ${isOpen ? 'show' : ''}`}
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ opacity: isOpen ? 1 : 0, height: isOpen ? "auto" : 0 }}
-                                    exit={{ opacity: 0, height: 0 }}
-                                    transition={{ duration: 0.3 }}
-                                    style={{ overflow: 'hidden' }}
-                                >
-                                    <li><Link className="dropdown-item" to="/telaListar">Todos Pacientes</Link></li>
-                                    <li><Link className="dropdown-item" to="/telaCadastrar">Cadastrar Paciente</Link></li>
-                                </motion.ul>
+
+                                <AnimatePresence>
+                                    {dropdownOpen && (
+                                        <motion.ul
+                                            className="dropdown-menu show"
+                                            initial={{ opacity: 0, scale: 0.95 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.95 }}
+                                            transition={{ duration: 0.15 }}
+                                            style={{
+                                                position: "absolute",
+                                                top: "100%",
+                                                left: 0,
+                                                minWidth: "10rem",
+                                                zIndex: 1000,
+                                                backgroundColor: "#0c001c",
+                                                borderRadius: "0.25rem",
+                                                boxShadow: "0 0.5rem 1rem rgb(0 0 0 / 0.15)",
+                                                pointerEvents: dropdownOpen ? "auto" : "none",
+                                                overflow: "hidden",
+                                            }}
+                                        >
+                                            <li>
+                                                <Link className="dropdown-item" to="/telaListar" onClick={() => setDropdownOpen(false)}>
+                                                    Todos Pacientes
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link className="dropdown-item" to="/telaCadastrar" onClick={() => setDropdownOpen(false)}>
+                                                    Cadastrar Paciente
+                                                </Link>
+                                            </li>
+                                        </motion.ul>
+                                    )}
+                                </AnimatePresence>
                             </li>
+
+
                             <li className="nav-item">
-                                <Link className="nav-link" to={`/historicoConsultas/${usuarioId}`}>Histórico de Consultas</Link>
+                                <Link className="nav-link" to={`/historicoConsultas/${usuarioId}`}>
+                                    <FaHistory className="icon-margin-right" />
+                                    Histórico de Consultas
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -65,6 +108,6 @@ const Header = () => {
             </nav>
         </div>
     );
-}
+};
 
 export default Header;

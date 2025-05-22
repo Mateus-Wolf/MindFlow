@@ -6,7 +6,6 @@
     background-color: var(--roxo-fundo);
     color: #fff;
     padding-bottom: 30px;
-    
 }
 
 .perfil-container {
@@ -14,8 +13,8 @@
 }
 
 .avatar-placeholder {
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
     background-color: #555;
     border-radius: 50%;
     margin: 20px auto;
@@ -58,8 +57,98 @@
 }
 
 .avatar {
-    width: 150px;
-    height: 150px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.buttonDados {
+    background-color: var(--roxo-botao);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buttonDados:hover {
+    background-color: var(--roxo-hover);
+}
+
+.buttonCancelar {
+    background-color: var(--cinza-claro);
+    color: #333;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttonCancelar:hover {
+    background-color: #bbb;
+}
+
+.buttonRemoverFoto {
+    background-color: var(--vermelho-cancelar);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttonRemoverFoto:hover {
+    background-color: #ff0000;
+}
+
+.custom-upload-button {
+    display: inline-block;
+    background-color: var(--roxo-destaque);
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.custom-upload-button:hover {
+    background-color: var(--roxo-hover);
+}
+
+.upload-button-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: nowrap;
+    margin-top: 10px;
+}
+
+.upload-button-group button,
+.upload-button-group .custom-upload-button {
+    height: 40px;
+    flex: 1;
+    min-width: 150px;
+    max-width: 510px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+    .upload-button-group {
+        flex-wrap: wrap;
+    }
+    .upload-button-group button,
+    .upload-button-group .custom-upload-button {
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+    }
 }

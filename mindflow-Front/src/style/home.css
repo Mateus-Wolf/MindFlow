@@ -1,193 +1,275 @@
-/* Incio da customização do Header*/
-    #header {
-        background-color: #0C001C;
-    }
+/* Inicio da customização do Header */
+#header {
+  background-color: #0c001c;
+  width: 100%;
+  overflow-x: visible;
+  overflow-y: visible;
+  padding: 10px 0;
+}
 
-    #tituloHeader {
-        font-size: 40px;
-        margin-left: 10px;
-        font-family: 'tituloAnurati';
-        color: whitesmoke
-    }
+#tituloHeader {
+  font-size: clamp(24px, 5vw, 55px);
+  margin-left: 10px;
+  padding-right: 20px;
+  font-family: "tituloAnurati";
+  color: whitesmoke;
+  white-space: nowrap;
+}
 
-    .navbar .nav-link,
-    .navbar .navbar-brand,
-    .navbar .dropdown-toggle {
-        color: white;
-        font-size: 25px;
-    }
+.navbar-nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
 
-    .nav-item .nav-link.dropdown-toggle {
-        transition: color 0.3s ease;
-    }
+.nav-item {
+  padding: 10px 0;
+  max-width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+}
 
-    .nav-item .nav-link.dropdown-toggle:hover,
-    .nav-item .nav-link.dropdown-toggle:focus,
-    .nav-item .nav-link.dropdown-toggle:active {
-        color: rgb(167, 167, 167);
-    }
-/* Fim da customização do Header*/
+.navbar .nav-link,
+.navbar .navbar-brand,
+.navbar .dropdown-toggle {
+  color: white;
+  font-size: clamp(16px, 2.5vw, 25px);
+  text-decoration: none;
+  padding: 5px 10px;
+}
 
+.navbar .nav-link:hover,
+.navbar .dropdown-toggle:hover {
+  color: rgb(167, 167, 167);
+  text-decoration: none;
+}
 
+.nav-item.dropdown {
+  position: relative;
+}
 
-/* Inicio da customização dos Compromissos*/
-    #compromissos {
-        background-color: #150031;
-        color: white;
-        padding: 20px;
-    }
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  min-width: 10rem;
+  z-index: 1000;
+  background-color: #0c001c;
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 0.15);
+  padding: 0.5rem 0;
+}
 
-    h3 {
-        font-size: 24px;
-    }
+.dropdown-menu.show {
+  display: block;
+}
 
-    h3 .destaque {
-        font-weight: bold;
-        font-size: 25px;
-        color: #e5e5e5; /* tom mais claro */
-    }
+.dropdown-item {
+  color: whitesmoke;
+  font-size: 20px;
+  padding: 8px 20px;
+}
 
-    p {
-        font-size: 14px;
-        margin-bottom: 20px;
-    }
+.dropdown-item:hover {
+  background-color: var(--roxo-destaque);
+  color: whitesmoke;
+  text-decoration: none;
+}
 
-    #dataComp{
-        font-size: 18px;
-    }
+@media (max-width: 768px) {
+  #tituloHeader {
+    font-size: 28px;
+    padding-right: 10px;
+  }
 
-    .ver-todos {
-        float: right;
-        font-size: 18px;
-        color: #ffffff;
-        cursor: pointer;
-    }
+  .navbar-nav {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    padding-left: 0;
+  }
 
-    .compromisso-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: linear-gradient(90deg, rgba(119,0,255,1) 0%, rgba(166,58,255,1) 100%);
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-    }
+  .nav-item {
+    padding: 8px 0;
+    width: 100%;
+    max-width: 300px;
+  }
 
-    .hora {
-        display: flex;
-        align-items: center;
-        font-size: 16px;
-    }
+  .navbar .nav-link,
+  .navbar .navbar-brand,
+  .navbar .dropdown-toggle {
+    font-size: 18px;
+  }
+}
 
-    .indicador {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        margin-right: 8px;
-    }
+.icon-margin-right {
+  margin-right: 5px;
+}
 
-    .indicador.red {
-        background-color: red;
-    }
-
-    .indicador.yellow {
-        background-color: yellow;
-    }
-
-    .consulta {
-        font-size: 16px;
-    }
-
-    .link-paciente {
-        color: whitesmoke; /* Azul padrão para links */
-        cursor: pointer; /* Muda o cursor para indicar que é clicável */
-    }
-    
-    .link-paciente:hover {
-        text-decoration: none; /* Remove o sublinhado ao passar o mouse */
-        color: rgb(201, 201, 201); /* Cor ao passar o mouse */
-    }
-    
-/* Fim da customização dos Compromissos*/
-
+.icon-margin-left {
+  margin-left: 5px;
+}
+/* Fim da customização do Header */
 
 
-/* Inicio da customização dos Pacientes*/
-    #pacientes-recentes {
-        color: white;
-        padding: 20px;
-        background-color: #150031;
-    }
+/* Inicio da customização dos Compromissos */
+#compromissos {
+    background-color: #150031;
+    color: white;
+    padding: 20px;
+}
 
-    h3 {
-        font-size: 22px;
-    }
+h3 {
+    font-size: 24px;
+}
 
-    .ver-todos {
-        float: right;
-        font-size: 12px;
-        color: #999;
-        cursor: pointer;
-    }
+h3 .destaque {
+    font-weight: bold;
+    font-size: 25px;
+    color: #e5e5e5;
+}
 
-    .paciente-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #0C001C; /* Fundo mais escuro */
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-    }
+p {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
 
-    .paciente-img {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 15px;
-    }
+#dataComp {
+    font-size: 18px;
+}
 
-    .paciente-info {
-        flex-grow: 1;
-        font-size: 14px;
-    }
+.ver-todos {
+    float: right;
+    font-size: 18px;
+    color: #ffffff;
+    cursor: pointer;
+}
 
-    .paciente-info h4 {
-        margin: 0;
-        font-size: 16px;
-        color: #e5e5e5;
-    }
+.compromisso-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(119,0,255,1) 0%, rgba(166,58,255,1) 100%);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
 
-    .paciente-info p {
-        margin: 5px 0 0;
-        font-size: 12px;
-        color: #aaa;
-    }
+.hora {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+}
 
-    .idade {
-        margin-left: 5px;
-    }
+.indicador {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
 
-    .paciente-consulta {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-    }
+.indicador.red {
+    background-color: red;
+}
 
-    .btn-horario {
-        background: linear-gradient(90deg, rgba(119,0,255,1) 0%, rgba(166,58,255,1) 100%);
-        border: none;
-        border-radius: 10px;
-        color: white;
-        padding: 5px 10px;
-        font-size: 12px;
-        cursor: pointer;
-    }
+.indicador.yellow {
+    background-color: yellow;
+}
 
-    .btn-horario.secundario {
-        background-color: #333;
-    }
+.consulta {
+    font-size: 16px;
+}
 
-/* Fim da customização dos Pacientes*/
+.link-paciente {
+    color: whitesmoke;
+    cursor: pointer;
+}
+
+.link-paciente:hover {
+    text-decoration: none;
+    color: rgb(201, 201, 201);
+}
+/* Fim da customização dos Compromissos */
+
+
+/* Inicio da customização dos Pacientes */
+#pacientes-recentes {
+    color: white;
+    padding: 20px;
+    background-color: #150031;
+}
+
+h3 {
+    font-size: 22px;
+}
+
+.ver-todos {
+    float: right;
+    font-size: 12px;
+    color: #999;
+    cursor: pointer;
+}
+
+.paciente-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #0C001C;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.paciente-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.paciente-info {
+    flex-grow: 1;
+    font-size: 14px;
+}
+
+.paciente-info h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #e5e5e5;
+}
+
+.paciente-info p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: #aaa;
+}
+
+.idade {
+    margin-left: 5px;
+}
+
+.paciente-consulta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.btn-horario {
+    background: linear-gradient(90deg, rgba(119,0,255,1) 0%, rgba(166,58,255,1) 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-horario.secundario {
+    background-color: #333;
+}
+/* Fim da customização dos Pacientes */

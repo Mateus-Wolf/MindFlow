@@ -69,6 +69,7 @@ a:hover {
   font-weight: normal;
   font-family: 'textosGerais';
   font-size: 22px;
+  text-align: center;
 }
 
 #conteudoEsquerda {
@@ -150,7 +151,7 @@ a:hover {
 
 .saibaMais {
   width: 290px;
-  margin: 5px;
+  margin: 15px;
   background-color: rgb(71, 6, 135);
   border-radius: 15px;
   color: whitesmoke;

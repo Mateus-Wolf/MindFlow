@@ -3,6 +3,12 @@
     padding: 20px;
     height: 100%;
     background-color: var(--roxo-fundo);
+    animation: fadeIn 0.2s ease-out;
+}
+
+#divisaPaciente {
+    width: 80px;
+    height: -100px;
 }
 
 #tudo {
@@ -15,14 +21,17 @@
 .search-bar {
     display: flex;
     align-items: center;
+    gap: 10px;
     margin-bottom: 20px;
     margin-left: -10px;
+    position: relative;
 }
 
 .search-input {
     flex-grow: 1;
+    flex: 1;
     padding: 8px;
-    border-radius: 10px;
+    border-radius: 4px;
     border: none;
     margin: 0 10px;
 }
@@ -37,6 +46,46 @@
     cursor: pointer;
 }
 
+.btn-filtros {
+    padding: 10px 10px;
+    background: var(--roxo-gradiente);
+    color: whitesmoke;
+    cursor: pointer;
+    border: none;
+    border-radius: 25px;
+}
+
+.menu-filtros {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    background: var(--roxo-fundo);
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 8px;
+    z-index: 99;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+}
+
+.menu-filtros select,
+.menu-filtros input {
+    padding: 5px;
+    font-size: 14px;
+}
+
+.btn-limpar {
+    padding: 5px 10px;
+    background: var(--roxo-gradiente);
+    color: whitesmoke;
+    cursor: pointer;
+    border: none;
+    border-radius: 25px;
+}
+
 .paciente-item {
     display: flex;
     align-items: center;
@@ -45,6 +94,7 @@
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
+    animation: fadeInSlideUp 0.3s ease-in-out;
 }
 
 .paciente-img {
@@ -58,6 +108,11 @@
     flex-grow: 1;
     margin-left: 10px;
     font-size: 16px;
+}
+
+.divisa-paciente {
+    margin: 5px 0;
+    width: 100px;
 }
 
 .paciente-botoes {
@@ -77,50 +132,112 @@
     cursor: pointer;
 }
 
+.loading-container {
+    text-align: center;
+    margin-top: 2rem;
+}
 
+.spinner {
+    border: 4px solid #e4e4e7;
+    border-top: 4px solid #4f46e5;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.nenhum-paciente {
+    margin-top: 160px;
+    text-align: center;
+    color: #888;
+}
+
+/* Form e botões adicionais que você já tinha */
 .form-container {
     background-color: var(--roxo-fundo);
-    padding: 10px;
     padding: 15px;
 }
-  
+
 .form-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
 }
-  
+
 .form-group {
     flex: 1;
     margin-right: 10px;
 }
-  
+
 .form-group:last-child {
     margin-right: 0;
 }
-  
+
 label {
     display: block;
     color: #fff;
     margin-bottom: 5px;
 }
-  
+
 input, select {
     width: 100%;
     padding: 8px;
     border: none;
     border-radius: 5px;
 }
-  
+
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 8px var(--roxo-destaque);
+    border-radius: 5px;
+    border: 1px solid var(--roxo-destaque);
+    background-color: var(--roxo-escuro);
+    transition: box-shadow 0.3s ease, background-color 0.3s ease;
+    color: whitesmoke;
+}
+
 .submit-button {
     background-color: var(--roxo-destaque);
     color: #fff;
-    padding: 10px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 100%;
-    margin-top: 25px;
+    width: fit-content;
+    display: block;
+    margin: 25px auto 0 auto;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
 }
 
 .delete-button {
@@ -161,65 +278,13 @@ input, select {
     gap: 10px;
 }
 
-#paciente-dados{
+#paciente-dados {
     padding: 15px;
 }
 
-/* Estilo geral para os campos */
+/* Estilo geral para os campos desabilitados */
 .form-group input[disabled], .form-group select[disabled], .form-group textarea[disabled] {
     background-color: var(--roxo-escuro);
     color: #ffffff;
     width: 100%;
-  }
-  
-.paciente-item {
-  animation: fadeInSlideUp 0.3s ease-in-out;
-}
-
-@keyframes fadeInSlideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Botão de cadastrar paciente com leve animação ao hover */
-.submit-button {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: fit-content;
-  padding: 10px 20px;
-  display: block;
-  margin: 25px auto 0 auto;
-}
-.submit-button:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 8px rgba(0,0,0,0.15);
-}
-
-/* Animação para o container da lista */
-#pacientes-lista {
-  animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-input:focus, select:focus {
-    outline: none;
-    box-shadow: 0 0 8px var(--roxo-destaque);
-    border-radius: 5px;
-    border: 1px solid var(--roxo-destaque);
-    background-color: var(--roxo-escuro);
-    transition: box-shadow 0.3s ease, background-color 0.3s ease;
-    color: whitesmoke;
 }

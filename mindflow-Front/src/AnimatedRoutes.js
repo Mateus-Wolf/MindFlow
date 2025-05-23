@@ -1,8 +1,7 @@
 import React from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { AnimatePresence, motion } from 'framer-motion';
 
-// importa todas as suas telas
 import Login from './componentes/telaIncial/bemVindo';
 import Home from './componentes/telaHome/home';
 import Perfil from './componentes/telaPerfil/perfil';
@@ -21,13 +20,16 @@ const AnimatedRoutes = () => {
   const location = useLocation();
 
   return (
-    <TransitionGroup component={null}>
-      <CSSTransition
+    <AnimatePresence mode="wait">
+      <motion.div
+        layout
         key={location.pathname}
-        classNames="page"
-        timeout={300}
-        unmountOnExit
+        initial={{ opacity: 50 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 10 }} //alterar para 0 se quiser um fade em branco
+        transition={{ duration: 0.1 }}
       >
+
         <Routes location={location}>
           <Route path="/" element={<Login />} />
           <Route path="/home" element={<Home />} />
@@ -43,8 +45,8 @@ const AnimatedRoutes = () => {
           <Route path="/registroHumorAvaliacao/:id" element={<RegistroHumorAvaliacao />} />
           <Route path="/historicoConsultas/:id" element={<HistoricoConsultas />} />
         </Routes>
-      </CSSTransition>
-    </TransitionGroup>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

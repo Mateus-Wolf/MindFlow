@@ -6,9 +6,8 @@ import './style/pacientes.css';
 import './style/agendamentos.css';
 import './style/registrohumor.css';
 import './style/historico.css';
-import './style/animations.css'; // Vamos criar esse já já
+import './style/animations.css';
 
-import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AnimatedRoutes from './AnimatedRoutes';
 

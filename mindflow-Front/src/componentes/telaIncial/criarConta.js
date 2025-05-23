@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { motion } from 'framer-motion';
+import AnimatedEye from '../iconesAnimados/AnimatedEye';
 
 const CriarConta = ({ voltar, irParaLogin }) => {
   const [nome, setNome] = useState('');
@@ -28,13 +30,10 @@ const CriarConta = ({ voltar, irParaLogin }) => {
   const handleCreateAccount = async (event) => {
     event.preventDefault();
 
-    // Verifica se as senhas inseridas coincidem
     if (senha !== senhaRepetida) {
       setErro('As SENHAS não coincidem, por favor, verifique!');
-      return; // Interrompe se as senhas não coincidirem
+      return;
     }
-
-    console.log('pre-response')
 
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/usuarios/register`, {
       method: 'POST',
@@ -43,19 +42,14 @@ const CriarConta = ({ voltar, irParaLogin }) => {
       },
       body: JSON.stringify({ nome, email, nascimento, senha, tipo_usuario }),
     });
-    
-    const data = await response.json();
-    
-    console.log('Dados retornados do servidor:', data);
 
-    // Verifica se a resposta da API foi bem-sucedida
+    const data = await response.json();
+
     if (!response.ok) {
       setErro(`Erro ao criar conta: ${data.error || 'Erro desconhecido'}`);
     } else {
-      // Se a conta for criada com sucesso, armazena as informações no localStorage
-      console.log('Conta criada com sucesso:', data);
       localStorage.setItem('nomeUsuario', data.nome);
-      localStorage.setItem('usuarioId', data.usuarioId); // Armazena o ID do usuário
+      localStorage.setItem('usuarioId', data.usuarioId);
       localStorage.setItem('token', data.token);
 
       Swal.fire({
@@ -63,21 +57,17 @@ const CriarConta = ({ voltar, irParaLogin }) => {
         title: 'Conta criada com sucesso!',
         text: 'Agora você só precisa fazer login e já pode começar a usar o MindFlow!',
       });
-      if (irParaLogin) {
-        irParaLogin(); // Verifica se irParaLogin foi passado e então chama a função
-      }
+
+      if (irParaLogin) irParaLogin();
     }
   };
 
-
-  // Função para lidar com o pressionamento de teclas
   const handleKeyPress = (event) => {
     if (event.key === 'Enter' && isFormValid) {
       handleCreateAccount(event);
     }
   };
 
-  // Hook para adicionar e remover o manipulador de evento
   useEffect(() => {
     window.addEventListener('keypress', handleKeyPress);
     return () => {
@@ -86,77 +76,92 @@ const CriarConta = ({ voltar, irParaLogin }) => {
   }, [nome, email, nascimento, senha, senhaRepetida]);
 
   return (
-    <div>
+    <motion.div
+      initial={{ opacity: 0, x: 80 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <h2>Crie a sua conta no MindFlow</h2>
       <form onSubmit={handleCreateAccount}>
         <div id='campos'>
-          <input
+          <motion.input
             className='form'
             type="text"
             placeholder="Nome"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             required
+            whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
+            transition={{ type: "spring", stiffness: 300 }}
           />
-          <input
+          <motion.input
             className='form'
-            type="email"
+            type="text"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
+            transition={{ type: "spring", stiffness: 300 }}
           />
-          <input
+          <motion.input
             className='form'
-            type='date'
-            placeholder="Data de Nascimento"
+            type="date"
             value={nascimento}
             onChange={(e) => setNascimento(e.target.value)}
             required
+            whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
+            transition={{ type: "spring", stiffness: 300 }}
           />
 
           <div className='password-container'>
-            <input
-              className='form password-input'
-              type={mostrarSenha ? "text" : "password"}
-              placeholder="Senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
+          <motion.input
+            className='form'
+            type="password"
+            placeholder="Digite a sua Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+            required
+            whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
+            transition={{ type: "spring", stiffness: 300 }}
+          />
             <button
               type="button"
               className='password-toggle'
               onClick={alternarVisibilidadeSenha}
             >
-              <i className={`fa ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              <AnimatedEye aberto={mostrarSenha} />
             </button>
           </div>
 
           <div className='password-container'>
-            <input
-              className='form password-input'
-              type={mostrarRepetirSenha ? "text" : "password"}
-              placeholder="Repetir a Senha"
-              value={senhaRepetida}
-              onChange={(e) => setSenhaRepetida(e.target.value)}
-              required
-            />
+          <motion.input
+            className='form'
+            type="password"
+            placeholder="Repita a sua Senha"
+            value={senhaRepetida}
+            onChange={(e) => setSenhaRepetida(e.target.value)}
+            required
+            whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
+            transition={{ type: "spring", stiffness: 300 }}
+          />
             <button
               type="button"
               className='password-toggle'
               onClick={alternarVisibilidadeRepetirSenha}
             >
-              <i className={`fa ${mostrarRepetirSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              <AnimatedEye aberto={mostrarRepetirSenha} />
             </button>
           </div>
         </div>
+
         {erro && <p className="error-message">{erro}</p>}
+
         <button className='btns' type="button" onClick={voltar}>Voltar</button>
         <button
           className='btns'
           type="submit"
-          disabled={!isFormValid} // Desabilita o botão se o formulário estiver incompleto
+          disabled={!isFormValid}
           style={{
             backgroundColor: isFormValid ? 'rgb(71, 6, 135)' : 'gray',
             cursor: isFormValid ? 'pointer' : 'not-allowed',
@@ -165,7 +170,7 @@ const CriarConta = ({ voltar, irParaLogin }) => {
           Criar Conta
         </button>
       </form>
-    </div>
+    </motion.div>
   );
 };
 

@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import AnimatedEye from '../iconesAnimados/AnimatedEye';
+import { motion } from 'framer-motion';
+
 
 const Login = ({ voltar }) => {
     const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -163,7 +166,7 @@ const Login = ({ voltar }) => {
                 <>
                     <h2>Entrar na sua conta do MindFlow</h2>
                     <form onSubmit={handleLogin}>
-                        <input
+                        <motion.input
                             className='form'
                             type="text"
                             placeholder="Email"
@@ -171,9 +174,12 @@ const Login = ({ voltar }) => {
                             onChange={(e) => setEmail(e.target.value)}
                             onKeyDown={handleKeyDown}
                             required
+                            whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
+                            transition={{ type: "spring", stiffness: 300 }}
                         />
+
                         <div className='password-container'>
-                            <input
+                            <motion.input
                                 className='form password-input'
                                 type={mostrarSenha ? "text" : "password"}
                                 placeholder="Senha"
@@ -181,14 +187,18 @@ const Login = ({ voltar }) => {
                                 onChange={(e) => setSenha(e.target.value)}
                                 onKeyDown={handleKeyDown}
                                 required
+                                whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
+                                transition={{ type: "spring", stiffness: 300 }}
                             />
+
                             <button
                                 type="button"
                                 className='password-toggle'
                                 onClick={alternarVisibilidadeSenha}
                             >
-                                <i className={`fa ${mostrarSenha ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                                <AnimatedEye aberto={mostrarSenha} />
                             </button>
+
                         </div>
                         <div className='form-group'>
                             <a href="#" className='forgot-password' onClick={mostrarTelaEsqueciSenha}>

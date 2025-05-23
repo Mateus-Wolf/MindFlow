@@ -9,7 +9,9 @@
 }
 /* Fim da Customização das Fontes */
 
-
+  body {
+    overflow: hidden;
+  }
 
 /* Inicio da Customização do H2 */
 #titulo{

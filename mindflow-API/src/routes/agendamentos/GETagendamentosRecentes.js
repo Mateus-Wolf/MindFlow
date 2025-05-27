@@ -13,17 +13,19 @@ router.get('/pacientes-recentes', async (req, res) => {
     try {
         // Alteração para buscar agendamentos passados (data de hoje menos 1)
         const query = `
-            SELECT DISTINCT ON (p.id) 
-                p.id AS paciente_id,
-                p.nome AS paciente_nome,
-                p.genero,
-                a.data AS data_consulta,
-                a.hora AS hora_consulta
-            FROM agendamentos a
-            INNER JOIN pacientes p ON a.paciente_id = p.id
-            WHERE a.usuario_id = $1 AND a.data < CURRENT_DATE  -- Busca por agendamentos passados
-            ORDER BY p.id, a.data DESC, a.hora DESC
-            LIMIT 3;
+        SELECT DISTINCT ON (p.id) 
+            p.id AS paciente_id,
+            p.nome AS paciente_nome,
+            p.genero,
+            p.idade,
+            a.data AS data_consulta,
+            a.hora AS hora_consulta
+        FROM agendamentos a
+        INNER JOIN pacientes p ON a.paciente_id = p.id
+        WHERE a.usuario_id = $1 AND a.data < CURRENT_DATE
+        ORDER BY p.id, a.data DESC, a.hora DESC
+        LIMIT 3;
+
         `;
 
         const { rows } = await pool.query(query, [usuarioId]);
@@ -32,9 +34,11 @@ router.get('/pacientes-recentes', async (req, res) => {
             id: row.paciente_id,
             nome: row.paciente_nome,
             genero: row.genero,
+            idade: row.idade,
             dataConsulta: row.data_consulta,
             horaConsulta: row.hora_consulta,
         }));
+
 
         res.json(pacientes);
     } catch (error) {

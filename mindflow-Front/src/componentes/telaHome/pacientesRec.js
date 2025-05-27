@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const PacientesRec = () => {
     const [pacientes, setPacientes] = useState([]);
 
     useEffect(() => {
         const fetchPacientes = async () => {
-            const usuarioId = localStorage.getItem('usuarioId'); // ID do usuário logado
+            const usuarioId = localStorage.getItem('usuarioId');
 
             if (!usuarioId) {
                 console.error('Usuário não está logado.');
@@ -16,8 +17,9 @@ const PacientesRec = () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/agendamentos/pacientes-recentes`, {
                     params: { usuarioId },
-                });             
+                });
                 setPacientes(response.data);
+                console.log("Pacientes recebidos:", response.data);
             } catch (error) {
                 console.error('Erro ao buscar pacientes recentes:', error);
             }
@@ -25,6 +27,12 @@ const PacientesRec = () => {
 
         fetchPacientes();
     }, []);
+
+    // Função para capitalizar a primeira letra do gênero
+    const capitalize = (texto) => {
+        if (!texto) return '';
+        return texto.charAt(0).toUpperCase() + texto.slice(1);
+    };
 
     return (
         <div id="pacientes-recentes">
@@ -38,20 +46,23 @@ const PacientesRec = () => {
                             <div className="paciente-info">
                                 <h4>{paciente.nome}</h4>
                                 <p>
-                                    {paciente.genero} <span className="idade">{paciente.idade}</span>
+                                    {capitalize(paciente.genero)} • {paciente.idade} anos
                                 </p>
                             </div>
                             <div className="paciente-consulta">
-                                <p className="btn-horario secundario">
+                                <Link
+                                    to={`/registroHumor/${paciente.id}`}
+                                    className="btn-horario secundario"
+                                >
                                     {new Date(paciente.dataConsulta).toLocaleDateString()} {paciente.horaConsulta.slice(0, 5)}
-                                </p>
+                                </Link>
                             </div>
                         </div>
                     ))}
                 </>
             )}
         </div>
-    );    
+    );
 };
 
 export default PacientesRec;

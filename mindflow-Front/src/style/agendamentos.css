@@ -135,6 +135,10 @@ body, html {
   color: whitesmoke;
 }
 
+.cancel-button-icon{
+  background-color: var(--vermelho-cancelar);
+}
+
 #form-Agendamento-PopUp {
   margin-left: 100px;
 }
@@ -159,7 +163,6 @@ body, html {
   color: white;
 }
 
-/* Já deve estar presente */
 .popup {
   position: fixed;
   top: 0;

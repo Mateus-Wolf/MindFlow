@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../telaHome/header';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { FaTimesCircle } from 'react-icons/fa';
 
 const Agendamentos = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -20,20 +21,20 @@ const Agendamentos = () => {
     const fetchAppointments = async () => {
       const usuarioId = localStorage.getItem('usuarioId');
       const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
-      
+
       try {
         // Buscar agendamentos
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/agendamentos/mensal/${usuarioId}`, {
           params: { mes: formattedDate }
         });
-  
+
         // Filtrar os agendamentos para pegar apenas os que têm status_id = 1 (Em Aberto)
         const openAppointments = response.data.filter(appointment => appointment.status_id === 1);
         setOpenAppointments(openAppointments);
-        
+
         // Atualiza a quantidade total de agendamentos em aberto
         setTotalAppointments(openAppointments.length);
-  
+
         // Buscar pacientes
         const patientsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/pacientes`, {
           params: { usuario_id: usuarioId }
@@ -43,10 +44,10 @@ const Agendamentos = () => {
         console.error('Erro ao carregar agendamentos ou pacientes:', error);
       }
     };
-  
+
     fetchAppointments();
   }, [currentDate]);
-  
+
 
   const isBeforeToday = (day) => {
     const today = new Date();
@@ -135,6 +136,22 @@ const Agendamentos = () => {
     setTime('');
   };
 
+  const getStatusClass = (statusId) => {
+    switch (statusId) {
+      case 1:
+        return 'status-agendado'; // Agendado
+      case 2:
+        return 'status-realizado'; // Realizado
+      case 3:
+        return 'status-cancelado'; // Cancelado
+      case 4:
+        return 'status-atrasado'; // Atrasado
+      default:
+        return '';
+    }
+  };
+
+
   const openCreateForm = () => {
     setShowCreateForm(true);
   };
@@ -175,21 +192,21 @@ const Agendamentos = () => {
 
   const renderCalendarDays = () => {
     return generateCalendarDays().map((day, index) => {
-        const isDisabled = day && isBeforeToday(day);
-        const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date());
-        const hasOpenAppointment = openAppointments.some(appointment => new Date(appointment.data).getDate() === day);
+      const isDisabled = day && isBeforeToday(day);
+      const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date());
+      const hasOpenAppointment = openAppointments.some(appointment => new Date(appointment.data).getDate() === day);
 
-        return (
-            <div
-                key={index}
-                className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : isPast ? 'filled past-day' : 'filled') : 'empty'} ${hasOpenAppointment ? 'open-appointment' : ''}`}
-                onClick={() => handleDayClick(day)}
-            >
-                {day}
-            </div>
-        );
+      return (
+        <div
+          key={index}
+          className={`calendar-day ${day ? (isDisabled ? 'filled before-today' : isPast ? 'filled past-day' : 'filled') : 'empty'} ${hasOpenAppointment ? 'open-appointment' : ''}`}
+          onClick={() => handleDayClick(day)}
+        >
+          {day}
+        </div>
+      );
     });
-};
+  };
 
 
 
@@ -225,27 +242,42 @@ const Agendamentos = () => {
       {popupVisible && (
         <div className="popup">
           <div className="popup-content">
-            <h3>Agendamentos para {selectedDay}/{currentDate.getMonth() + 1}/{currentDate.getFullYear()}</h3>
+            <h3>
+              Agendamentos para {String(selectedDay).padStart(2, '0')}/
+              {String(currentDate.getMonth() + 1).padStart(2, '0')}/
+              {currentDate.getFullYear()}
+            </h3>
+
             <hr />
             {appointments.length > 0 ? (
               <ul>
-                {appointments.map((appt, index) => {
-                  const patient = patients.find(patient => patient.id === appt.paciente_id);
-                  return (
-                    <li id='agendamentosDoDia' key={index}>
-                      {appt.hora} - {patient ? patient.nome : 'Paciente não encontrado'}
-                      {!isBeforeToday(selectedDay) && appt.status_id !== 3 && (
-                        <button
-                          onClick={() => handleCancelAppointment(appt.id)}
-                          className="cancel-button"
-                        >
-                          X
-                        </button>
-                      )}
-                      <hr />
-                    </li>
-                  );
-                })}
+                {appointments
+                  .slice() // pra evitar mutação do state original
+                  .sort((a, b) => a.hora.localeCompare(b.hora))
+                  .map((appt, index) => {
+
+                    const patient = patients.find(patient => patient.id === appt.paciente_id);
+                    return (
+                      <li
+                        key={index}
+                        className={`agendamento-item ${getStatusClass(appt.status_id)}`}
+                      >
+
+                        {appt.hora.split(':').slice(0, 2).join(':')}
+                        - {patient ? patient.nome : 'Paciente não encontrado'}
+                        {appt.status_id === 1 && !isBeforeToday(selectedDay) && (
+                          <button
+                            onClick={() => handleCancelAppointment(appt.id)}
+                            className="cancel-button-icon"
+                            title="Cancelar agendamento"
+                          >
+                            <FaTimesCircle size={20} />
+                          </button>
+
+                        )}
+                      </li>
+                    );
+                  })}
 
               </ul>
             ) : (

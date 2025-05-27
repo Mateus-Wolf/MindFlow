@@ -62,7 +62,12 @@ function Body() {
   return (
     <div id="conteudoBody">
       <div id="conteudoEsquerda">
-        <h1 id="tituloPrincipal">MINDFLOW</h1>
+        <img
+          id="tituloPrincipal"
+          src="/logo 4K.png"
+          alt="MindFlow"
+        />
+
         <h3 id="slogan">Porque cada dia conta uma história</h3>
 
         <div id="frasesDiarias">

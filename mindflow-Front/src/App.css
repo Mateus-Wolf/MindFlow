@@ -27,11 +27,13 @@
 }
 
 #tituloPrincipal {
-  font-family: 'tituloAnurati';
-  font-size: 80px;
-  margin-top: 85px;
-  text-align: center;
-  color: whitesmoke;
+  width: 700px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  margin-top: -150px;
+  margin-bottom: -200px;
 }
 
 #slogan {
@@ -92,7 +94,7 @@ a:hover {
   background-image: url('./imagens/backgroundHome.jpg');
   background-size: 150%;
   background-repeat: no-repeat;
-  filter: blur(11px);
+  filter: blur(13px);
   z-index: -1;
 }
 

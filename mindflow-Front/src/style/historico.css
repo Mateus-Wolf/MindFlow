@@ -1,72 +1,124 @@
-
 .historico-container {
-    margin: 20px;
-    padding: 20px;
+  background-color: var(--roxo-fundo);
+  color: white;
+  padding: 40px;
+  max-width: 800px;
+  margin: auto;
+  border-radius: 12px;
+}
+
+.btnCriar:hover {
+    transform: scale(1.2);
+}
+
+.btnCancelar:hover {
+    transform: scale(1.2);
 }
 
 #tituloBusca {
-    text-align: center;
-    margin-bottom: 30px;
+  font-size: 2rem;
+  color: #D6A4FF;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .historico-titulos {
-    display: flex;
-    justify-content: center;
-    gap: 80px;
-    cursor: pointer;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
 }
 
 .historico-titulos h3 {
-    color: black;
-    background-color: var(--roxo-destaque);
-    transition: color 0.3s ease;
-    margin-top: 45px;
-    padding: 10px;
-    border-radius: 25px;
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: var(--roxo-destaque);
+  border-radius: 25px;
+  transition: background-color 0.3s ease;
+  font-size: 1.1rem;
+  color: white;
 }
 
 .historico-titulos h3:hover {
-    color: #ffffff;
-    background-color: var(--roxo-escuro);
+  background-color: var(--roxo-fundo);
 }
 
 .historico-titulos h3.ativo {
-    background-color: var(--roxo-escuro);
-    color: #ffffff;
+  background-color: #9B0069;
+  font-weight: bold;
+}
+
+.agendamento-item {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  color: white;
+  font-weight: bold;
+}
+
+.status-agendado {
+  background-color: #3498db; /* Azul */
+}
+
+.status-realizado {
+  background-color: #2ecc71; /* Verde */
+}
+
+.status-cancelado {
+  background-color: #e74c3c; /* Vermelho */
+}
+
+.status-atrasado {
+  background-color: #f39c12; /* Laranja */
 }
 
 .historico-item ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 10px;
-    text-align: center;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
 }
 
 .historico-item li {
-    font-size: 16px;
+  background-color: #1f003b;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  font-size: 1rem;
+  text-align: left;
 }
 
-.historico-item .concluido {
-    color: rgb(0, 255, 0);
-    font-size: 20px;
+.historico-item li.concluido {
+  border-left: 5px solid #00ff88;
 }
 
-.historico-item .cancelado {
-    color: red;
-    font-size: 20px;
+.historico-item li.cancelado {
+  border-left: 5px solid #ff4444;
 }
 
-.historico-item .atrasado {
-    color: purple;
-    font-size: 20px;
+.historico-item li.atrasado {
+  border-left: 5px solid #ffc107;
 }
 
-.ativo {
-    color: #ffffff;
-    background-color: var(--roxo-escuro);
+.mensagemHistorico {
+  color: #BBBBBB;
+  font-size: 1.1rem;
+  text-align: center;
 }
 
-p {
-    color: #666;
-    font-size: 20px;
+.cancel-button-icon {
+  background: transparent;
+  border: none;
+  color: var(--roxo-escuro);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  margin-left: 10px;
+}
+
+.cancel-button-icon:hover {
+  transform: scale(1.2);
 }

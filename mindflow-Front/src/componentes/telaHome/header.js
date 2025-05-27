@@ -19,8 +19,9 @@ const Header = () => {
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
                     <Link className="navbar-brand" id="tituloHeader" to="/home">
-                        MINDFLOW
+                        <img src="/logo 4k.png" alt="MindFlow" className="logo-header" />
                     </Link>
+
                     <button
                         className="navbar-toggler"
                         type="button"

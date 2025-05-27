@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../telaHome/header';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function HistoricoConsultas() {
     const [concluidoOpen, setConcluidoOpen] = useState(false);
@@ -13,6 +14,13 @@ function HistoricoConsultas() {
 
     const usuarioId = localStorage.getItem('usuarioId'); 
 
+    // Função para normalizar string: remove acento e converte para minúsculo
+    const normalizeString = (str) =>
+        str
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase();
+
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/agendamentos/usuario/${usuarioId}`)
         .then(response => {
@@ -24,7 +32,6 @@ function HistoricoConsultas() {
         });
     }, [usuarioId]);
 
-    // Função para calcular total de agendamentos por status
     const calcularTotal = (agendamentos) => {
         const total = {
             concluido: agendamentos.filter(agendamento => agendamento.status_id === 2).length,
@@ -34,17 +41,17 @@ function HistoricoConsultas() {
         setTotalAgendamentos(total);
     };
 
-    // Filtra os agendamentos por status e pelo termo de busca
+    // Agora o filtro usa a função normalizeString pra comparar
     const agendamentosFiltrados = agendamentos.filter(agendamento => {
-        const nomeCompleto = agendamento.nome.toLowerCase();
-        return nomeCompleto.includes(searchTerm.toLowerCase());
+        const nomeNormalizado = normalizeString(agendamento.nome);
+        const searchNormalizado = normalizeString(searchTerm);
+        return nomeNormalizado.includes(searchNormalizado);
     });
 
     const agendamentosConcluidos = agendamentosFiltrados.filter(agendamento => agendamento.status_id === 2);
     const agendamentosCancelados = agendamentosFiltrados.filter(agendamento => agendamento.status_id === 3);
     const agendamentosAtrasados = agendamentosFiltrados.filter(agendamento => agendamento.status_id === 4);
 
-    // Função para selecionar um status
     const handleStatusClick = (status) => {
         setSelectedStatus(status);
 
@@ -63,7 +70,6 @@ function HistoricoConsultas() {
         }
     };
 
-    // Função para formatar a data para dd/mm/yyyy
     const formatarData = (data) => {
         const dateObj = new Date(data); 
         const dia = String(dateObj.getDate()).padStart(2, '0');
@@ -72,7 +78,6 @@ function HistoricoConsultas() {
         return `${dia}/${mes}/${ano}`;
     };
 
-    // Função para formatar o nome completo
     const formatarNome = (nome) => {
         return nome
             .split(' ')
@@ -80,16 +85,34 @@ function HistoricoConsultas() {
             .join(' ');
     };
 
-    // Função para formatar a hora para apenas horas e minutos
     const formatarHora = (hora) => {
         const partes = hora.split(':');
         return `${partes[0]}:${partes[1]}`;
     };
 
+    const listaAnimada = {
+        hidden: {},
+        visible: {
+            transition: {
+                staggerChildren: 0.1
+            }
+        }
+    };
+
+    const itemAnimado = {
+        hidden: { opacity: 0, x: -20 },
+        visible: { opacity: 1, x: 0 }
+    };
+
     return (
         <div className="tudo">
             <Header />
-            <div className="historico-container">
+            <motion.div 
+                className="historico-container"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
                 <h2 id='tituloBusca'>Histórico de Consultas</h2>
 
                 <input 
@@ -101,77 +124,88 @@ function HistoricoConsultas() {
                 />
 
                 <div className="historico-titulos">
-                    <h3 
-                        onClick={() => handleStatusClick('concluido')}
-                        className={selectedStatus === 'concluido' ? 'ativo' : ''}
-                    >
-                        Concluído ({totalAgendamentos.concluido})
-                    </h3>
-                    <h3 
-                        onClick={() => handleStatusClick('cancelado')}
-                        className={selectedStatus === 'cancelado' ? 'ativo' : ''}
-                    >
-                        Cancelado ({totalAgendamentos.cancelado})
-                    </h3>
-                    <h3 
-                        onClick={() => handleStatusClick('atrasado')}
-                        className={selectedStatus === 'atrasado' ? 'ativo' : ''}
-                    >
-                        Atrasado ({totalAgendamentos.atrasado})
-                    </h3>
+                    {['concluido', 'cancelado', 'atrasado'].map(status => (
+                        <motion.h3
+                            key={status}
+                            onClick={() => handleStatusClick(status)}
+                            className={selectedStatus === status ? 'ativo' : ''}
+                            whileTap={{ scale: 0.95 }}
+                            whileHover={{ scale: 1.05 }}
+                            transition={{ type: 'spring', stiffness: 300 }}
+                        >
+                            {status.charAt(0).toUpperCase() + status.slice(1)} ({totalAgendamentos[status] || 0})
+                        </motion.h3>
+                    ))}
                 </div>
 
-                {/* Lista de Agendamentos Concluídos */}
-                {concluidoOpen && (
-                    <div className="historico-item">
-                        <ul>
-                            {agendamentosConcluidos.length > 0 ? (
-                                agendamentosConcluidos.map(agendamento => (
-                                    <li key={agendamento.id} className="concluido">
-                                        {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Nenhum agendamento concluído encontrado.</p>
-                            )}
-                        </ul>
-                    </div>
-                )}
+                <AnimatePresence>
+                    {concluidoOpen && (
+                        <motion.div 
+                            className="historico-item"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
+                                {agendamentosConcluidos.length > 0 ? (
+                                    agendamentosConcluidos.map(agendamento => (
+                                        <motion.li key={agendamento.id} className="concluido" variants={itemAnimado}>
+                                            {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
+                                        </motion.li>
+                                    ))
+                                ) : (
+                                    <p className='mensagemHistorico'>Nenhum agendamento concluído encontrado.</p>
+                                )}
+                            </motion.ul>
+                        </motion.div>
+                    )}
 
-                {/* Lista de Agendamentos Cancelados */}
-                {canceladoOpen && (
-                    <div className="historico-item">
-                        <ul>
-                            {agendamentosCancelados.length > 0 ? (
-                                agendamentosCancelados.map(agendamento => (
-                                    <li key={agendamento.id} className="cancelado">
-                                        {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Nenhum agendamento cancelado encontrado.</p>
-                            )}
-                        </ul>
-                    </div>
-                )}
+                    {canceladoOpen && (
+                        <motion.div 
+                            className="historico-item"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
+                                {agendamentosCancelados.length > 0 ? (
+                                    agendamentosCancelados.map(agendamento => (
+                                        <motion.li key={agendamento.id} className="cancelado" variants={itemAnimado}>
+                                            {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
+                                        </motion.li>
+                                    ))
+                                ) : (
+                                    <p className='mensagemHistorico'>Nenhum agendamento cancelado encontrado.</p>
+                                )}
+                            </motion.ul>
+                        </motion.div>
+                    )}
 
-                {/* Lista de Agendamentos Atrasados */}
-                {atrasadoOpen && (
-                    <div className="historico-item">
-                        <ul>
-                            {agendamentosAtrasados.length > 0 ? (
-                                agendamentosAtrasados.map(agendamento => (
-                                    <li key={agendamento.id} className="atrasado">
-                                        {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
-                                    </li>
-                                ))
-                            ) : (
-                                <p>Nenhum agendamento atrasado encontrado.</p>
-                            )}
-                        </ul>
-                    </div>
-                )}
-            </div>
+                    {atrasadoOpen && (
+                        <motion.div 
+                            className="historico-item"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
+                                {agendamentosAtrasados.length > 0 ? (
+                                    agendamentosAtrasados.map(agendamento => (
+                                        <motion.li key={agendamento.id} className="atrasado" variants={itemAnimado}>
+                                            {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
+                                        </motion.li>
+                                    ))
+                                ) : (
+                                    <p className='mensagemHistorico'>Nenhum agendamento atrasado encontrado.</p>
+                                )}
+                            </motion.ul>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </motion.div>
         </div>
     );
 }

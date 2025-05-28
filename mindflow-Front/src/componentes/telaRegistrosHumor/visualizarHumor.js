@@ -7,22 +7,17 @@ import trabalhoIcon from '../../icones/trabalho-icone.svg';
 import exercicioIcon from '../../icones/exercicio-icone.svg';
 import lazerIcon from '../../icones/lazer-icone.svg';
 import { parseISO, format } from 'date-fns';
+import { motion } from 'framer-motion';
 
 const getTaskKey = (category) => {
     switch (category) {
-        case 'Estudos':
-            return 'tarefas_estudo';
-        case 'Trabalho':
-            return 'tarefas_trabalho';
-        case 'Exercício':
-            return 'tarefas_exercicio';
-        case 'Lazer':
-            return 'tarefas_lazer';
-        default:
-            return '';
+        case 'Estudos': return 'tarefas_estudo';
+        case 'Trabalho': return 'tarefas_trabalho';
+        case 'Exercício': return 'tarefas_exercicio';
+        case 'Lazer': return 'tarefas_lazer';
+        default: return '';
     }
 };
-
 
 const VisualizarHumor = () => {
     const { id } = useParams();
@@ -33,7 +28,6 @@ const VisualizarHumor = () => {
         const fetchRegistro = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/agendamentos/${id}`);
-                console.log('Resposta da API:', response.data);
                 setRegistro(response.data);
             } catch (error) {
                 console.error('Erro ao buscar registro:', error);
@@ -42,28 +36,18 @@ const VisualizarHumor = () => {
         fetchRegistro();
     }, [id]);
 
-    // Função para obter o ícone com base na categoria
     const getIcon = (category) => {
         switch (category) {
-            case 'Estudos':
-                return estudoIcon;
-            case 'Trabalho':
-                return trabalhoIcon;
-            case 'Exercício':
-                return exercicioIcon;
-            case 'Lazer':
-                return lazerIcon;
-            default:
-                return null;
+            case 'Estudos': return estudoIcon;
+            case 'Trabalho': return trabalhoIcon;
+            case 'Exercício': return exercicioIcon;
+            case 'Lazer': return lazerIcon;
+            default: return null;
         }
     };
 
-    // Verificação para garantir que a data seja válida antes de formatar
     const formatDate = (dateString) => {
-        // Parse a data ISO para um objeto Date
         const date = parseISO(dateString);
-
-        // Formata a data no formato desejado, levando em consideração o fuso horário local
         return isNaN(date) ? 'Data Inválida' : format(date, 'dd/MM/yyyy');
     };
 
@@ -76,11 +60,23 @@ const VisualizarHumor = () => {
     return (
         <div className="tudo">
             <Header />
-            <h2>Registro de Humor</h2>
-            <h3>Data: {formatDate(registro.data)}</h3>
+            <motion.h2 initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+                Registro de Humor
+            </motion.h2>
+            <motion.h3 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }}>
+                Data: {formatDate(registro.data)}
+            </motion.h3>
+
             <div className="categories">
-                {['Estudos', 'Trabalho', 'Exercício', 'Lazer'].map((category) => (
-                    <div className="category" key={category}>
+                {['Estudos', 'Trabalho', 'Exercício', 'Lazer'].map((category, index) => (
+                    <motion.div
+                        className="category"
+                        key={category}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 + index * 0.1 }}
+                        whileHover={{ scale: 1.02 }}
+                    >
                         <h2>{category}</h2>
                         <img src={getIcon(category)} alt={`${category} Icon`} />
                         <div className="buttons">
@@ -88,25 +84,37 @@ const VisualizarHumor = () => {
                                 className={`checkstyle ${registro[getTaskKey(category)] ? 'button-checked' : ''}`}
                                 disabled
                             >
-                                <i className="fas fa-check"></i>
+                                ✅
                             </button>
                             <button
                                 className={`checkstyle ${!registro[getTaskKey(category)] ? 'button-checked' : ''}`}
                                 disabled
                             >
-                                <i className="fas fa-times"></i>
+                                ❌
                             </button>
-
                         </div>
-                    </div>
+                    </motion.div>
                 ))}
             </div>
-            <div className="footer">
-                <button className="btnVoltar" onClick={() => navigate(-1)}>Voltar</button>
-                <button className="btnSalvar" onClick={handleAvancar}>
+
+            <motion.div className="footer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+                <motion.button
+                    className="btnVoltar"
+                    onClick={() => navigate(-1)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    Voltar
+                </motion.button>
+                <motion.button
+                    className="btnSalvar"
+                    onClick={handleAvancar}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                >
                     Avançar
-                </button>
-            </div>
+                </motion.button>
+            </motion.div>
         </div>
     );
 };

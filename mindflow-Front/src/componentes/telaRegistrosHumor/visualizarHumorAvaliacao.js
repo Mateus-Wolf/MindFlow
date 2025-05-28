@@ -3,6 +3,18 @@ import Header from '../telaHome/header';
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { FaStar } from 'react-icons/fa';
 import axios from 'axios';
+import { motion } from 'framer-motion';
+
+const starVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: (i) => ({
+        opacity: 1,
+        scale: 1,
+        transition: {
+            delay: i * 0.05,
+        },
+    }),
+};
 
 const RegistroHumorAvaliacao = ({ label, emoji }) => {
     const { id } = useParams();
@@ -13,7 +25,7 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
         energyLevel: 0,
         generalEvaluation: 0,
     });
-    const [observacoes, setObservacoes] = useState(''); // Estado para observações
+    const [observacoes, setObservacoes] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +39,7 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
                         energyLevel: response.data.nivel_energia,
                         generalEvaluation: response.data.avaliacao_geral,
                     });
-                    setObservacoes(response.data.observacoes || ''); // Garante que não seja undefined
+                    setObservacoes(response.data.observacoes || '');
                 }
             } catch (error) {
                 console.error('Erro ao buscar os dados:', error);
@@ -41,11 +53,19 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
             {[...Array(5)].map((_, index) => {
                 const ratingValue = index + 1;
                 return (
-                    <FaStar
+                    <motion.div
+                        custom={index}
                         key={index}
-                        className="star"
-                        color={ratingValue <= level ? '#ffc107' : '#e4e5e9'}
-                    />
+                        variants={starVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="inline-block"
+                    >
+                        <FaStar
+                            className="star"
+                            color={ratingValue <= level ? '#ffc107' : '#e4e5e9'}
+                        />
+                    </motion.div>
                 );
             })}
         </div>
@@ -53,7 +73,12 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
 
     const Avaliacao = () => {
         return (
-            <div className="avaliacao-container">
+            <motion.div
+                className="avaliacao-container"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+            >
                 <div className="avaliacao-row">
                     <div className="avaliacao-item">
                         <span role="img" aria-label="sono" className="emoji">😴</span>
@@ -78,35 +103,65 @@ const RegistroHumorAvaliacao = ({ label, emoji }) => {
                         {renderStars(ratings.generalEvaluation)}
                     </div>
                 </div>
-            </div>
+            </motion.div>
         );
     };
 
     return (
         <div className="tudo">
             <Header />
-            <h2>{label}</h2>
-            <div>{emoji}</div>
+
+            <motion.div
+                className="cabecalho-avaliacao"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="emoji-grande">{emoji}</div>
+                <h2 className="titulo-avaliacao">{label || 'Avaliação do Humor'}</h2>
+            </motion.div>
+
             <Avaliacao />
 
-            {/* Exibição das observações */}
-            <div className="observacoes-container">
+            <motion.div
+                className="observacoes-container"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
+            >
                 <h3>Observações</h3>
                 <textarea
                     value={observacoes}
                     readOnly
                     className="observacoes-textarea"
                 />
-            </div>
+            </motion.div>
 
-            <div className="footer">
+            <motion.div
+                className="footer"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.4 }}
+            >
                 <Link to={`/visualizarHumor/${pacienteId}`}>
-                    <button className="btnVoltar">Voltar</button>
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="btnVoltar"
+                    >
+                        Voltar
+                    </motion.button>
                 </Link>
                 <Link to={`/telaListar`}>
-                    <button className="btnSalvar btnProximo">Próximo</button>
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="btnSalvar btnProximo"
+                    >
+                        Próximo
+                    </motion.button>
                 </Link>
-            </div>
+            </motion.div>
         </div>
     );
 };

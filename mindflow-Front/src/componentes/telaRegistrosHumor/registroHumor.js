@@ -2,100 +2,107 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import Header from '../telaHome/header';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const RegistroHumor = () => {
-    const { id } = useParams();  // Obtém o ID do paciente via URL
-    const [registros, setRegistros] = useState([]);  // Armazena os registros de humor do paciente
-    const [nomePaciente, setNomePaciente] = useState('');  // Armazena o nome do paciente
-    const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());  // Armazena o ano atual
+    const { id } = useParams();
+    const [registros, setRegistros] = useState([]);
+    const [nomePaciente, setNomePaciente] = useState('');
+    const [anoAtual, setAnoAtual] = useState(new Date().getFullYear());
 
-    // Efeito para buscar registros e dados do paciente
     useEffect(() => {
         const fetchRegistros = async () => {
             try {
-                // Busca os registros do paciente no ano selecionado
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/pacientes/${id}/registros?ano=${anoAtual}`);
-                console.log('Registros da API:', response.data); // Verifique o formato da data
-                
-                setRegistros(response.data);  // Atualiza os registros com a resposta da API
+                setRegistros(response.data);
 
-                // Busca o nome do paciente
                 const pacienteResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/pacientes/${id}`);
-                setNomePaciente(pacienteResponse.data.nome);  // Atualiza o nome do paciente
+                setNomePaciente(pacienteResponse.data.nome);
             } catch (error) {
                 console.error('Erro ao buscar registros:', error);
             }
         };
 
         fetchRegistros();
-    }, [id, anoAtual]);  // Re-executa quando o ID ou o ano atual muda
+    }, [id, anoAtual]);
 
-    // Função para formatar a data
     const formatarData = (data) => {
         if (!data) return 'Data inválida';
-    
         try {
             const dataFormatada = new Date(data);
-    
-            if (isNaN(dataFormatada.getTime())) {
-                return 'Data inválida';
-            }
-    
+            if (isNaN(dataFormatada.getTime())) return 'Data inválida';
             const dia = dataFormatada.getUTCDate().toString().padStart(2, '0');
             const mes = dataFormatada.toLocaleString('pt-BR', { month: 'short' }).toUpperCase();
-    
             return `${dia} ${mes}`;
-        } catch (error) {
-            console.error('Erro ao formatar data:', error);
+        } catch {
             return 'Data inválida';
         }
     };
-    
 
-    // Função para navegar para o ano anterior
-    const handlePrevYear = () => {
-        setAnoAtual(anoAtual - 1);
-    };
-
-    // Função para navegar para o próximo ano
-    const handleNextYear = () => {
-        setAnoAtual(anoAtual + 1);
-    };
+    const handlePrevYear = () => setAnoAtual((prev) => prev - 1);
+    const handleNextYear = () => setAnoAtual((prev) => prev + 1);
 
     return (
         <div className="tudo">
             <Header />
-            <div id="registros-container">
-                <h2 className="titulo">Registros do Paciente</h2>
-                <h3 className="nome-paciente">
+
+            <motion.div
+                id="registros-container"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <motion.h2 className="titulo" initial={{ y: -20 }} animate={{ y: 0 }} transition={{ duration: 0.5 }}>
+                    Registros do Paciente
+                </motion.h2>
+                <motion.h3 className="nome-paciente" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
                     <b>{nomePaciente}</b>
-                </h3>
-                <div className="ano-navegacao">
-                    <button onClick={handlePrevYear}>&lt;</button>
+                </motion.h3>
+
+                <motion.div className="ano-navegacao" initial={{ scale: 0.9 }} animate={{ scale: 1 }}>
+                    <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.05 }} onClick={handlePrevYear}>
+                        &lt;
+                    </motion.button>
                     <span className="ano">{anoAtual}</span>
-                    <button onClick={handleNextYear}>&gt;</button>
-                </div>
+                    <motion.button whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.05 }} onClick={handleNextYear}>
+                        &gt;
+                    </motion.button>
+                </motion.div>
 
                 <hr />
 
                 <div className="registros-datas">
-                    {registros.length > 0 ? (
-                        registros.map((registro) => (
-                            <Link key={registro.id} to={`/visualizarHumor/${registro.id}`} className="bolinha">
-                                <span className="data-registro">
-                                    {formatarData(registro.data_registro) !== 'Data inválida' ? (
-                                        formatarData(registro.data_registro)
-                                    ) : (
-                                        'Data inválida'
-                                    )}
-                                </span>
-                            </Link>
-                        ))
-                    ) : (
-                        <p>Nenhum registro encontrado.</p>
-                    )}
+                    <AnimatePresence>
+                        {registros.length > 0 ? (
+                            registros.map((registro, index) => (
+                                <motion.div
+                                    key={registro.id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                                    className="registro-card"
+                                >
+                                    <Link to={`/visualizarHumor/${registro.id}`} className="bolinha">
+                                        <span className="data-registro">
+                                            {formatarData(registro.data_registro)}
+                                        </span>
+                                    </Link>
+                                </motion.div>
+                            ))
+                        ) : (
+                            <motion.p
+                                className="sem-registro"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                Nenhum registro encontrado.
+                            </motion.p>
+                        )}
+                    </AnimatePresence>
                 </div>
-            </div>
+            </motion.div>
         </div>
     );
 };

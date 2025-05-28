@@ -3,6 +3,7 @@ import Header from '../telaHome/header';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+
 const PacienteCadastro = ({ usuarioId }) => {
     const [nome, setNome] = useState('');
     const [idade, setIdade] = useState('');

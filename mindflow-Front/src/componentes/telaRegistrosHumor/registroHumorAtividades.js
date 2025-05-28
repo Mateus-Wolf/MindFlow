@@ -5,11 +5,12 @@ import estudoIcon from '../../icones/estudo-icone.svg';
 import trabalhoIcon from '../../icones/trabalho-icone.svg';
 import exercicioIcon from '../../icones/exercicio-icone.svg';
 import lazerIcon from '../../icones/lazer-icone.svg';
+import { motion } from 'framer-motion';
 
 function RegistroHumorAtividades() {
-  const [selected, setSelected] = useState({}); 
+  const [selected, setSelected] = useState({});
   const navigate = useNavigate();
-  const { id: pacienteId } = useParams(); 
+  const { id: pacienteId } = useParams();
   const agendamentoId = localStorage.getItem('agendamentoId');
 
   useEffect(() => {
@@ -26,27 +27,22 @@ function RegistroHumorAtividades() {
   const handleTimes = (category) => {
     setSelected((prev) => ({
       ...prev,
-      [category]: false, 
+      [category]: false,
     }));
   };
 
   const handleSave = () => {
-    // Armazena os valores no localStorage
     Object.keys(selected).forEach((category) => {
       localStorage.setItem(category, selected[category]);
     });
-
-    // Redireciona para a tela de avaliação com o ID do paciente e ID do agendamento
     navigate(`/registroHumorAvaliacao/${pacienteId}`);
   };
 
   const handleBack = () => {
-    // Remove os dados do localStorage
     Object.keys(selected).forEach((category) => {
       localStorage.removeItem(category);
     });
-    // Redireciona para a tela de listar
-    navigate('/telaListar');
+    navigate('/home');
   };
 
   const getButtonClass = (category, type) => {
@@ -58,48 +54,103 @@ function RegistroHumorAtividades() {
     return '';
   };
 
-  // Função para verificar se todas as categorias foram selecionadas
   const allCategoriesSelected = () => {
     const categories = ['Estudos', 'Trabalho', 'Exercício', 'Lazer'];
     return categories.every((category) => selected[category] !== undefined);
   };
 
+  const containerVariants = {
+    hidden: {},
+    show: {
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+  };
+
   return (
-    <div className="tudo">
+    <motion.div
+      className="tudo"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <Header />
-      <div className="categories">
-        {['Estudos', 'Trabalho', 'Exercício', 'Lazer'].map((category) => (
-          <div className="category" key={category}>
+
+      <motion.div
+        className="categories"
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+      >
+        {['Estudos', 'Trabalho', 'Exercício', 'Lazer'].map((category, index) => (
+          <motion.div
+            className="category"
+            key={category}
+            variants={itemVariants}
+          >
             <h2>{category}</h2>
-            <img src={category === 'Estudos' ? estudoIcon : category === 'Trabalho' ? trabalhoIcon : category === 'Exercício' ? exercicioIcon : lazerIcon} alt={`${category} Icon`} />
+            <img
+              src={
+                category === 'Estudos' ? estudoIcon :
+                category === 'Trabalho' ? trabalhoIcon :
+                category === 'Exercício' ? exercicioIcon :
+                lazerIcon
+              }
+              alt={`${category} Icon`}
+            />
             <div className="buttons">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 className={`checkstyle ${getButtonClass(category, 'check')}`}
                 onClick={() => handleCheck(category)}
               >
                 <i className="fas fa-check"></i>
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
                 className={`checkstyle ${getButtonClass(category, 'times')}`}
                 onClick={() => handleTimes(category)}
               >
                 <i className="fas fa-times"></i>
-              </button>
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
-      <div className="footer">
-        <button className="btnVoltar" onClick={handleBack}>Voltar</button>
-        <button 
-          className="btnSalvar" 
-          onClick={handleSave} 
+      </motion.div>
+
+      <motion.div
+        className="footer"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+      >
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="btnVoltar"
+          onClick={handleBack}
+        >
+          Voltar
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="btnSalvar"
+          onClick={handleSave}
           disabled={!allCategoriesSelected()}
         >
           Salvar
-        </button>
-      </div>
-    </div>
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 }
 

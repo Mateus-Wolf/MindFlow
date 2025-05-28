@@ -40,13 +40,17 @@ router.put('/:id/concluir', async (req, res) => {
 });
 
 // Rota PUT para marcar um agendamento como Perdido
+// Rota PUT para marcar um agendamento como Perdido
 router.put('/status', async (req, res) => {
     try {
-        const now = new Date();
+        // Gera "agora" no fuso horário de São Paulo (UTC-3)
+        const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+
         const query = `
             UPDATE agendamentos
             SET status_id = 4
-            WHERE status_id = 1 AND TO_TIMESTAMP(data || ' ' || hora, 'YYYY-MM-DD HH24:MI:SS') < $1
+            WHERE status_id = 1 
+            AND (data::timestamp + hora::time) < $1
             RETURNING *;
         `;
 
@@ -54,7 +58,7 @@ router.put('/status', async (req, res) => {
 
         if (result.rowCount > 0) {
             res.status(200).json({
-                message: 'Status do agendamento atualizado com sucesso!',
+                message: 'Status do(s) agendamento(s) atualizado(s) com sucesso!',
                 agendamento: result.rows
             });
         } else {

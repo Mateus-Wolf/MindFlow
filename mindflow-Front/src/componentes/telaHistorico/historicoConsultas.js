@@ -11,8 +11,11 @@ function HistoricoConsultas() {
     const [selectedStatus, setSelectedStatus] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [totalAgendamentos, setTotalAgendamentos] = useState({});
+    const [anosAbertos, setAnosAbertos] = useState({});
+    const [mesesAbertos, setMesesAbertos] = useState({});
 
-    const usuarioId = localStorage.getItem('usuarioId'); 
+
+    const usuarioId = localStorage.getItem('usuarioId');
 
     // Função para normalizar string: remove acento e converte para minúsculo
     const normalizeString = (str) =>
@@ -23,13 +26,13 @@ function HistoricoConsultas() {
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_API_URL}/api/agendamentos/usuario/${usuarioId}`)
-        .then(response => {
-            setAgendamentos(response.data);
-            calcularTotal(response.data);
-        })
-        .catch(error => {
-            console.error("Erro ao carregar agendamentos:", error);
-        });
+            .then(response => {
+                setAgendamentos(response.data);
+                calcularTotal(response.data);
+            })
+            .catch(error => {
+                console.error("Erro ao carregar agendamentos:", error);
+            });
     }, [usuarioId]);
 
     const calcularTotal = (agendamentos) => {
@@ -57,7 +60,7 @@ function HistoricoConsultas() {
 
         if (status === 'concluido') {
             setConcluidoOpen(!concluidoOpen);
-            setCanceladoOpen(false); 
+            setCanceladoOpen(false);
             setAtrasadoOpen(false);
         } else if (status === 'cancelado') {
             setConcluidoOpen(false);
@@ -71,7 +74,7 @@ function HistoricoConsultas() {
     };
 
     const formatarData = (data) => {
-        const dateObj = new Date(data); 
+        const dateObj = new Date(data);
         const dia = String(dateObj.getDate()).padStart(2, '0');
         const mes = String(dateObj.getMonth() + 1).padStart(2, '0');
         const ano = dateObj.getFullYear();
@@ -104,10 +107,39 @@ function HistoricoConsultas() {
         visible: { opacity: 1, x: 0 }
     };
 
+    const toggleAno = (ano) => {
+        setAnosAbertos(prev => ({ ...prev, [ano]: !prev[ano] }));
+    };
+
+    const toggleMes = (ano, mes) => {
+        const key = `${ano}-${mes}`;
+        setMesesAbertos(prev => ({ ...prev, [key]: !prev[key] }));
+    };
+
+
+    const agruparPorData = (lista) => {
+        const agrupado = {};
+
+        lista.forEach(agendamento => {
+            const data = new Date(agendamento.data);
+            const ano = data.getFullYear();
+            const mes = data.toLocaleString('default', { month: 'long' });
+            const dia = String(data.getDate()).padStart(2, '0');
+
+            if (!agrupado[ano]) agrupado[ano] = {};
+            if (!agrupado[ano][mes]) agrupado[ano][mes] = {};
+            if (!agrupado[ano][mes][dia]) agrupado[ano][mes][dia] = [];
+
+            agrupado[ano][mes][dia].push(agendamento);
+        });
+
+        return agrupado;
+    };
+
     return (
-        <div className="tudo">
+        <div className="tudoHistorico">
             <Header />
-            <motion.div 
+            <motion.div
                 className="historico-container"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -115,11 +147,11 @@ function HistoricoConsultas() {
             >
                 <h2 id='tituloBusca'>Histórico de Consultas</h2>
 
-                <input 
-                    type="text" 
-                    placeholder="Buscar por nome de paciente" 
-                    value={searchTerm} 
-                    onChange={(e) => setSearchTerm(e.target.value)} 
+                <input
+                    type="text"
+                    placeholder="Buscar por nome de paciente"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     style={{ marginBottom: '20px', padding: '10px', width: '100%' }}
                 />
 
@@ -140,68 +172,152 @@ function HistoricoConsultas() {
 
                 <AnimatePresence>
                     {concluidoOpen && (
-                        <motion.div 
+                        <motion.div
                             className="historico-item"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
-                                {agendamentosConcluidos.length > 0 ? (
-                                    agendamentosConcluidos.map(agendamento => (
-                                        <motion.li key={agendamento.id} className="concluido" variants={itemAnimado}>
-                                            {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
-                                        </motion.li>
-                                    ))
-                                ) : (
-                                    <p className='mensagemHistorico'>Nenhum agendamento concluído encontrado.</p>
-                                )}
-                            </motion.ul>
+                            {Object.entries(agruparPorData(agendamentosConcluidos)).map(([ano, meses]) => (
+                                <div key={ano}>
+                                    <h4
+                                        className="ano"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => toggleAno(ano)}
+                                    >
+                                        {anosAbertos[ano] ? '▼' : '▶'} {ano}
+                                    </h4>
+
+                                    {anosAbertos[ano] && Object.entries(meses).map(([mes, dias]) => {
+                                        const keyMes = `${ano}-${mes}`;
+                                        return (
+                                            <div className='datasColapsadas' key={mes}>
+                                                <h5
+                                                    className="mes"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => toggleMes(ano, mes)}
+                                                >
+                                                    {mesesAbertos[keyMes] ? '▼' : '▶'} {mes}
+                                                </h5>
+
+                                                {mesesAbertos[keyMes] && Object.entries(dias).map(([dia, ags]) => (
+                                                    <div key={dia} style={{ marginLeft: '40px' }}>
+                                                        <h6 className="dia">{dia}</h6>
+                                                        <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
+                                                            {ags.map(agendamento => (
+                                                                <motion.li key={agendamento.id} className="concluido" variants={itemAnimado}>
+                                                                    {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
+                                                                </motion.li>
+                                                            ))}
+                                                        </motion.ul>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </motion.div>
                     )}
 
                     {canceladoOpen && (
-                        <motion.div 
+                        <motion.div
                             className="historico-item"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
-                                {agendamentosCancelados.length > 0 ? (
-                                    agendamentosCancelados.map(agendamento => (
-                                        <motion.li key={agendamento.id} className="cancelado" variants={itemAnimado}>
-                                            {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
-                                        </motion.li>
-                                    ))
-                                ) : (
-                                    <p className='mensagemHistorico'>Nenhum agendamento cancelado encontrado.</p>
-                                )}
-                            </motion.ul>
+                            {Object.entries(agruparPorData(agendamentosCancelados)).map(([ano, meses]) => (
+                                <div key={ano}>
+                                    <h4
+                                        className="ano"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => toggleAno(ano)}
+                                    >
+                                        {anosAbertos[ano] ? '▼' : '▶'} {ano}
+                                    </h4>
+
+                                    {anosAbertos[ano] && Object.entries(meses).map(([mes, dias]) => {
+                                        const keyMes = `${ano}-${mes}`;
+                                        return (
+                                            <div className='datasColapsadas' key={mes}>
+                                                <h5
+                                                    className="mes"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => toggleMes(ano, mes)}
+                                                >
+                                                    {mesesAbertos[keyMes] ? '▼' : '▶'} {mes}
+                                                </h5>
+
+                                                {mesesAbertos[keyMes] && Object.entries(dias).map(([dia, ags]) => (
+                                                    <div key={dia} style={{ marginLeft: '40px' }}>
+                                                        <h6 className="dia">{dia}</h6>
+                                                        <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
+                                                            {ags.map(agendamento => (
+                                                                <motion.li key={agendamento.id} className="cancelado" variants={itemAnimado}>
+                                                                    {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
+                                                                </motion.li>
+                                                            ))}
+                                                        </motion.ul>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </motion.div>
                     )}
 
                     {atrasadoOpen && (
-                        <motion.div 
+                        <motion.div
                             className="historico-item"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.3 }}
                         >
-                            <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
-                                {agendamentosAtrasados.length > 0 ? (
-                                    agendamentosAtrasados.map(agendamento => (
-                                        <motion.li key={agendamento.id} className="atrasado" variants={itemAnimado}>
-                                            {formatarData(agendamento.data)} - {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
-                                        </motion.li>
-                                    ))
-                                ) : (
-                                    <p className='mensagemHistorico'>Nenhum agendamento atrasado encontrado.</p>
-                                )}
-                            </motion.ul>
+                            {Object.entries(agruparPorData(agendamentosAtrasados)).map(([ano, meses]) => (
+                                <div key={ano}>
+                                    <h4
+                                        className="ano"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => toggleAno(ano)}
+                                    >
+                                        {anosAbertos[ano] ? '▼' : '▶'} {ano}
+                                    </h4>
+
+                                    {anosAbertos[ano] && Object.entries(meses).map(([mes, dias]) => {
+                                        const keyMes = `${ano}-${mes}`;
+                                        return (
+                                            <div className='datasColapsadas' key={mes}>
+                                                <h5
+                                                    className="mes"
+                                                    style={{ cursor: 'pointer' }}
+                                                    onClick={() => toggleMes(ano, mes)}
+                                                >
+                                                    {mesesAbertos[keyMes] ? '▼' : '▶'} {mes}
+                                                </h5>
+
+                                                {mesesAbertos[keyMes] && Object.entries(dias).map(([dia, ags]) => (
+                                                    <div key={dia} style={{ marginLeft: '40px' }}>
+                                                        <h6 className="dia">{dia}</h6>
+                                                        <motion.ul variants={listaAnimada} initial="hidden" animate="visible">
+                                                            {ags.map(agendamento => (
+                                                                <motion.li key={agendamento.id} className="atrasado" variants={itemAnimado}>
+                                                                    {formatarHora(agendamento.hora)} - {formatarNome(agendamento.nome)}
+                                                                </motion.li>
+                                                            ))}
+                                                        </motion.ul>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ))}
                         </motion.div>
                     )}
                 </AnimatePresence>

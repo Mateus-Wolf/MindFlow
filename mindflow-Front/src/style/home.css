@@ -287,4 +287,18 @@ h3 {
 .btn-horario.secundario {
     background-color: #333;
 }
+
+.btn-limpar-pacientes{
+    background: var(--roxo-gradiente);
+    color: whitesmoke;
+    cursor: pointer;
+    border: none;
+    border-radius: 25px;
+    margin: 10px;
+    padding: 5px;
+}
+
+.btn-limpar-pacientes:hover{
+  transform: scale(1.03);
+}
 /* Fim da customização dos Pacientes */

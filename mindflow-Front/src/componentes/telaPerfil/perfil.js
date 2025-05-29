@@ -4,6 +4,9 @@ import Header from '../telaHome/header';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import InputMask from 'react-input-mask';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 const Perfil = () => {
     const [editable, setEditable] = useState(false);
@@ -12,7 +15,55 @@ const Perfil = () => {
     const [imagem, setImagem] = useState(null);
     const [imagemFile, setImagemFile] = useState(null);
     const navigate = useNavigate();
+    const doc = new jsPDF();
 
+    const gerarRelatorioPDF = async () => {
+        const token = localStorage.getItem('token');
+        const usuarioId = localStorage.getItem('usuarioId');
+        const nomeUsuario = localStorage.getItem('nomeUsuario');
+
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/agendamentos/usuario/${usuarioId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            const agendamentos = response.data;
+
+            const doc = new jsPDF();
+
+            // Título personalizado
+            doc.setFontSize(16);
+            doc.text(`Atendimentos do Dr. ${nomeUsuario}`, 14, 20);
+
+            // Dados da tabela
+            const tableData = agendamentos.map((ag) => [
+                ag.nome,
+                new Date(ag.data).toLocaleDateString('pt-BR'),
+                ag.hora ? ag.hora.slice(0, 5) : 'Sem hora',
+            ]);
+
+            // Tabela
+            autoTable(doc, {
+                head: [['Paciente', 'Data', 'Hora']],
+                body: tableData,
+                startY: 30,
+            });
+
+            // Rodapé
+            const pageHeight = doc.internal.pageSize.height;
+            doc.setFontSize(10);
+            doc.text('© 2025 MindFlow - Todos os direitos reservados.', 14, pageHeight - 10);
+
+            // Salvar o PDF
+            const pdfBlob = doc.output('blob');
+            const pdfUrl = URL.createObjectURL(pdfBlob);
+            window.open(pdfUrl);
+            doc.save('relatorio_consultas.pdf');
+        } catch (error) {
+            Swal.fire('Erro', 'Não foi possível gerar o relatório.', 'error');
+            console.error('Erro ao gerar relatório:', error);
+        }
+    };
     const toggleEdit = () => {
         setEditable(prev => !prev);
     };
@@ -225,38 +276,42 @@ const Perfil = () => {
                                     disabled={!editable}
                                 />
                             </div>
-<div className="form-group">
-    <label htmlFor="imagem">Foto de Perfil:</label>
+                            <div className="form-group">
+                                <label htmlFor="imagem">Foto de Perfil:</label>
 
-    <input
-        type="file"
-        id="imagem"
-        onChange={handleImageChange}
-        disabled={!editable}
-        style={{ display: 'none' }}
-    />
+                                <input
+                                    type="file"
+                                    id="imagem"
+                                    onChange={handleImageChange}
+                                    disabled={!editable}
+                                    style={{ display: 'none' }}
+                                />
 
-    {editable && (
-        <div className="upload-button-group">
-            <label htmlFor="imagem" className="custom-upload-button">
-                Enviar nova imagem
-            </label>
-            {imagem && (
-                <button
-                    type="button"
-                    className="buttonRemoverFoto"
-                    onClick={handleRemoveImage}
-                >
-                    Remover Foto
-                </button>
-            )}
-        </div>
-    )}
-</div>
+                                {editable && (
+                                    <div className="upload-button-group">
+                                        <label htmlFor="imagem" className="custom-upload-button">
+                                            Enviar nova imagem
+                                        </label>
+                                        {imagem && (
+                                            <button
+                                                type="button"
+                                                className="buttonRemoverFoto"
+                                                onClick={handleRemoveImage}
+                                            >
+                                                Remover Foto
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
 
                         </div>
                     </div>
                     <div className="botoes">
+                        <button onClick={gerarRelatorioPDF} className="buttonDados" style={{ marginRight: '10px' }}>
+                            Gerar Relatório
+                        </button>
+
                         {editable ? (
                             <>
                                 <button onClick={handleSave} className="buttonDados">Salvar</button>

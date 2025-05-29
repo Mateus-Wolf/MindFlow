@@ -45,6 +45,9 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+
+
+
 // Rota para criar um novo paciente
 router.post('/', async (req, res) => {
     const { usuario_ID, nome, idade, cpf, cep, genero, email, telefone, estado_civil } = req.body;

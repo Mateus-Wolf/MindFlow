@@ -68,10 +68,10 @@ router.get('/', async (req, res) => {
   const { data, usuario_id } = req.query; // Data e usuario_id enviados como query
   try {
       const agendamentos = await db.query(`
-          SELECT a.*, p.nome 
-          FROM agendamentos a 
-          JOIN pacientes p ON a.paciente_id = p.id 
-          WHERE a.data = $1 AND a.usuario_id = $2 AND a.status_id = 1`, 
+SELECT a.*, p.nome, p.idade 
+FROM agendamentos a 
+JOIN pacientes p ON a.paciente_id = p.id 
+WHERE a.usuario_id = $1`, 
           [data, usuario_id]
       );
       res.json(agendamentos.rows);

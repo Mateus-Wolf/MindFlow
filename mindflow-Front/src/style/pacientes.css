@@ -269,6 +269,10 @@ input:focus, select:focus {
     margin-right: 10px;
 }
 
+.buttonDados:hover {
+      transform: scale(1.05);
+}
+
 .buttonDados:last-child {
     margin-right: 0;
 }

@@ -1,14 +1,17 @@
+/* === Reset e Estrutura Básica === */
 body, html {
   height: 100%;
   margin: 0;
 }
 
+/* === Container Principal da Aplicação === */
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
 }
 
+/* === Container do Calendário === */
 .calendar-container {
   flex-grow: 1;
   display: flex;
@@ -20,7 +23,7 @@ body, html {
   padding: 20px;
 }
 
-
+/* === Cabeçalho do Calendário === */
 .calendar-header {
   display: flex;
   justify-content: space-between;
@@ -36,6 +39,7 @@ body, html {
   color: #D6A4FF;
 }
 
+/* === Botões no Cabeçalho do Calendário === */
 .cancel-button {
   background: none;
   color: red;
@@ -54,12 +58,15 @@ body, html {
   border-radius: 5px;
 }
 
-.day-of-week{
+/* === Dias da Semana === */
+.day-of-week {
   text-align: center;
   margin-bottom: 10px;
 }
 
-.calendar-days-of-week, .calendar-days {
+/* === Grades de Dias do Calendário === */
+.calendar-days-of-week,
+.calendar-days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 10px;
@@ -67,102 +74,56 @@ body, html {
   width: 100%;
 }
 
+/* === Cada Dia no Calendário === */
 .calendar-day {
   background-color: var(--roxo-destaque);
   text-align: center;
   padding: 20px;
   font-size: 1.2rem;
   border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .calendar-day:hover {
   background-color: #2a0061;
-  cursor: pointer;
 }
 
 .calendar-day.has-appointment:hover {
   background-color: #9B0069;
 }
 
+/* Dia vazio (sem data) */
+.calendar-day.empty {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+/* Dias preenchidos antes da data atual */
+.calendar-day.filled.before-today {
+  background-color: var(--roxo-escuro);
+  color: #aaa;
+}
+
+/* Dia com compromisso aberto */
+.open-appointment {
+  background-color: rgb(225, 0, 255);
+  color: white;
+}
+
+/* === Mensagem de Sem Compromissos === */
 .no-appointments {
   margin-top: 20px;
   font-size: 1.1rem;
   color: #BBBBBB;
 }
 
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+/* === Lista de Pacientes === */
+.patient-list {
+  color: black;
 }
 
-.popup-content {
-  background-color: var(--roxo-fundo);
-  text-align: center;
-  color: whitesmoke;
-  padding: 40px; 
-  border-radius: 8px;
-  max-width: 600px;
-  width: 100%;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
-
-.popup-content h3 {
-  margin: 0 0 10px;
-}
-
-.popup-buttons {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between; 
-  gap: 55px;
-}
-
-.btnCriar {
-  background-color: #2a0061;
-  color: whitesmoke;
-}
-
-.btnCancelar {
-  background-color: var(--vermelho-cancelar);
-  color: whitesmoke;
-}
-
-.cancel-button-icon{
-  background-color: var(--vermelho-cancelar);
-}
-
-#form-Agendamento-PopUp {
-  margin-left: 100px;
-}
-
-#agendamentosDoDia {
-  font-size: 15px;
-  text-align: left;
-}
-
-.calendar-day.empty {
-  background-color: transparent;
-  cursor: pointer;
-}
-
-.calendar-day.filled.before-today {
-  background-color: var(--roxo-escuro);
-  color: #aaa;
-}
-
-.open-appointment {
-  background-color: rgb(225, 0, 255);
-  color: white;
-}
-
+/* === Pop-up de Agendamento e Interações === */
 .popup {
   position: fixed;
   top: 0;
@@ -178,8 +139,15 @@ body, html {
 }
 
 .popup-content {
-  padding: 20px;
+  background-color: var(--roxo-fundo);
+  text-align: center;
+  color: whitesmoke;
+  padding: 40px;
   border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
   animation: slideUp 0.3s ease-out;
   max-height: 90vh;
   overflow-y: auto;
@@ -187,10 +155,47 @@ body, html {
   max-width: 600px;
 }
 
-.create-form-animate {
+.popup-content h3 {
+  margin: 0 0 10px;
+}
+
+/* Botões dentro do pop-up */
+.popup-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 55px;
+}
+
+.btnCriar {
+  background-color: #2a0061;
+  color: whitesmoke;
+}
+
+.btnCancelar {
+  background-color: var(--vermelho-cancelar);
+  color: whitesmoke;
+}
+
+.cancel-button-icon {
+  background-color: var(--vermelho-cancelar);
+}
+
+/* Formulário específico do pop-up */
+#create-form-animate {
   animation: zoomIn 0.3s ease-out;
 }
 
+#form-Agendamento-PopUp {
+  margin-left: 100px;
+}
+
+#agendamentosDoDia {
+  font-size: 15px;
+  text-align: left;
+}
+
+/* === Animações === */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }

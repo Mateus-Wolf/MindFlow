@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
         // Consulta todos os usuários no banco de dados, excluindo a coluna de imagem
-        const usuarios = await db.query('SELECT id, nome, email, nascimento, senha FROM usuarios');
+        const usuarios = await db.query('SELECT id, nome, email, nascimento, tipo_usuario, registro_profissional, experiencia_anos, estado_atuacao, telefone, idiomas FROM usuarios');
         res.status(200).json(usuarios.rows);
     } catch (error) {
         console.error('Erro ao obter usuários:', error);
@@ -27,14 +27,18 @@ router.get('/me', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, 'seu_segredo');
-        const usuario = await db.query('SELECT id, nome, email, nascimento, imagem FROM usuarios WHERE id = $1', [decoded.id]);
+        const usuario = await db.query(`
+  SELECT id, nome, email, nascimento, imagem, registro_profissional, experiencia_anos, estado_atuacao, telefone, idiomas
+  FROM usuarios 
+  WHERE id = $1
+`, [decoded.id]);
 
         if (usuario.rows.length === 0) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
 
         const userData = usuario.rows[0];
-        
+
         // Converte a imagem para base64 se ela existir
         if (userData.imagem) {
             userData.imagem = `data:image/png;base64,${userData.imagem.toString('base64')}`;

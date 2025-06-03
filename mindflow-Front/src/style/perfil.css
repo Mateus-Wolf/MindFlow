@@ -1,154 +1,246 @@
-#dadosPerfil {
-    margin-bottom: 30px;
-}
-
+/* ========= LAYOUT GERAL & CONTAINERS ========= */
 #conteudoPerfil {
-    background-color: var(--roxo-fundo);
-    color: #fff;
-    padding-bottom: 30px;
+  background-color: var(--roxo-fundo);
+  color: #fff;
+  padding-bottom: 30px;
 }
 
 .perfil-container {
-    margin-top: 45px;
+  margin-top: 45px;
+}
+
+.perfil-layout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 40px; /* Sobrescreve 60px da primeira ocorrência */
+  margin-top: 40px; /* Da primeira ocorrência */
+  padding: 0 40px; /* Da primeira ocorrência */
+}
+
+.linha-horizontal {
+  display: flex;
+  gap: 20px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+/* ========= AVATAR & IMAGEM DE PERFIL ========= */
+.avatar-wrapper {
+  flex-shrink: 0; /* Garante que o avatar não encolha */
+  position: relative; /* Pra posicionar elementos dentro */
 }
 
 .avatar-placeholder {
-    width: 250px;
-    height: 250px;
-    background-color: #555;
-    border-radius: 50%;
-    margin: 20px auto;
-}
-
-.perfil-opcoes  {
-    padding: 15px;
-}
-
-.perfil-opcoes label {
-    display: block;
-    margin: 10px 0;
-}
-
-.perfil-opcoes input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: none;
-    border-radius: 5px;
-}
-
-.delete-account {
-    background-color: var(--vermelho-cancelar);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.delete-account:hover {
-    background-color: #ff0000;
-}
-
-.botoes {
-    display: flex;
-    gap: 10px;
-    margin-left: 16px;
+  width: 450px; /* Sobrescreve 220px da primeira ocorrência */
+  height: 450px;
+  background-color: #555;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto; /* Centraliza na horizontal */
 }
 
 .avatar {
-    width: 250px;
-    height: 250px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
+.foto-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(80, 80, 80, 0.6);
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.avatar-placeholder:hover .foto-overlay {
+  opacity: 1;
+}
+
+/* ========= FORMULÁRIO DADOS DO PERFIL ========= */
+#dadosPerfil {
+  flex-grow: 1;
+  min-width: 400px;
+  max-width: 800px;
+}
+
+#dadosPerfil input,
+#dadosPerfil select,
+#dadosPerfil textarea {
+  width: 100%;
+  max-width: 600px;
+}
+
+.campo-uf {
+  flex: 0 0 80px;
+}
+
+.campo-registro,
+.campo-experiencia {
+  flex: 1;
+  min-width: 200px;
+}
+
+#telefone {
+  max-width: 220px;
+}
+
+/* ========= OPÇÕES DO PERFIL ========= */
+.perfil-opcoes {
+  padding: 15px;
+}
+
+.perfil-opcoes label {
+  display: block;
+  margin: 10px 0;
+}
+
+.perfil-opcoes input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 5px;
+}
+
+/* ========= BOTÕES ========= */
+/* Container de Botões de Ação */
+.botoes {
+  display: flex;
+  gap: 10px;
+  margin-left: 16px;
+}
+
+/* Botões Individuais */
 .buttonDados {
-    background-color: var(--roxo-botao);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  background-color: var(--roxo-botao);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .buttonDados:hover {
-    background-color: var(--roxo-hover);
+  background-color: var(--roxo-hover);
 }
 
 .buttonCancelar {
-    background-color: var(--cinza-claro);
-    color: #333;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+  background-color: var(--cinza-claro);
+  color: #333;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .buttonCancelar:hover {
-    background-color: #bbb;
+  background-color: #bbb;
+}
+
+.delete-account {
+  background-color: var(--vermelho-cancelar);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.delete-account:hover {
+  background-color: #ff0000;
+  transform: scale(1.05);
 }
 
 .buttonRemoverFoto {
-    background-color: var(--vermelho-cancelar);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
+  background-color: var(--vermelho-cancelar);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .buttonRemoverFoto:hover {
-    background-color: #ff0000;
+  background-color: #ff0000;
 }
 
+/* Botões de Upload */
 .custom-upload-button {
-    display: inline-block;
-    background-color: var(--roxo-destaque);
-    color: white;
-    padding: 10px 20px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: center;
+  display: inline-block;
+  background-color: var(--roxo-destaque);
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: center;
 }
 
 .custom-upload-button:hover {
-    background-color: var(--roxo-hover);
+  background-color: var(--roxo-hover);
 }
 
 .upload-button-group {
-    display: flex;
-    gap: 10px;
-    flex-wrap: nowrap;
-    margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+  margin-top: 10px;
 }
 
 .upload-button-group button,
 .upload-button-group .custom-upload-button {
-    height: 40px;
-    flex: 1;
-    min-width: 150px;
-    max-width: 510px;
-    display: flex;
+  height: 40px;
+  flex: 1;
+  min-width: 150px;
+  max-width: 510px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* ========= MEDIA QUERIES ========= */
+@media (max-width: 768px) {
+  .perfil-layout {
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-    border-radius: 5px;
-    box-sizing: border-box;
+  }
+
+  #dadosPerfil {
+    width: 100%;
+    max-width: 90vw;
+  }
 }
 
 @media (max-width: 600px) {
-    .upload-button-group {
-        flex-wrap: wrap;
-    }
-    .upload-button-group button,
-    .upload-button-group .custom-upload-button {
-        flex: none;
-        width: 100%;
-        max-width: 100%;
-    }
+  .upload-button-group {
+    flex-wrap: wrap;
+  }
+
+  .upload-button-group button,
+  .upload-button-group .custom-upload-button {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
+  }
 }

@@ -87,7 +87,7 @@ function Body() {
               transition={{ duration: 0.4 }}
             >
               <h2 id="textoInicial">
-                Entre e administre os sentimentos e emoções de seus pacientes de maneira rápida, fácil e gratuita!
+                Entre e administre o dia, as emoções e as consultas de seus pacientes de maneira rápida, fácil e gratuita!
               </h2>
               <hr />
               <div id="botoes">

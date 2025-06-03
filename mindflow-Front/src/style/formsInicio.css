@@ -2,49 +2,66 @@
 @font-face {
     font-family: 'textosGerais';
     src: url(../fontes/quicksand/Quicksand-VariableFont_wght.ttf);
-  }
+}
 
 * {
     font-family: 'textosGerais';
 }
+
 /* Fim da Customização das Fontes */
 
 #conteudoBody {
     overflow: hidden;
-  }
+}
 
 /* Inicio da Customização do H2 */
-#titulo{
+#titulo {
     margin-bottom: 35px;
 }
+
 /* Fim da Customização do H2 */
 
 
 
 /* Customização dos Formularios */
 .form {
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    padding: 12px 15px;
-    font-size: 16px;
-    color: #333; /* Cor do texto */
-    transition: all 0.3s ease; /* Transição suave para todas as propriedades */
-    background-color: #f9f9f9; /* Cor de fundo base */
-    outline: none; /* Remove a borda padrão de foco */
-    margin-bottom: 15px; /* Espaçamento entre os campos */
-    width: 100%; /* Garante que os campos tenham o mesmo tamanho */
-    box-sizing: border-box; /* Inclui padding e border no cálculo da largura */
+    max-width: 500px;
+    margin: auto;
+    padding: 10px;
+    border: 2px solid #ccc;
+    /* borda mais clara e visível */
+    color: #333;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    outline: none;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 600px) {
+    form {
+        padding: 20px;
+        margin: 20px 10px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
 }
 
 .error-message {
     color: rgb(255, 0, 0);
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 15px;
     margin-left: 3px;
 }
 
 .input-error {
-    border: 2px solid red; 
+    border: 2px solid red;
 }
 
 
@@ -59,7 +76,7 @@
 .form:not(:placeholder-shown) {
     border-color: #4caf50;
     background-color: #e8f5e9;
-    color: #333; 
+    color: #333;
 }
 
 .password-container {
@@ -73,11 +90,11 @@
 .password-toggle {
     position: absolute;
     right: 8px;
-    top: 43%; 
+    top: 43%;
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: #7e22ff; 
+    color: #7e22ff;
     cursor: pointer;
     font-size: 20px;
     transition: color 0.3s ease;
@@ -97,7 +114,6 @@
 .form:focus {
     box-shadow: 0 0 10px rgba(255, 87, 34, 0.2);
 }
-
 
 /* Fim da Customização do Formulario */
 
@@ -120,21 +136,25 @@
     color: #7b80ff;
     text-decoration: none;
 }
+
 /* Fim da Customização do Esqueci Minha Senha */
 
 
 
 /* Customização dos Botões */
+
 .btns {
-    width: 290px;
+    width: 150px;
     background-color: rgb(71, 6, 135);
     border-radius: 15px;
     color: whitesmoke;
     padding: 15px 30px;
     border: none;
+    margin-left: 35px;
     font-size: 14px;
     font-weight: bold;
     text-align: center;
+    align-items: center;
     text-decoration: none;
     display: inline-block;
     transition: background-color 0.3s ease, transform 0.3s ease;

@@ -151,6 +151,34 @@ const Agendamentos = () => {
     }
   };
 
+  const [patientFilter, setPatientFilter] = React.useState('');
+  const [filteredPatients, setFilteredPatients] = React.useState([]);
+  const [showPatientList, setShowPatientList] = React.useState(false);
+
+  const handlePatientFilterChange = (e) => {
+    const value = e.target.value;
+    setPatientFilter(value);
+
+    if (value.trim() === '') {
+      setFilteredPatients([]);
+      setShowPatientList(false);
+      setSelectedPatient(''); // limpa seleção se limpar filtro
+      return;
+    }
+
+    const filtered = patients.filter(p =>
+      p.nome.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredPatients(filtered);
+    setShowPatientList(true);
+  }
+
+  // Quando clicar em um paciente da lista
+  const handleSelectPatient = (id, nome) => {
+    setSelectedPatient(id);
+    setPatientFilter(nome); // mostra o nome no campo
+    setShowPatientList(false); // esconde a lista
+  }
 
   const openCreateForm = () => {
     setShowCreateForm(true);
@@ -298,21 +326,45 @@ const Agendamentos = () => {
                 </>
               ) : (
                 <form id='form-Agendamento-PopUp' className="create-form-animate">
-                  <div className="form-group">
-                    <label>Paciente</label>
-                    <select
-                      className="form-control"
-                      value={selectedPatient}
-                      onChange={(e) => setSelectedPatient(e.target.value)}
-                    >
-                      <option value="">Selecione o paciente</option>
-                      {patients.map((patient) => (
-                        <option key={patient.id} value={patient.id}>
-                          {patient.nome}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+<div className="form-group" style={{ position: 'relative' }}>
+  <label>Paciente</label>
+  <input
+    type="text"
+    className="form-control"
+    value={patientFilter}
+    onChange={handlePatientFilterChange}
+    onFocus={() => {
+      if(patientFilter.trim() !== '') setShowPatientList(true);
+    }}
+    placeholder="Digite para buscar o paciente"
+    autoComplete="off"
+  />
+  {showPatientList && filteredPatients.length > 0 && (
+    <ul className="patient-list" style={{
+      position: 'absolute',
+      zIndex: 10,
+      backgroundColor: 'white',
+      border: '1px solid #ccc',
+      width: '100%',
+      maxHeight: '150px',
+      overflowY: 'auto',
+      marginTop: '2px',
+      listStyle: 'none',
+      paddingLeft: 0,
+    }}>
+      {filteredPatients.map(patient => (
+        <li
+          key={patient.id}
+          style={{ padding: '5px', cursor: 'pointer' }}
+          onClick={() => handleSelectPatient(patient.id, patient.nome)}
+        >
+          {patient.nome}
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
                   <div className="form-group">
                     <label>Data</label>
                     <input

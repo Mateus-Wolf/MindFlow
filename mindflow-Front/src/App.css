@@ -151,6 +151,11 @@ a:hover {
   font-size: 16px;
 }
 
+#botoes {
+  align-items: center;
+  text-align: center;
+}
+
 .saibaMais {
   width: 290px;
   margin: 15px;

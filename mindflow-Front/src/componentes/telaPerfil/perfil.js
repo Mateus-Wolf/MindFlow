@@ -10,7 +10,17 @@ import autoTable from 'jspdf-autotable';
 
 const Perfil = () => {
     const [editable, setEditable] = useState(false);
-    const [usuario, setUsuario] = useState({});
+    const [usuario, setUsuario] = useState({
+        nome: '',
+        email: '',
+        nascimento: '',
+        registro_profissional: '',
+        experiencia_anos: '',
+        estado_atuacao: '',
+        telefone: '',
+        idiomas: [],
+        data_criacao: ''
+    });
     const [novaSenha, setNovaSenha] = useState('');
     const [imagem, setImagem] = useState(null);
     const [imagemFile, setImagemFile] = useState(null);
@@ -104,6 +114,8 @@ const Perfil = () => {
                         Authorization: token,
                     },
                 });
+
+                console.log("Dados do usuário recebidos:", response.data);
 
                 if (response.data.nascimento) {
                     setUsuario({ ...response.data, nascimento: displayFormattedDate(response.data.nascimento) });
@@ -233,13 +245,20 @@ const Perfil = () => {
     return (
         <div id="tudo">
             <Header />
-            <div className="perfil-container">
-                <div className="avatar-placeholder">
-                    {imagem ? (
-                        <img src={imagem} alt="Imagem do Usuário" className="avatar" />
-                    ) : (
-                        <img src="mindflow/src/icones/perfil_PlaceHolder.png" className="avatar" />
-                    )}
+            <div className="perfil-layout">
+                <div className="avatar-wrapper">
+                    <div className="avatar-placeholder">
+                        {imagem ? (
+                            <img src={imagem} alt="Imagem do Usuário" className="avatar" />
+                        ) : (
+                            <img src="mindflow/src/icones/perfil_PlaceHolder.png" className="avatar" />
+                        )}
+                        {editable && (
+                            <label htmlFor="imagem" className="foto-overlay">
+                                Trocar Foto
+                            </label>
+                        )}
+                    </div>
                 </div>
                 <div id="dadosPerfil">
                     <div className="perfil-opcoes">
@@ -265,6 +284,7 @@ const Perfil = () => {
                                 />
                             </div>
                         </div>
+
                         <div className="form-row">
                             <div className="form-group">
                                 <label htmlFor="nascimento">Nascimento:</label>
@@ -277,36 +297,76 @@ const Perfil = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="imagem">Foto de Perfil:</label>
-
-                                <input
-                                    type="file"
-                                    id="imagem"
-                                    onChange={handleImageChange}
+                                <label htmlFor="telefone">Telefone:</label>
+                                <InputMask
+                                    mask="(99) 99999-9999"
+                                    id="telefone"
+                                    value={usuario.telefone || ''}
+                                    onChange={(e) => setUsuario({ ...usuario, telefone: e.target.value })}
                                     disabled={!editable}
-                                    style={{ display: 'none' }}
                                 />
-
-                                {editable && (
-                                    <div className="upload-button-group">
-                                        <label htmlFor="imagem" className="custom-upload-button">
-                                            Enviar nova imagem
-                                        </label>
-                                        {imagem && (
-                                            <button
-                                                type="button"
-                                                className="buttonRemoverFoto"
-                                                onClick={handleRemoveImage}
-                                            >
-                                                Remover Foto
-                                            </button>
-                                        )}
-                                    </div>
-                                )}
                             </div>
-
                         </div>
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="estado_atuacao">Estado de Atuação (UF):</label>
+                                <input
+                                    type="text"
+                                    id="estado_atuacao"
+                                    maxLength={2}
+                                    value={usuario.estado_atuacao || ''}
+                                    onChange={(e) => setUsuario({ ...usuario, estado_atuacao: e.target.value.toUpperCase() })}
+                                    disabled={!editable}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="registro_profissional">Registro Profissional:</label>
+                                <input
+                                    type="text"
+                                    id="registro_profissional"
+                                    value={usuario.registro_profissional || ''}
+                                    onChange={(e) => setUsuario({ ...usuario, registro_profissional: e.target.value })}
+                                    disabled={!editable}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="experiencia_anos">Anos de Experiência:</label>
+                                <input
+                                    type="number"
+                                    id="experiencia_anos"
+                                    value={usuario.experiencia_anos || ''}
+                                    onChange={(e) => setUsuario({ ...usuario, experiencia_anos: e.target.value })}
+                                    disabled={!editable}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="idiomas">Idiomas:</label>
+                                <input
+                                    type="text"
+                                    id="idiomas"
+                                    value={(usuario.idiomas || []).join(', ')}
+                                    onChange={(e) =>
+                                        setUsuario({ ...usuario, idiomas: e.target.value.split(',').map((i) => i.trim()) })
+                                    }
+                                    disabled={!editable}
+                                />
+                            </div>
+                        </div>
+
+                        <input
+                            type="file"
+                            id="imagem"
+                            onChange={handleImageChange}
+                            disabled={!editable}
+                            style={{ display: 'none' }}
+                        />
                     </div>
+
+                    {/* Botões */}
                     <div className="botoes">
                         <button onClick={gerarRelatorioPDF} className="buttonDados" style={{ marginRight: '10px' }}>
                             Gerar Relatório
@@ -323,6 +383,7 @@ const Perfil = () => {
                         <button className="delete-account" onClick={handleLogout}>Sair</button>
                     </div>
                 </div>
+
             </div>
         </div>
     );

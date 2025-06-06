@@ -17,7 +17,7 @@ const RegistroHumor = () => {
                 setRegistros(response.data);
 
                 const pacienteResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/pacientes/${id}`);
-                setNomePaciente(pacienteResponse.data.nome);
+                setNomePaciente(capitalizarNome(pacienteResponse.data.nome));
             } catch (error) {
                 console.error('Erro ao buscar registros:', error);
             }
@@ -25,6 +25,13 @@ const RegistroHumor = () => {
 
         fetchRegistros();
     }, [id, anoAtual]);
+
+    const capitalizarNome = (nome) => {
+        return nome
+            .split(' ')
+            .map((parte) => parte.charAt(0).toUpperCase() + parte.slice(1).toLowerCase())
+            .join(' ');
+    };
 
     const formatarData = (data) => {
         if (!data) return 'Data inválida';

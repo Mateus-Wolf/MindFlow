@@ -11,8 +11,6 @@ const CriarConta = ({ voltar, irParaLogin }) => {
   const [senha, setSenha] = useState('');
   const [senhaRepetida, setSenhaRepetida] = useState('');
   const [tipo_usuario, setTipoUsuario] = useState('psicologo'); // Por padrão 'psicologo' pra teste
-
-  // Novos campos
   const [registroProfissional, setRegistroProfissional] = useState('');
   const [experienciaAnos, setExperienciaAnos] = useState('');
   const [estadoAtuacao, setEstadoAtuacao] = useState('');
@@ -27,13 +25,13 @@ const CriarConta = ({ voltar, irParaLogin }) => {
   const alternarVisibilidadeSenha = () => setMostrarSenha(!mostrarSenha);
   const alternarVisibilidadeRepetirSenha = () => setMostrarRepetirSenha(!mostrarRepetirSenha);
 
-const isFormValid =
-  nome.trim() &&
-  email.trim() &&
-  nascimento.trim() &&
-  senha.trim() &&
-  senhaRepetida.trim() &&
-  senha === senhaRepetida;
+  const isFormValid =
+    nome.trim() &&
+    email.trim() &&
+    nascimento.trim() &&
+    senha.trim() &&
+    senhaRepetida.trim() &&
+    senha === senhaRepetida;
 
 
   const handleCreateAccount = async (event) => {
@@ -107,7 +105,17 @@ const isFormValid =
             type="text"
             placeholder="Nome"
             value={nome}
-            onChange={(e) => setNome(e.target.value)}
+            onChange={(e) => {
+              const valor = e.target.value;
+              const regex =/^[\p{L}\p{N} ]+$/u
+
+              if (valor === '' || regex.test(valor)) {
+                setNome(valor);
+                setErro('');
+              } else {
+                setErro('O nome deve conter apenas letras e números.');
+              }
+            }}
             required
             whileFocus={{ scale: 1.03, borderColor: "#7e22ff", boxShadow: "0 0 10px rgba(126, 34, 255, 0.3)" }}
             transition={{ type: "spring", stiffness: 300 }}
@@ -168,8 +176,7 @@ const isFormValid =
                 type="text"
                 placeholder="Idiomas (Separar por vírgula)"
                 value={idiomas}
-                onChange={(e) => setIdiomas(e.target.value)}
-              />
+                onChange={(e) => setIdiomas(e.target.value)}/>
             </>
           )}
 

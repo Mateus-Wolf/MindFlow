@@ -19,7 +19,13 @@ CREATE TABLE usuarios (
     nascimento DATE NOT NULL,
     senha VARCHAR(100) NOT NULL,
     tipo_usuario VARCHAR(20) NOT NULL,
-    imagem BYTEA
+    imagem BYTEA,
+    data_criacao TIMESTAMP DEFAULT NOW(),
+    registro_profissional VARCHAR(20) UNIQUE,
+    experiencia_anos INT,
+    estado_atuacao VARCHAR(2),
+    telefone VARCHAR(20),
+    idiomas TEXT[],
 );
 
 -- Tabela de pacientes

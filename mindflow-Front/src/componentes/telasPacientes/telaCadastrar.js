@@ -35,6 +35,15 @@ const handleSubmit = async (e) => {
         estado_civil: estadoCivil,
     };
 
+    const nomeValidoRegex = /^[A-Za-zÀ-ÿ\s]+$/;
+    if (!nome || nome.trim().length < 2 || !nomeValidoRegex.test(nome)) {
+        return Swal.fire({
+            icon: 'warning',
+            title: 'Nome inválido',
+            text: 'O nome deve conter apenas letras e não pode conter símbolos ou emojis.',
+        });
+    }
+
     // Validações
     if (!nome || nome.trim().length < 2) {
         return Swal.fire({
@@ -117,64 +126,133 @@ const handleSubmit = async (e) => {
     return (
         <div id="tudo">
             <Header />
-            <div className="form-container">
-                <form onSubmit={handleSubmit}>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="nome">Nome</label>
-                            <input type="text" id="nome" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="idade">Idade</label>
-                            <input type="number" id="idade" placeholder="Idade" value={idade} onChange={(e) => setIdade(e.target.value)} required />
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="cpf">CPF</label>
-                            <input type="text" id="cpf" placeholder="CPF" value={cpf} onChange={(e) => setCpf(e.target.value)} required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="cep">CEP</label>
-                            <input type="text" id="cep" placeholder="CEP" value={cep} onChange={(e) => setCep(e.target.value)} required />
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="genero">Gênero</label>
-                            <select id="genero" value={genero} onChange={(e) => setGenero(e.target.value)}>
-                                <option value="masculino">Masculino</option>
-                                <option value="feminino">Feminino</option>
-                                <option value="nao-binario">Não Binário</option>
-                                <option value="outro">Outro</option>
-                                <option value="nao-informar">Não Informar</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="email">Email</label>
-                            <input type="email" id="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-                        </div>
-                    </div>
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="telefone">Telefone/Celular</label>
-                            <input type="tel" id="telefone" placeholder="Telefone/Celular" value={telefone} onChange={(e) => setTelefone(e.target.value)} required />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="estadoCivil">Estado Civil</label>
-                            <select id="estadoCivil" value={estadoCivil} onChange={(e) => setEstadoCivil(e.target.value)}>
-                                <option value="casado">Casado</option>
-                                <option value="solteiro">Solteiro</option>
-                                <option value="divorciado">Divorciado</option>
-                                <option value="viuvo">Separado</option>
-                                <option value="viuvo">Viúvo</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" className="submit-button">Cadastrar Paciente</button>
-                </form>
-            </div>
+<div className="form-container">
+  <form onSubmit={handleSubmit} className="space-y-4">
+    {/* Nome */}
+    <div className="form-group">
+      <label htmlFor="nome">Nome</label>
+      <input
+        type="text"
+        id="nome"
+        className="input w-full"
+        placeholder="Nome"
+        value={nome}
+        onChange={(e) => setNome(e.target.value)}
+        required
+      />
+    </div>
+
+    {/* CPF, Idade e CEP */}
+    <div className="form-row flex gap-4">
+      <div className="form-group flex-1 max-w-[200px]">
+        <label htmlFor="cpf">CPF</label>
+        <input
+          type="text"
+          id="cpf"
+          className="input w-full"
+          placeholder="CPF"
+          value={cpf}
+          onChange={(e) => setCpf(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group flex-1 max-w-[120px]">
+        <label htmlFor="idade">Idade</label>
+        <input
+          type="number"
+          id="idade"
+          className="input w-full"
+          placeholder="Idade"
+          value={idade}
+          onChange={(e) => setIdade(e.target.value)}
+          required
+        />
+      </div>
+      <div className="form-group flex-1 max-w-[180px]">
+        <label htmlFor="cep">CEP</label>
+        <input
+          type="text"
+          id="cep"
+          className="input w-full"
+          placeholder="CEP"
+          value={cep}
+          onChange={(e) => setCep(e.target.value)}
+          required
+        />
+      </div>
+    </div>
+
+    {/* Gênero e Estado Civil */}
+    <div className="form-row flex gap-4">
+      <div className="form-group flex-1">
+        <label htmlFor="genero">Gênero</label>
+        <select
+          id="genero"
+          className="input w-full"
+          value={genero}
+          onChange={(e) => setGenero(e.target.value)}
+        >
+          <option value="masculino">Masculino</option>
+          <option value="feminino">Feminino</option>
+          <option value="nao-binario">Não Binário</option>
+          <option value="outro">Outro</option>
+          <option value="nao-informar">Não Informar</option>
+        </select>
+      </div>
+      <div className="form-group flex-1">
+        <label htmlFor="estadoCivil">Estado Civil</label>
+        <select
+          id="estadoCivil"
+          className="input w-full"
+          value={estadoCivil}
+          onChange={(e) => setEstadoCivil(e.target.value)}
+        >
+          <option value="casado">Casado</option>
+          <option value="solteiro">Solteiro</option>
+          <option value="divorciado">Divorciado</option>
+          <option value="separado">Separado</option>
+          <option value="viuvo">Viúvo</option>
+        </select>
+      </div>
+    </div>
+
+    {/* Email */}
+    <div className="form-group">
+      <label htmlFor="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        className="input w-full"
+        placeholder="Email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        required
+      />
+    </div>
+
+    {/* Telefone */}
+    <div className="form-group">
+      <label htmlFor="telefone">Telefone/Celular</label>
+      <input
+        type="tel"
+        id="telefone"
+        className="input w-full"
+        placeholder="Telefone/Celular"
+        value={telefone}
+        onChange={(e) => setTelefone(e.target.value)}
+        required
+      />
+    </div>
+
+    {/* Botão de envio */}
+    <div className="form-group">
+      <button type="submit" className="submit-button w-full">
+        Cadastrar Paciente
+      </button>
+    </div>
+  </form>
+</div>
+
         </div>
     );
 };

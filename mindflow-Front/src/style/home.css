@@ -9,8 +9,14 @@
   display: flex;
 }
 
+#tituloHeader{
+  margin: auto;
+  padding: -350px;
+}
+
 .logo-header {
-  height: 360px;
+  height: 260px;
+  margin: auto;
   width: auto;
   object-fit: contain;
   display: block;
@@ -32,8 +38,11 @@
   text-overflow: ellipsis;
 }
 
+.navbar .navbar-brand{
+  padding: -150px;
+}
+
 .navbar .nav-link,
-.navbar .navbar-brand,
 .navbar .dropdown-toggle {
   color: white;
   font-size: clamp(16px, 2.5vw, 25px);

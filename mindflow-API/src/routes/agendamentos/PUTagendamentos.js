@@ -27,7 +27,7 @@ router.put('/:id/concluir', async (req, res) => {
     try {
         // Atualiza o status do agendamento para concluído (ID 2)
         const result = await pool.query('UPDATE agendamentos SET status_id = $1 WHERE id = $2', [2, id]);
-        
+
         if (result.rowCount === 0) {
             return res.status(404).json({ message: 'Agendamento não encontrado.' });
         }
@@ -40,18 +40,12 @@ router.put('/:id/concluir', async (req, res) => {
 });
 
 // Rota PUT para marcar um agendamento como Perdido
-// Rota PUT para marcar um agendamento como Perdido
 router.put('/status', async (req, res) => {
     try {
-        // Gera "agora" no fuso horário de São Paulo (UTC-3)
-        const now = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+        const now = new Date();
 
         const query = `
-            UPDATE agendamentos
-            SET status_id = 4
-            WHERE status_id = 1 
-            AND (data::timestamp + hora::time) < $1
-            RETURNING *;
+            UPDATE agendamentos SET status_id = 4 WHERE status_id = 1 AND (data + hora) AT TIME ZONE 'America/Sao_Paulo' < NOW() AT TIME ZONE 'America/Sao_Paulo' RETURNING *;
         `;
 
         const result = await pool.query(query, [now]);

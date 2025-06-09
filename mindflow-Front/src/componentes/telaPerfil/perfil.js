@@ -268,6 +268,7 @@ const Perfil = () => {
                                 <input
                                     type="text"
                                     id="nome"
+                                    placeholder="Seu Nome Completo"
                                     value={editable ? usuario.nome || '' : capitalizarNome(usuario.nome || '')}
                                     onChange={(e) => setUsuario({ ...usuario, nome: e.target.value })}
                                     disabled={!editable}
@@ -278,6 +279,7 @@ const Perfil = () => {
                                 <input
                                     type="email"
                                     id="email"
+                                    placeholder="Seu Principal Email"
                                     value={usuario.email || ''}
                                     onChange={(e) => setUsuario({ ...usuario, email: e.target.value })}
                                     disabled={!editable}
@@ -301,6 +303,7 @@ const Perfil = () => {
                                 <InputMask
                                     mask="(99) 99999-9999"
                                     id="telefone"
+                                    placeholder="Seu Número de Telefone, com o DDD e o 9"
                                     value={usuario.telefone || ''}
                                     onChange={(e) => setUsuario({ ...usuario, telefone: e.target.value })}
                                     disabled={!editable}
@@ -314,6 +317,7 @@ const Perfil = () => {
                                 <input
                                     type="text"
                                     id="estado_atuacao"
+                                    placeholder="Sigla do estado em que atua"
                                     maxLength={2}
                                     value={usuario.estado_atuacao || ''}
                                     onChange={(e) => setUsuario({ ...usuario, estado_atuacao: e.target.value.toUpperCase() })}
@@ -325,6 +329,7 @@ const Perfil = () => {
                                 <input
                                     type="text"
                                     id="registro_profissional"
+                                    placeholder="Seu CRM ou CRP"
                                     value={usuario.registro_profissional || ''}
                                     onChange={(e) => setUsuario({ ...usuario, registro_profissional: e.target.value })}
                                     disabled={!editable}
@@ -335,6 +340,7 @@ const Perfil = () => {
                                 <input
                                     type="number"
                                     id="experiencia_anos"
+                                    placeholder="Seus anos de experiencia"
                                     value={usuario.experiencia_anos || ''}
                                     onChange={(e) => setUsuario({ ...usuario, experiencia_anos: e.target.value })}
                                     disabled={!editable}
@@ -348,6 +354,7 @@ const Perfil = () => {
                                 <input
                                     type="text"
                                     id="idiomas"
+                                    placeholder="Todos os idiomas que domina, separados por virgula"
                                     value={(usuario.idiomas || []).join(', ')}
                                     onChange={(e) =>
                                         setUsuario({ ...usuario, idiomas: e.target.value.split(',').map((i) => i.trim()) })

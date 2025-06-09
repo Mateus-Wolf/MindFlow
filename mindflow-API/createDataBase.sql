@@ -27,7 +27,7 @@ CREATE TABLE usuarios (
     experiencia_anos INT,
     estado_atuacao VARCHAR(2),
     telefone VARCHAR(20),
-    idiomas TEXT[],
+    idiomas TEXT[]
 );
 
 -- Tabela de pacientes
@@ -43,7 +43,7 @@ CREATE TABLE pacientes (
     telefone VARCHAR(15) NOT NULL,
     estado_civil VARCHAR(20) NOT NULL,
     usuario_id INT REFERENCES usuarios(id) ON DELETE CASCADE,
-    alergia VARCHAR(50),
+    alergia VARCHAR(50)
 );
 
 -- Tabela de agendamentos

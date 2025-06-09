@@ -37,10 +37,12 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./mindflow-Front
+    build:
+      context: ./mindflow-Front
+      dockerfile: Dockerfile
     restart: always
     container_name: mindflow-front
     ports:
-      - "3001:3000"
+      - "3001:80"
     depends_on:
       - backend

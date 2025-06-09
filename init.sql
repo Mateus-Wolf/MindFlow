@@ -12,6 +12,7 @@ INSERT INTO agendamento_status (descricao) VALUES
 ('Consulta Atrasada');
 
 -- Tabela de usuários
+-- Tabela de usuários
 CREATE TABLE usuarios (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
@@ -25,8 +26,9 @@ CREATE TABLE usuarios (
     experiencia_anos INT,
     estado_atuacao VARCHAR(2),
     telefone VARCHAR(20),
-    idiomas TEXT[],
+    idiomas TEXT[]
 );
+
 
 -- Tabela de pacientes
 CREATE TABLE pacientes (

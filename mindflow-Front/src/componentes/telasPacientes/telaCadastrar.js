@@ -246,7 +246,7 @@ const handleSubmit = async (e) => {
 
     {/* Botão de envio */}
     <div className="form-group">
-      <button type="submit" className="submit-button w-full">
+      <button type="submit" className="enviarBTN">
         Cadastrar Paciente
       </button>
     </div>

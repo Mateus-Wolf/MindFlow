@@ -108,7 +108,7 @@ const PacientesLista = () => {
                     <motion.input
                         type="text"
                         className="search-input"
-                        placeholder="Pesquisar pelo nome..."
+                        placeholder="Buscar pelo nome do Paciente"
                         value={searchTerm}
                         onChange={handleSearchChange}
                         whileFocus={{ scale: 1.02 }}

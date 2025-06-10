@@ -251,7 +251,7 @@ const Perfil = () => {
                         {imagem ? (
                             <img src={imagem} alt="Imagem do Usuário" className="avatar" />
                         ) : (
-                            <img src="mindflow/src/icones/perfil_PlaceHolder.png" className="avatar" />
+                            <img src="mindflow-Front\src\icones\perfil_PlaceHolder.png" className="avatar" />
                         )}
                         {editable && (
                             <label htmlFor="imagem" className="foto-overlay">

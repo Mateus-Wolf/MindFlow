@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Login from "./login";
 import CriarConta from "./criarConta";
 import { AnimatePresence, motion } from "framer-motion";
+import logo from '../../icones/logo4K.png';
 
 function Body() {
   const [telaAtiva, setTelaAtiva] = useState(null);
@@ -64,9 +65,10 @@ function Body() {
       <div id="conteudoEsquerda">
         <img
           id="tituloPrincipal"
-          src="/logo 4K.png"
+          src={logo}
           alt="MindFlow"
         />
+
 
         <h3 id="slogan">Porque cada dia conta uma história</h3>
 

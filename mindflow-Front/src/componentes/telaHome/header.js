@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaUser, FaCalendarAlt, FaUsers, FaHistory, FaChevronDown } from "react-icons/fa";
+import logo from '../../icones/logo4K.png';
 
 const Header = () => {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -19,7 +20,7 @@ const Header = () => {
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
                     <Link className="navbar-brand" id="tituloHeader" to="/home">
-                        <img src="/logo4k.png" alt="MindFlow" className="logo-header" />
+                        <img src={logo} alt="MindFlow" className="logo-header" />
                     </Link>
 
                     <button

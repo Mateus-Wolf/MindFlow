@@ -44,7 +44,7 @@ const Compromissos = () => {
     return (
         <div id="compromissos">
             <h3>Olá, Dr(a). <span className="destaque">{nomeUsuario ? nomeUsuario : ''}</span></h3>
-
+            <hr></hr>
             {compromissos.length > 0 ? (
                 compromissos.map((compromisso) => (
                     <div className="compromisso-item" key={compromisso.id}>

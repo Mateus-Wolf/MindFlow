@@ -222,7 +222,23 @@ const Agendamentos = () => {
     return generateCalendarDays().map((day, index) => {
       const isDisabled = day && isBeforeToday(day);
       const isPast = day && (new Date(currentDate.getFullYear(), currentDate.getMonth(), day) < new Date());
-      const hasOpenAppointment = openAppointments.some(appointment => new Date(appointment.data).getDate() === day);
+      const hasOpenAppointment = openAppointments.some((appointment) => {
+        const appointmentDate = new Date(appointment.data);
+
+        return (
+          appointmentDate.getUTCFullYear() === currentDate.getFullYear() &&
+          appointmentDate.getUTCMonth() === currentDate.getMonth() &&
+          appointmentDate.getUTCDate() === day
+        );
+      });
+
+      if (day && hasOpenAppointment) {
+        console.log('Dia com agendamento:', {
+          day,
+          appointmentDates: openAppointments.map(a => a.data),
+        });
+      }
+
 
       return (
         <div

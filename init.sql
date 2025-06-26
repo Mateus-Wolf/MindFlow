@@ -1,3 +1,5 @@
+SET TIME ZONE 'America/Sao_Paulo';
+
 -- Tabela de Status de Agendamentos
 CREATE TABLE agendamento_status (
     id SERIAL PRIMARY KEY,

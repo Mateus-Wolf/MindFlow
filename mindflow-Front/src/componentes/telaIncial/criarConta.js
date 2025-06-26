@@ -49,13 +49,14 @@ const CriarConta = ({ voltar, irParaLogin }) => {
       senha,
       tipo_usuario,
       ...(tipo_usuario === 'psicologo' && {
-        registro_profissional: registroProfissional,
+        registro_profissional: registroProfissional.trim() === '' ? null : registroProfissional,
         experiencia_anos: parseInt(experienciaAnos),
         estado_atuacao: estadoAtuacao,
         telefone,
         idiomas: idiomas.split(',').map(i => i.trim()),
       })
     };
+
 
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/usuarios/register`, {
       method: 'POST',
@@ -107,7 +108,7 @@ const CriarConta = ({ voltar, irParaLogin }) => {
             value={nome}
             onChange={(e) => {
               const valor = e.target.value;
-              const regex =/^[\p{L}\p{N} ]+$/u
+              const regex = /^[\p{L}\p{N} ]+$/u
 
               if (valor === '' || regex.test(valor)) {
                 setNome(valor);
@@ -176,7 +177,7 @@ const CriarConta = ({ voltar, irParaLogin }) => {
                 type="text"
                 placeholder="Idiomas (Separar por vírgula)"
                 value={idiomas}
-                onChange={(e) => setIdiomas(e.target.value)}/>
+                onChange={(e) => setIdiomas(e.target.value)} />
             </>
           )}
 

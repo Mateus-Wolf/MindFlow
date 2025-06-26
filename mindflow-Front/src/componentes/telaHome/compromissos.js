@@ -5,7 +5,7 @@ import axios from 'axios';
 const Compromissos = () => {
     const [nomeUsuario, setNomeUsuario] = useState('');
     const [compromissos, setCompromissos] = useState([]);
-    
+
     const usuarioId = localStorage.getItem('usuarioId');
 
     useEffect(() => {
@@ -22,9 +22,8 @@ const Compromissos = () => {
     useEffect(() => {
         const fetchCompromissos = async () => {
             const hoje = new Date();
-            const opcoes = { day: '2-digit', month: '2-digit', year: 'numeric' };
-            const dataFormatada = hoje.toLocaleDateString('pt-BR', opcoes);
-            
+            const dataFormatada = hoje.toISOString().split('T')[0];
+
             try {
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/agendamentos?data=${dataFormatada}&usuario_id=${usuarioId}`);
                 const compromissosFiltrados = response.data.filter(compromisso => compromisso.status_id === 1);
@@ -36,6 +35,7 @@ const Compromissos = () => {
 
         fetchCompromissos();
     }, [usuarioId]);
+
 
     const formatarHora = (hora) => {
         return hora.split(':').slice(0, 2).join(':');
@@ -51,7 +51,7 @@ const Compromissos = () => {
                         <span className="hora">
                             <span className="indicador red"></span> {formatarHora(compromisso.hora)}
                         </span>
-                        <span className="consulta"> 
+                        <span className="consulta">
                             <Link to={`/registroHumorAtividades/${compromisso.paciente_id}`} className="link-paciente">
                                 {compromisso.nome}
                             </Link>
